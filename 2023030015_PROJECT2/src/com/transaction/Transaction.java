@@ -1,34 +1,13 @@
-package com.transaction;
+package com.bank.transaction;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
-public abstract class Transaction {
-    protected String id;
-    protected double amount;
-    protected LocalDateTime timestamp;
-
-    public Transaction(String id, double amount) {
-        this.id = id;
-        this.amount = amount;
-        this.timestamp = LocalDateTime.now();
+public class Deposit extends Transaction {
+    public Deposit(String transactionId, double amount) {
+        super(transactionId, amount);
     }
 
-    public String getId() {
-        return id;
+    @Override
+    public void process() {
+        System.out.println("Processing deposit of " + amount + "€ [ID: " + transactionId + "]");
+        // Εδώ μπορεί να ενημερωθεί το υπόλοιπο λογαριασμού
     }
-
-    public double getAmount() {
-        return amount;
-    }
-
-    public String getFormattedTimestamp() {
-        return timestamp.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-    }
-
-    public abstract String getType();
-
-    public abstract String getSummary();  // To display details of the transaction
-
-    public abstract String toCSV();       // Used for saving to file
 }
