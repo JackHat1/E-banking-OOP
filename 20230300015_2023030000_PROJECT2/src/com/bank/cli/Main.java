@@ -37,5 +37,18 @@ public class Main {
         for (Transaction tx : txManager.getHistory()) {
             System.out.println(tx.getTimestamp() + " | " + tx.getClass().getSimpleName() + " | " + tx.getReason());
         }
+
+        // Δοκιμή μεταφοράς
+        PersonalAccount acc3 = new PersonalAccount(giannis, 1.2);
+        Deposit preload = new Deposit(acc3, 200.0, giannis, "Προετοιμασία μεταφοράς");
+        txManager.executeTransaction(preload);
+
+        Transfer transfer = new Transfer(acc3, acc1, 150.0, giannis, "Μεταφορά σε άλλο δικό μου λογαριασμό", "Λήψη από λογαριασμό savings");
+        txManager.executeTransaction(transfer);
+
+        // Δοκιμή πληρωμής
+        Payment payment = new Payment(acc1, acc2, 100.0, "RF123456789", giannis, "Πληρωμή Vodafone Λογαριασμού");
+        txManager.executeTransaction(payment);
+
     }
 }
