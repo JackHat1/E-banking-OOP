@@ -8,6 +8,7 @@ public abstract class Account implements Storable {
     protected Customer owner;
     protected double balance;
     protected double interestRate;
+    //dhusdhusd
 
     public Account(Customer owner, double interestRate) {
         this.iban = IBANGenerator.generate(this.getAccountTypeCode());
