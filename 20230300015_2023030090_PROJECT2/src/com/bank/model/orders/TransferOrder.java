@@ -1,4 +1,4 @@
-package com.bank.orders;
+package com.bank.model.orders;
 
 public class TransferOrder {
     

@@ -1,0 +1,196 @@
+E-BANKING Project – Κατανομή Εργασιών
+
+
+====================================================
+====================================================
+
+📂 Πακέτο: com.bank.cli
+
+✅ Υλοποιεί:
+- Main.java
+- BankApp.java ή παρόμοιο κεντρικό flow
+- Login μέσω username / password
+- Menu επιλογών (κατάθεση, ανάληψη, μεταφορά, πληρωμή)
+- Κλήση συναλλαγών μέσω TransactionManager:
+  - transactionManager.execute(new Deposit(...))
+- Προβολή ιστορικού (με ανάγνωση από StatementManager)
+
+✅ Χρησιμοποιεί:
+- UserManager για authentication
+- AccountManager για εμφάνιση λογαριασμών
+
+====================================================
+====================================================
+
+📂 Πακέτα:
+- com.bank.model.transactions
+- com.bank.manager
+- com.bank.model.statements
+
+
+✅ Υλοποιεί:
+- abstract class Transaction (id, timestamp, transactor, reason)
+- Deposit, Withdrawal, Transfer, Payment (extends Transaction)
+- TransactionManager:
+  - execute(Transaction t)
+  - καταγραφή σε statements
+- StatementEntry:
+  - marshal/unmarshal
+  - περιέχει timestamp, τύπο, ποσό, λόγο, balance
+- StatementManager:
+  - save(Account, StatementEntry)
+  - load(Account)
+- Προαιρετικά:
+  - Bill, BillManager
+  - StandingOrder, TransferOrder, PaymentOrder
+
+✅ Διαχειρίζεται:
+- Επιχειρησιακή λογική των συναλλαγών
+- Έλεγχο υπολοίπου
+- Αποθήκευση δεδομένων στο `data/statements/iban.csv`
+
+====================================================
+📌 ΔΟΜΗ ΣΥΣΤΗΜΑΤΟΣ (πακέτα & αρχεία)
+====================================================
+
+com.bank
+├── cli/
+│   └── Main.java, BankApp.java
+├── model/
+│   ├── users/            // User, Individual, Company, etc.
+│   ├── accounts/         // Account, PersonalAccount, etc.
+│   ├── transactions/     // Deposit, Withdrawal, Transfer, etc.
+│   ├── bills/            // Bill
+│   ├── orders/           // StandingOrder, etc.
+│   ├── statements/       // StatementEntry
+├── manager/
+│   └── UserManager, TransactionManager, etc.
+├── storage/
+│   └── CsvStorageManager, Storable
+
+//////////////////////////////////////////////////////////////
+Ρόλος: Backend Developer (Core λογική τραπεζικού συστήματος)
+📦 Πακέτα:
+
+com.bank.model.transactions
+
+com.bank.manager
+
+com.bank.model.statements
+
+(προαιρετικά) com.bank.model.bills, com.bank.model.orders
+
+🔨 Κύριες Υλοποιήσεις (υποχρεωτικά)
+✅ 1. Transaction Σύστημα
+📁 com.bank.model.transactions
+
+🔹 abstract class Transaction
+
+String id
+
+LocalDateTime timestamp
+
+User transactor
+
+String reason
+
+abstract void execute()
+
+🔹 class Deposit, Withdrawal, Transfer, Payment
+
+Υλοποιούν execute() → επηρεάζουν το Account.balance
+
+Χρησιμοποιούν account.deposit() ή account.withdraw()
+
+✅ 2. TransactionManager.java
+📁 com.bank.manager
+
+🔹 Μέθοδος void execute(Transaction t)
+
+Εκτελεί την t.execute()
+
+Δημιουργεί StatementEntry με:
+
+timestamp
+
+ποσό
+
+είδος
+
+αιτιολογία
+
+source/target IBAN
+
+balance μετά
+
+Καλεί StatementManager.save(...)
+
+✅ 3. StatementEntry.java
+📁 com.bank.model.statements
+
+🔹 Πεδία:
+
+LocalDateTime timestamp
+
+String type (Deposit, Withdrawal, Transfer, Payment)
+
+double amount
+
+String reason
+
+String sourceIban
+
+String targetIban
+
+double balanceAfter
+
+🔹 Μέθοδοι:
+
+marshal() ➝ επιστρέφει CSV string
+
+unmarshal(String) ➝ διαβάζει CSV
+
+toString() για κονσόλα
+
+✅ 4. StatementManager.java
+📁 com.bank.manager
+
+🔹 Μέθοδοι:
+
+java
+Copy
+Edit
+public void save(Account acc, StatementEntry entry)
+public List<StatementEntry> load(Account acc)
+🔹 Αποθηκεύει σε:
+
+bash
+Copy
+Edit
+./data/statements/GRxxxxxxxx.csv
+⚠️ Προσοχή:
+Απαγορεύεται κατάθεση/ανάληψη με αρνητικό ποσό
+
+Απαγορεύεται ανάληψη χωρίς αρκετό υπόλοιπο
+
+Πρέπει να ενημερώνεται το αρχείο statements μετά από κάθε Transaction
+
+✳ Παραδείγματα Χρήσης:
+java
+Copy
+Edit
+Transaction t = new Deposit(account, 500.0, user, "Αρχική κατάθεση");
+transactionManager.execute(t);
+java
+Copy
+Edit
+Transaction t = new Transfer(sourceAcc, targetAcc, 200.0, user, "Πληρωμή ενοικίου");
+transactionManager.execute(t);
+📌 Προαιρετικά (αν έχει χρόνο):
+Bill, BillManager
+
+StandingOrder, TransferOrder, PaymentOrder
+
+Εφαρμογή Interest και Maintenance Fees
+
+
