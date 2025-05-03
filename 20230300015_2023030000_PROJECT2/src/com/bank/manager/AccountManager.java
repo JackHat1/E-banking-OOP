@@ -11,7 +11,7 @@ import java.util.List;
 public class AccountManager {
 
     private List<Account> accounts = new ArrayList<>();
-    private final String filePath = "./data/accounts/accounts.csv";
+    private final String path = "./data/accounts/accounts.csv";
     private CsvStorageManager storage = new CsvStorageManager();
 
     private UserManager userManager;
@@ -20,42 +20,58 @@ public class AccountManager {
         this.userManager = userManager;
     }
 
-    // Φόρτωση από CSV
     public void load() {
-        List<String> lines = storage.loadLines(filePath);
+        List<String> lines = storage.loadLines(path);
+    
         for (String line : lines) {
-            String[] parts = line.split(",");
-            String typeCode = parts[0]; // "100" ή "200"
-            String iban = parts[1];
-            String vat = parts[2];
-
-            Customer owner = userManager.findByVat(vat);
-
-            Account acc = null;
-
-            if (typeCode.equals("100")) {
-                acc = new PersonalAccount((Individual) owner, 0);
-            } else if (typeCode.equals("200")) {
-                acc = new BusinessAccount((Company) owner, 0, 0);
+            String[] fields = line.split(",");
+            String type = "", iban = "", vat = "";
+            double balance = 0, interest = 0;
+    
+            for (String field : fields) {
+                String[] parts = field.split(":");
+                if (parts.length < 2) continue;
+    
+                String key = parts[0].trim();
+                String value = parts[1].trim();
+    
+                switch (key) {
+                    case "type": type = value.toUpperCase(); break;
+                    case "iban": iban = value; break;
+                    case "primaryOwner": vat = value; break;
+                    case "balance": balance = Double.parseDouble(value); break;
+                    case "rate": interest = Double.parseDouble(value); break;
+                    // ignore: dateCreated, coOwner
+                }
             }
-
+    
+            Customer owner = userManager.findByVat(vat);
+            Account acc = null;
+    
+            if (type.equals("PERSONALACCOUNT") && owner instanceof Individual) {
+                acc = new PersonalAccount((Individual) owner, interest);
+            } else if (type.equals("BUSINESSACCOUNT") && owner instanceof Company) {
+                acc = new BusinessAccount((Company) owner, interest, 0); // προσωρινά fee = 0
+            }
+    
             if (acc != null) {
-                acc.unmarshal(line);
+                acc.setIban(iban);
+                acc.deposit(balance);
                 accounts.add(acc);
+                System.out.println("✔ Προστέθηκε: " + iban + " ➝ " + owner.getFullName());
             }
         }
     }
+    
 
-    // Αποθήκευση όλων των λογαριασμών
     public void saveAll() {
         List<Storable> list = new ArrayList<>();
         for (Account acc : accounts) {
             list.add(acc);
         }
-        storage.saveAll(list, filePath);
+        storage.saveAll(list, path, false);
     }
 
-    // Εύρεση με IBAN
     public Account findByIban(String iban) {
         for (Account acc : accounts) {
             if (acc.getIban().equals(iban)) {
@@ -65,11 +81,11 @@ public class AccountManager {
         return null;
     }
 
-    public void addAccount(Account acc) {
-        accounts.add(acc);
-    }
-
     public List<Account> getAllAccounts() {
         return accounts;
+    }
+
+    public void addAccount(Account acc) {
+        accounts.add(acc);
     }
 }

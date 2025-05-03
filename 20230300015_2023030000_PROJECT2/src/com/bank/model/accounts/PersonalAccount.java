@@ -19,4 +19,13 @@ public class PersonalAccount extends Account {
     public String getAccountTypeCode() {
         return "100";
     }
+    @Override
+    public String marshal() {
+        return "type:Personal"
+            + ",iban:" + getIban()
+            + ",vatNumber:" + getOwner().getVat()
+            + ",balance:" + getBalance()
+            + ",interest:" + getInterestRate();
+    }
+
 }

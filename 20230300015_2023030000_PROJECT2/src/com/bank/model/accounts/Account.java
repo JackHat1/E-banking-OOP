@@ -17,6 +17,8 @@ public abstract class Account implements Storable {
     }
 
     public String getIban() { return iban; }
+    public void setIban(String iban) { this.iban = iban; }
+
     public Customer getOwner() { return owner; }
     public double getBalance() { return balance; }
     public double getInterestRate() { return interestRate; }
@@ -28,7 +30,7 @@ public abstract class Account implements Storable {
 
     @Override
     public String marshal() {
-        return String.join(",", getAccountTypeCode(), iban, owner.getVat(), String.valueOf(balance), String.valueOf(interestRate));
+        return getAccountTypeCode() + "," + iban + "," + owner.getVat() + "," + balance + "," + interestRate;
     }
 
     @Override

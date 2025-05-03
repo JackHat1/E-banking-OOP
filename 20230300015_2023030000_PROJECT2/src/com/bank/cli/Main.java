@@ -1,54 +1,42 @@
 package com.bank.cli;
 
-import com.bank.model.users.*;
-import com.bank.model.accounts.*;
-import com.bank.model.transactions.*;
-import com.bank.manager.TransactionManager;
+import com.bank.manager.UserManager;
+import com.bank.manager.AccountManager;
+import com.bank.model.users.User;
+import com.bank.model.accounts.Account;
+
+import java.io.File;
 
 public class Main {
     public static void main(String[] args) {
-        // Δημιουργία Χρηστών
-        Individual giannis = new Individual("user1", "1234", "Γιάννης Παπαδόπουλος", "123456789");
-        Company vodafone = new Company("vodafone", "pass123", "Vodafone Ελλάς", "987654321");
-        Admin admin = new Admin("admin", "admin", "Διαχειριστής");
 
-        // Λογαριασμοί
-        PersonalAccount acc1 = new PersonalAccount(giannis, 1.2);
-        BusinessAccount acc2 = new BusinessAccount(vodafone, 1.5, 5.0);
+        // ✅ Έλεγχος ύπαρξης αρχείων
+        File checkUsers = new File("./data/users/users.csv");
+        System.out.println("✅ Βρέθηκε users.csv: " + checkUsers.exists());
+        System.out.println("📂 Path: " + checkUsers.getAbsolutePath());
 
-        // Συναλλαγές
-        TransactionManager txManager = TransactionManager.getInstance();
+        File checkAccounts = new File("./data/accounts/accounts.csv");
+        System.out.println("✅ Βρέθηκε accounts.csv: " + checkAccounts.exists());
+        System.out.println("📂 Path: " + checkAccounts.getAbsolutePath());
 
-        Deposit deposit1 = new Deposit(acc1, 500.0, giannis, "Κατάθεση αρχικού ποσού");
-        txManager.executeTransaction(deposit1);
+        // 🔁 Managers
+        UserManager userManager = new UserManager();
+        AccountManager accountManager = new AccountManager(userManager);
 
-        Withdrawal withdrawal1 = new Withdrawal(acc1, 200.0, giannis, "Ανάληψη για ψώνια");
-        txManager.executeTransaction(withdrawal1);
+        // 📥 Load από CSV
+        userManager.load();
+        accountManager.load();
 
-        Withdrawal withdrawal2 = new Withdrawal(acc1, 400.0, giannis, "Ανάληψη υπερβάλλουσα"); // Θα αποτύχει
-        txManager.executeTransaction(withdrawal2);
-
-        // Εκτυπώσεις
-        System.out.println("\n🏁 Τελικό Υπόλοιπο:");
-        System.out.println("Λογαριασμός " + acc1.getIban() + " => " + acc1.getBalance() + " €");
-
-        // Προβολή ιστορικού συναλλαγών
-        System.out.println("\n📜 Ιστορικό Συναλλαγών:");
-        for (Transaction tx : txManager.getHistory()) {
-            System.out.println(tx.getTimestamp() + " | " + tx.getClass().getSimpleName() + " | " + tx.getReason());
+        // 🧑‍💻 Χρήστες
+        System.out.println("\n🔐 Χρήστες:");
+        for (User u : userManager.getAllUsers()) {
+            System.out.println(" - " + u.getRole() + ": " + u.getUsername() + " | " + u.getFullName());
         }
 
-        // Δοκιμή μεταφοράς
-        PersonalAccount acc3 = new PersonalAccount(giannis, 1.2);
-        Deposit preload = new Deposit(acc3, 200.0, giannis, "Προετοιμασία μεταφοράς");
-        txManager.executeTransaction(preload);
-
-        Transfer transfer = new Transfer(acc3, acc1, 150.0, giannis, "Μεταφορά σε άλλο δικό μου λογαριασμό", "Λήψη από λογαριασμό savings");
-        txManager.executeTransaction(transfer);
-
-        // Δοκιμή πληρωμής
-        Payment payment = new Payment(acc1, acc2, 100.0, "RF123456789", giannis, "Πληρωμή Vodafone Λογαριασμού");
-        txManager.executeTransaction(payment);
-
+        // 💰 Λογαριασμοί
+        System.out.println("\n🏦 Λογαριασμοί:");
+        for (Account a : accountManager.getAllAccounts()) {
+            System.out.println(" - " + a.getIban() + " | " + a.getOwner().getFullName() + " | " + a.getBalance() + " €");
+        }
     }
 }

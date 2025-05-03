@@ -16,6 +16,6 @@ public class Deposit extends Transaction {
     @Override
     public void execute() {
         account.deposit(amount);
-        System.out.println("💰 Κατάθεση " + amount + "€ στον λογαριασμό " + account.getIban());
+        System.out.println(" Κατάθεση " + amount + "€ στον λογαριασμό " + account.getIban());
     }
 }

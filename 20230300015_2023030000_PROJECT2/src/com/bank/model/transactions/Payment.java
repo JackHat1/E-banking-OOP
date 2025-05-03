@@ -24,9 +24,9 @@ public class Payment extends Transaction {
         if (from.getBalance() >= amount) {
             from.withdraw(amount);
             business.deposit(amount);
-            System.out.println("💸 Πληρωμή " + amount + "€ στον επαγγελματικό λογαριασμό " + business.getIban() + " [RF: " + paymentCode + "]");
+            System.out.println(" Πληρωμή " + amount + "€ στον επαγγελματικό λογαριασμό " + business.getIban() + " [RF: " + paymentCode + "]");
         } else {
-            System.out.println("❌ Ανεπαρκές υπόλοιπο για πληρωμή.");
+            System.out.println(" Ανεπαρκές υπόλοιπο για πληρωμή.");
         }
     }
 }
