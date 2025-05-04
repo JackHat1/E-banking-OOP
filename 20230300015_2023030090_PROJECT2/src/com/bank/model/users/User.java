@@ -22,16 +22,5 @@ public abstract class User implements Storable {
         return this.password.equals(input);
     }
 
-    @Override
-    public String marshal() {
-        return String.join(",", getRole(), username, password, fullName);
-    }
 
-    @Override
-    public void unmarshal(String data) {
-        String[] parts = data.split(",", 4);
-        this.username = parts[1];
-        this.password = parts[2];
-        this.fullName = parts[3];
-    }
 }
