@@ -43,33 +43,149 @@ public class App {
             System.exit(0);
         }
     }
+    
+    private void withdrawMenu() {
+        System.out.println("📤 Λογαριασμοί σου για ανάληψη:");
+    
+        List<Account> myAccounts = new ArrayList<>();
+        int index = 1;
+        for (Account acc : accountManager.getAllAccounts()) {
+            if (acc.getOwner().equals(loggedInUser)) {
+                myAccounts.add(acc);
+                System.out.println(index + ". " + acc.getIban() + " | Υπόλοιπο: " + acc.getBalance() + " €");
+                index++;
+            }
+        }
+    
+        if (myAccounts.isEmpty()) {
+            System.out.println("❌ Δεν έχεις λογαριασμούς.");
+            return;
+        }
+    
+        System.out.print("👉 Διάλεξε αριθμό: ");
+        int choice = Integer.parseInt(scanner.nextLine());
+    
+        if (choice < 1 || choice > myAccounts.size()) {
+            System.out.println("❌ Μη έγκυρη επιλογή.");
+            return;
+        }
+    
+        Account acc = myAccounts.get(choice - 1);
+    
+        System.out.print("💶 Ποσό ανάληψης: ");
+        double amount = Double.parseDouble(scanner.nextLine());
+    
+        if (amount <= 0) {
+            System.out.println("❌ Μη έγκυρο ποσό.");
+            return;
+        }
+    
+        if (acc.getBalance() < amount) {
+            System.out.println("❌ Δεν υπάρχει αρκετό υπόλοιπο.");
+            return;
+        }
+    
+        acc.withdraw(amount);
+        System.out.println("✅ Ανάληψη " + amount + "€ από τον " + acc.getIban());
+    }
+    
+    private void payBillMenu() {
+        System.out.println("📨 Πληρωμή Λογαριασμού");
+    
+        List<Account> myAccounts = new ArrayList<>();
+        int index = 1;
+        for (Account acc : accountManager.getAllAccounts()) {
+            if (acc.getOwner().equals(loggedInUser)) {
+                myAccounts.add(acc);
+                System.out.println(index + ". " + acc.getIban() + " | Υπόλοιπο: " + acc.getBalance() + " €");
+                index++;
+            }
+        }
+    
+        if (myAccounts.isEmpty()) {
+            System.out.println("❌ Δεν έχετε διαθέσιμους λογαριασμούς.");
+            return;
+        }
+    
+        System.out.print("👉 Επιλογή λογαριασμού: ");
+        int accChoice = Integer.parseInt(scanner.nextLine());
+        if (accChoice < 1 || accChoice > myAccounts.size()) {
+            System.out.println("❌ Μη έγκυρη επιλογή.");
+            return;
+        }
+    
+        Account from = myAccounts.get(accChoice - 1);
+    
+        System.out.print("🔢 RF κωδικός (τυχαίος): ");
+        String rfCode = scanner.nextLine();
+    
+        System.out.print("💶 Ποσό πληρωμής: ");
+        double amount = Double.parseDouble(scanner.nextLine());
+    
+        if (amount <= 0) {
+            System.out.println("❌ Μη έγκυρο ποσό.");
+            return;
+        }
+    
+        if (from.getBalance() < amount) {
+            System.out.println("❌ Ανεπαρκές υπόλοιπο.");
+            return;
+        }
+    
+        from.withdraw(amount);
+        System.out.println("✅ Πληρώθηκε RF " + rfCode + " από τον " + from.getIban());
+    }
+    
+    
+    private void showStatementMenu() {
+        System.out.println("📄 Προβολή Κινήσεων: (θα υλοποιηθεί σύντομα)");
+    }
+    
 
     private void menu() {
         while (true) {
-            System.out.println("\n1. Προβολή λογαριασμών");
+            System.out.println("\n🔽 Επιλέξτε λειτουργία:");
+            System.out.println("1. Προβολή Λογαριασμών");
             System.out.println("2. Κατάθεση");
-            System.out.println("3. Μεταφορά");
-            System.out.println("4. Έξοδος");
-            System.out.print("Επιλογή: ");
+            System.out.println("3. Ανάληψη");
+            System.out.println("4. Μεταφορά");
+            System.out.println("5. Πληρωμή Λογαριασμού");
+            System.out.println("6. Προβολή Κινήσεων (🔜)");
+            System.out.println("0. Έξοδος");
+    
             String option = scanner.nextLine();
-
-            if (option.equals("1")) {
-                showAccounts();
-            } else if (option.equals("2")) {
-                depositMenu();
-            } else if (option.equals("3")) {
-                transferMenu();
-            } else if (option.equals("4")) {
-                System.out.println("📦 Αποθήκευση...");
-                userManager.saveAll();
-                accountManager.saveAll();
-                System.out.println("✅ Έγινε αποθήκευση. Αντίο!");
-                break;
-            } else {
-                System.out.println("Άκυρη επιλογή.");
+    
+            switch (option) {
+                case "1":
+                    showAccounts();
+                    break;
+                case "2":
+                    depositMenu();
+                    break;
+                case "3":
+                    withdrawMenu();
+                    break;
+                case "4":
+                    transferMenu();
+                    break;
+                case "5":
+                    payBillMenu();
+                    break;
+                case "6":
+                    showStatementMenu();
+                    break;
+                case "0":
+                    System.out.println("📦 Αποθήκευση...");
+                    userManager.saveAll();
+                    accountManager.saveAll();
+                    System.out.println("✅ Έγινε αποθήκευση. Αντίο!");
+                    return;
+                default:
+                    System.out.println("❌ Άκυρη επιλογή.");
             }
         }
     }
+    
 
     private void showAccounts() {
         for (Account acc : accountManager.getAllAccounts()) {
@@ -168,5 +284,7 @@ public class App {
         toAccount.deposit(amount);
 
         System.out.println("✅ Μεταφέρθηκαν " + amount + "€ από " + fromAccount.getIban() + " σε " + toIban);
+
+        
     }
 }
