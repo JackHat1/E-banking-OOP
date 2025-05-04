@@ -61,8 +61,8 @@ public class App {
                 transferMenu();
             } else if (option.equals("4")) {
                 System.out.println("📦 Αποθήκευση...");
-                userManager.save();
-                accountManager.save();
+                userManager.saveAll();
+                accountManager.saveAll();
                 System.out.println("✅ Έγινε αποθήκευση. Αντίο!");
                 break;
             } else {
