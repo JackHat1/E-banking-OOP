@@ -58,7 +58,7 @@ public class AccountManager {
                 acc.setIban(iban);
                 acc.deposit(balance);
                 accounts.add(acc);
-                System.out.println("✔ Προστέθηκε: " + iban + " ➝ " + owner.getFullName());
+            //  System.out.println("✔ Προστέθηκε: " + iban + " ➝ " + owner.getFullName());
             }
         }
     }
