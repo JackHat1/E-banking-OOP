@@ -2,19 +2,21 @@ package com.bank.model.accounts;
 
 import com.bank.model.users.Customer;
 import com.bank.storage.Storable;
+import java.time.LocalDate;
 
 public abstract class Account implements Storable {
     protected String iban;
     protected Customer owner;
     protected double balance;
     protected double interestRate;
-    //dhusdhusd
+    protected LocalDate dateCreated; // ✅ Προσθήκη
 
     public Account(Customer owner, double interestRate) {
         this.iban = IBANGenerator.generate(this.getAccountTypeCode());
         this.owner = owner;
         this.interestRate = interestRate;
         this.balance = 0.0;
+        this.dateCreated = LocalDate.now(); // ✅ Αρχικοποίηση
     }
 
     public String getIban() { return iban; }

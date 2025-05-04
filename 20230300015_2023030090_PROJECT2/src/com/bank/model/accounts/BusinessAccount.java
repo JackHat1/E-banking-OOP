@@ -20,13 +20,15 @@ public class BusinessAccount extends Account {
     }
     @Override
     public String marshal() {
-        return "type:Business"
-            + ",iban:" + getIban()
-            + ",vatNumber:" + getOwner().getVat()
-            + ",balance:" + getBalance()
-            + ",interest:" + getInterestRate()
-            + ",fee:" + getMonthlyFee();
+        return "type:BusinessAccount"
+             + ",iban:" + getIban()
+             + ",primaryOwner:" + getOwner().getVat()
+             + ",dateCreated:" + dateCreated.toString()
+             + ",rate:" + getInterestRate()
+             + ",balance:" + getBalance()
+             + ",fee:" + getMonthlyFee();
     }
+    
     
 
 }

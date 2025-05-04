@@ -1,5 +1,6 @@
 package com.bank.model.accounts;
 
+import com.bank.model.users.Customer;
 import com.bank.model.users.Individual;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,11 +22,20 @@ public class PersonalAccount extends Account {
     }
     @Override
     public String marshal() {
-        return "type:Personal"
-            + ",iban:" + getIban()
-            + ",vatNumber:" + getOwner().getVat()
-            + ",balance:" + getBalance()
-            + ",interest:" + getInterestRate();
+        StringBuilder sb = new StringBuilder();
+        sb.append("type:PersonalAccount");
+        sb.append(",iban:").append(getIban());
+        sb.append(",primaryOwner:").append(getOwner().getVat());
+        sb.append(",dateCreated:").append(dateCreated.toString());
+        sb.append(",rate:").append(getInterestRate());
+        sb.append(",balance:").append(getBalance());
+
+        for (Customer co : coOwners) {
+            sb.append(",coOwner:").append(co.getVat());
+        }
+
+        return sb.toString();
     }
+
 
 }
