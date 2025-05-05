@@ -15,8 +15,34 @@ public class BillManager {
     };
 
 
+    public void create(Bill bill){
+        bills.add(bill);
+    }
 
+    public void delete(Bill bill){
+        if (bills.contains(bill)){
 
+            bills.remove(bill);
+        }
+
+    }
+
+    // den jerw akoma 
+    public Bill getBill(String billNumber){
+        for(Bill bill: bills){
+            if(bill.getBillNumber().equals(billNumber)){
+                return bill;
+            }
+
+        }
+        return null;
+    }
+
+    public void load(){
+        for(String filepath: path){
+
+        }
+    }
 
 
 

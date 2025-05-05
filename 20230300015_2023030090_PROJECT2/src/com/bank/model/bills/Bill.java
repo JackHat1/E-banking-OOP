@@ -32,7 +32,7 @@ public class Bill {
         this.paymentCode = paymentCode;
     }
 
-    private String getBillNumber() {
+    public String getBillNumber() {
         return billNumber;
     }
 
@@ -73,7 +73,7 @@ public class Bill {
     }
 
 
-    
+
     public String printBill(){
         return "Bill{ "+ "Payment Code: "+ paymentCode + ", Bill Number: " + billNumber + ", Issuer: " + issuer + ", Amount: " + amount + ", Issue Date: " + issueDate + ", Due Date: " + dueDate + '}';
     }
