@@ -4,12 +4,21 @@ import com.bank.model.accounts.Account;
 import com.bank.model.users.User;
 
 public class Withdrawal extends Transaction {
+
     private Account account;
     private double amount;
 
     public Withdrawal(Account account, double amount, User transactor, String reason) {
         super(transactor, reason);
         this.account = account;
+        this.amount = amount;
+    }
+
+
+    public double getAmount() {
+        return amount;
+    }
+    public void setAmount(double amount) {
         this.amount = amount;
     }
 

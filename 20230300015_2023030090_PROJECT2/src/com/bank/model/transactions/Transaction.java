@@ -9,6 +9,7 @@ public abstract class Transaction {
     protected LocalDateTime timestamp;
     protected User transactor;
     protected String reason;
+    
 
     public Transaction(User transactor, String reason) {
         this.transactionId = UUID.randomUUID().toString();
