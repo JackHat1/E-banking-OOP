@@ -10,6 +10,7 @@ public class Bill {
     //private String customer;
     private LocalDate issueDate;
     private LocalDate dueDate;
+    public boolean isPaid = true;
 
 
     public Bill(String paymentCode, String billNumber, String issuer, double amount, LocalDate issueDate, LocalDate dueDate) {
@@ -40,7 +41,7 @@ public class Bill {
         this.billNumber = billNumber;
     }
 
-    private double getAmount() {
+    public double getAmount() {
         return amount;
     }
 

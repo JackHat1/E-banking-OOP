@@ -3,6 +3,8 @@ package com.bank.manager;
 import java.util.ArrayList;
 import java.util.List;
 import com.bank.model.bills.Bill;
+import com.bank.model.transactions.Transaction;
+
 
 public class BillManager {
     
@@ -14,6 +16,7 @@ public class BillManager {
         "./data/bills/2025-06-01.csv"
     };
 
+    //δημιουργία, ανάκτηση, αποθήκευση, διαγραφή
 
     public void create(Bill bill){
         bills.add(bill);
@@ -45,7 +48,23 @@ public class BillManager {
     }
 
 
+    public void payBills(String billNumber){
+        Bill bill = getBill(billNumber);
 
+
+        if(bill.isPaid){
+            // paid
+            System.out.println("The bill is paid");
+        }else{
+            TransactionManager transactionManager = new TransactionManager();
+
+            
+            //Transaction transaction = new Payment(bill.getBillNumber(), bill.getAmount());
+            //transactionManager.transactionExecution(transaction);
+
+        }
+
+    }
 
 
 

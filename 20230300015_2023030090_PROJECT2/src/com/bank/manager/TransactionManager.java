@@ -1,27 +1,29 @@
 package com.bank.manager;
 
 import com.bank.model.transactions.Transaction;
+import com.bank.model.accounts.Account;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TransactionManager {
-    private static TransactionManager instance = null;
-    private List<Transaction> history = new ArrayList<>();
+   
+    private final List<Transaction> history = new ArrayList<>();
 
-    private TransactionManager() {}
+    void transactionExecution(Transaction transaction){
 
-    public static TransactionManager getInstance() {
-        if (instance == null) instance = new TransactionManager();
-        return instance;
     }
 
-    public void executeTransaction(Transaction tx) {
-        tx.execute();
-        history.add(tx);
+
+    private void updateBalance(Transaction transaction){
+
+
+
     }
 
-    public List<Transaction> getHistory() {
-        return history;
+    public List<Transaction> getHistory(){
+        return new ArrayList<>(history);
     }
+
+
 }

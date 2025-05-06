@@ -18,10 +18,25 @@ public abstract class Transaction {
         this.reason = reason;
     }
 
+
+    public String getTransactionId() { 
+        return transactionId; 
+    }
+
+    public LocalDateTime getTimestamp() {
+         return timestamp; 
+    }
+
+    public User getTransactor() {
+         return transactor; 
+    }
+
+    public String getReason() {
+         return reason; 
+    }
+
+
     public abstract void execute();
 
-    public String getTransactionId() { return transactionId; }
-    public LocalDateTime getTimestamp() { return timestamp; }
-    public User getTransactor() { return transactor; }
-    public String getReason() { return reason; }
+
 }
