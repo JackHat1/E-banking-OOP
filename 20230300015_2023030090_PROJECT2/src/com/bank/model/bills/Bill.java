@@ -1,19 +1,21 @@
 package com.bank.model.bills;
 
 import java.time.LocalDate;
+import com.bank.model.users.User;
+import com.bank.model.accounts.Account;
 
 public class Bill {
     private String paymentCode;
     private String billNumber;
     private double amount;
-    private String issuer;
+    private Account issuer;
     //private String customer;
     private LocalDate issueDate;
     private LocalDate dueDate;
     public boolean isPaid = true;
 
 
-    public Bill(String paymentCode, String billNumber, String issuer, double amount, LocalDate issueDate, LocalDate dueDate) {
+    public Bill(String paymentCode, String billNumber, Account issuer, double amount, LocalDate issueDate, LocalDate dueDate) {
         this.paymentCode = paymentCode;
         this.billNumber = billNumber;
         this.issuer = issuer;
@@ -25,7 +27,7 @@ public class Bill {
     }
 
 
-    private String getPaymentCode() {
+    public String getPaymentCode() {
         return paymentCode;
     }
 
@@ -49,11 +51,11 @@ public class Bill {
         this.amount = amount;
     }
 
-    private String getIssuer() {
+    private Account getIssuer() {
         return issuer;
     }
 
-    private void setIssuer(String issuer) {
+    private void setIssuer(Account issuer) {
         this.issuer = issuer;
     }
 
@@ -76,7 +78,13 @@ public class Bill {
 
 
     public String printBill(){
-        return "Bill{ "+ "Payment Code: "+ paymentCode + ", Bill Number: " + billNumber + ", Issuer: " + issuer + ", Amount: " + amount + ", Issue Date: " + issueDate + ", Due Date: " + dueDate + '}';
+        return "Bill{ "+ "Payment Code: "+ paymentCode + 
+        ", Bill Number: " + billNumber + 
+        ", Issuer: " + issuer.getIban() + 
+        ", Amount: " + amount + 
+        ", Issue Date: " + issueDate + 
+        ", Due Date: " + dueDate + 
+        '}';
     }
     
 }

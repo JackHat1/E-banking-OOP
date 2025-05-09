@@ -214,3 +214,11 @@ private static TransactionManager instance = null;
     public List<Transaction> getHistory() {
         return history;
     }
+
+
+
+  --------------------------------------------
+ ΜΟΥ ΤΟ ΕΒΓΑΛΕ ΓΙΑ ΤΗΝ ΜΑΙΝ ΜΕΤΑ ΑΠΛΑ ΝΑ ΜΗΝ ΤΟ ΞΕΧΑΣΩ 
+  System.out.println("Transaction ID: " + withdrawal.getTransactionId());
+System.out.println("Timestamp: " + withdrawal.getTimestamp());
+withdrawal.execute();

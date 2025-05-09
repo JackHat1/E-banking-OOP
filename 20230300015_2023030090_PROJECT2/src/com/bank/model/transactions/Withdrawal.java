@@ -9,7 +9,7 @@ public class Withdrawal extends Transaction {
     private double amount;
 
     public Withdrawal(Account account, double amount, User transactor, String reason) {
-        super(transactor, reason);
+        super(transactor, "Withdrawal");
         this.account = account;
         this.amount = amount;
     }
@@ -24,11 +24,15 @@ public class Withdrawal extends Transaction {
 
     @Override
     public void execute() {
-        if (account.getBalance() >= amount) {
+
+        if(account.getBalance()>= amount){
             account.withdraw(amount);
-            System.out.println("🏧 Ανάληψη " + amount + "€ από λογαριασμό " + account.getIban());
-        } else {
-            System.out.println(" Ανεπαρκές υπόλοιπο για ανάληψη.");
+            System.out.println("The amount of " + amount +"€ has been withdrawaled from " + account.getIban());
+
+        }else {
+            System.out.println("Unavailable to withdraw due to isufficient balance.");
         }
+
     }
+
 }

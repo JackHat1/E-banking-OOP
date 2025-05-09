@@ -24,9 +24,11 @@ public class Transfer extends Transaction {
         if (from.getBalance() >= amount) {
             from.withdraw(amount);
             to.deposit(amount);
-            System.out.println("🔄 Μεταφορά " + amount + "€ από " + from.getIban() + " προς " + to.getIban());
+            System.out.println("Tranfer of the amount  " + amount + "€ from " + from.getIban() + " to " + to.getIban());
+            System.out.println("Sender Reason: "+ senderReason);
+            System.out.println("Receiver reason: "+ receiverReason);
         } else {
-            System.out.println("❌ Ανεπαρκές υπόλοιπο για μεταφορά.");
+            System.out.println("Unavailable tranfer due to isufficient balance");
         }
     }
 }
