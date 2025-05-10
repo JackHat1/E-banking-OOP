@@ -1,7 +1,11 @@
 package com.bank.model.transactions;
 
 import com.bank.model.users.User;
+import java.time.LocalDateTime;
+
+import com.bank.manager.StatementManager;
 import com.bank.model.accounts.Account;
+import com.bank.model.statements.StatementEntry;
 
 public class Deposit extends Transaction {
     private Account account;
@@ -18,5 +22,12 @@ public class Deposit extends Transaction {
     public void execute() {
         account.deposit(amount);
         System.out.println("Deposit of " + amount + "€ in " + account.getIban());
+
+        StatementEntry entry = new StatementEntry(getTransactor().getUsername(), null, account.getIban(), amount, "Deposit", "Credit", LocalDateTime.now(), account.getBalance() );
+
+        StatementManager statementManager = new StatementManager();
+        statementManager.addStatement(entry);
+
+
     }
 }

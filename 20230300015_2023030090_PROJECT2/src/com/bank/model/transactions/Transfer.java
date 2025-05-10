@@ -1,6 +1,10 @@
 package com.bank.model.transactions;
 
+import java.time.LocalDateTime;
+
+import com.bank.manager.StatementManager;
 import com.bank.model.accounts.Account;
+import com.bank.model.statements.StatementEntry;
 import com.bank.model.users.User;
 
 public class Transfer extends Transaction {
@@ -27,6 +31,14 @@ public class Transfer extends Transaction {
             System.out.println("Tranfer of the amount  " + amount + "€ from " + from.getIban() + " to " + to.getIban());
             System.out.println("Sender Reason: "+ senderReason);
             System.out.println("Receiver reason: "+ receiverReason);
+
+            StatementEntry fromAccountEntry = new StatementEntry(getTransactor().getUsername(), from.getIban(), to.getIban(), amount, senderReason, "Debit", LocalDateTime.now(), from.getBalance() );
+            StatementEntry toAccountEntry = new StatementEntry(getTransactor().getUsername(), from.getIban(), to.getIban(), amount, receiverReason, "Credit", LocalDateTime.now(), to.getBalance() );
+
+            StatementManager statementManager = new StatementManager();
+            statementManager.addStatement(fromAccountEntry);
+            statementManager.addStatement(toAccountEntry);
+
         } else {
             System.out.println("Unavailable tranfer due to isufficient balance");
         }

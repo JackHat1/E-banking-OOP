@@ -1,6 +1,10 @@
 package com.bank.model.transactions;
 
+import java.time.LocalDateTime;
+
+import com.bank.manager.StatementManager;
 import com.bank.model.accounts.Account;
+import com.bank.model.statements.StatementEntry;
 import com.bank.model.users.User;
 
 public class Withdrawal extends Transaction {
@@ -28,6 +32,11 @@ public class Withdrawal extends Transaction {
         if(account.getBalance()>= amount){
             account.withdraw(amount);
             System.out.println("The amount of " + amount +"€ has been withdrawaled from " + account.getIban());
+
+            StatementEntry entry = new StatementEntry(getTransactor().getUsername(), account.getIban(), null, amount, "Withdrawal", "Debit", LocalDateTime.now(), account.getBalance() );
+
+            StatementManager statementManager = new StatementManager();
+            statementManager.addStatement(entry);
 
         }else {
             System.out.println("Unavailable to withdraw due to isufficient balance.");

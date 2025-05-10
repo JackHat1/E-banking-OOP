@@ -1,8 +1,12 @@
 package com.bank.model.transactions;
 
+import java.time.LocalDateTime;
+
+import com.bank.manager.StatementManager;
 import com.bank.model.accounts.Account;
 import com.bank.model.users.User;
 import com.bank.model.bills.Bill;
+import com.bank.model.statements.StatementEntry;
 
 public class Payment extends Transaction {
     private Bill bill;
@@ -33,6 +37,14 @@ public class Payment extends Transaction {
             business.deposit(bill.getAmount());
             bill.isPaid = true;
             System.out.println("Payment from " + bill.getAmount() + "€ to business " + business.getIban() + " [RF: " + bill.getPaymentCode() + "]");
+
+            StatementEntry fromAccountEntry = new StatementEntry(getTransactor().getUsername(), from.getIban(), business.getIban(), bill.getAmount(), "Payment ["+ bill.getPaymentCode()+"]", "Debit", LocalDateTime.now(), from.getBalance() );
+            StatementEntry businessAccountEntry = new StatementEntry(getTransactor().getUsername(), from.getIban(), business.getIban(), bill.getAmount(), "Receive Payment ["+ bill.getPaymentCode()+"]", "Credit", LocalDateTime.now(), business.getBalance() );
+
+            StatementManager statementManager = new StatementManager();
+            statementManager.addStatement(fromAccountEntry);
+            statementManager.addStatement(businessAccountEntry);
+
         } else {
             System.out.println(" Unavailable payment due to insufficient balance.");
         }

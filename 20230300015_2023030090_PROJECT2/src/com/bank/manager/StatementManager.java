@@ -8,5 +8,10 @@ public class StatementManager {
 
     private final List<StatementEntry> statements = new ArrayList<>();
 
+    public void addStatement(StatementEntry entry){
+        statements.add(0, entry);
+        
+    }
+
     
 }

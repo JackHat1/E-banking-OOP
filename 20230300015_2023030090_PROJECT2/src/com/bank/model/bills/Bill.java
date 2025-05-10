@@ -9,7 +9,6 @@ public class Bill {
     private String billNumber;
     private double amount;
     private Account issuer;
-    //private String customer;
     private LocalDate issueDate;
     private LocalDate dueDate;
     public boolean isPaid = true;
@@ -19,7 +18,6 @@ public class Bill {
         this.paymentCode = paymentCode;
         this.billNumber = billNumber;
         this.issuer = issuer;
-       // this.customer = customer;
         this.amount = amount;
         this.issueDate = issueDate;
         this.dueDate = dueDate;
@@ -77,7 +75,7 @@ public class Bill {
 
 
 
-    public String printBill(){
+    public String toString(){
         return "Bill{ "+ "Payment Code: "+ paymentCode + 
         ", Bill Number: " + billNumber + 
         ", Issuer: " + issuer.getIban() + 
