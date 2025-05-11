@@ -12,20 +12,17 @@ public class Payment extends Transaction {
     private Bill bill;
     private Account from;
     private Account business;
-    //private double amount;
-   // private Bill paymentCode;
-   // private String billReason;
+
 
     public Payment(Bill bill, Account from, Account business, User transactor) {
         super(transactor, "Payment");
         this.bill = bill;
         this.from = from;
         this.business = business;
-        //this.amount = amount;
-        //this.paymentCode = rfCode;
-        //this.billReason = billReason;
+
     }
 
+    
     public Bill getBill(){
         return bill;
     }
