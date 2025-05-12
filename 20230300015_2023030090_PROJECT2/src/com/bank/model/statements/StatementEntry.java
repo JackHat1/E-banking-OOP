@@ -59,7 +59,12 @@ public class StatementEntry {
 
     public String getToIban() {
         return toIban;
+
     }
+
+    //public String toCsvString(){
+
+    //}
 
 
     public String toString(){

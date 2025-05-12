@@ -2,9 +2,10 @@ package com.bank.model.bills;
 
 import java.time.LocalDate;
 import com.bank.model.users.User;
+import com.bank.storage.Storable;
 import com.bank.model.accounts.Account;
 
-public class Bill {
+public class Bill implements Storable{
     private String paymentCode;
     private String billNumber;
     private double amount;
