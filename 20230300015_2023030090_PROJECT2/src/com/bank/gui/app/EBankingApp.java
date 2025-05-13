@@ -8,6 +8,7 @@ public class EBankingApp {
         javax.swing.SwingUtilities.invokeLater(() -> {
             LoginWindow login = new LoginWindow();
             new AppController(login);
+            
         });
     }
 

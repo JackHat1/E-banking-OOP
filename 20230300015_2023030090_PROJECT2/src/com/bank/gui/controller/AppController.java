@@ -38,9 +38,9 @@ public class AppController {
 
     private void showDashboard(User user) {
         System.out.println(">>> Συνδέθηκε ο χρήστης: " + user.getClass().getSimpleName());
-
+    
         if (user instanceof Individual || user instanceof Customer) {
-            new CustomerDashboard(user, accountManager);
+            new MainDashboard(user, accountManager); // ✅ Χρήση νέου GUI
         } else if (user instanceof Company) {
             JOptionPane.showMessageDialog(null, "🚧 Company Dashboard δεν έχει υλοποιηθεί ακόμα.");
         } else if (user instanceof Admin) {
@@ -51,4 +51,5 @@ public class AppController {
                 "Άγνωστος Χρήστης", JOptionPane.ERROR_MESSAGE);
         }
     }
+    
 }
