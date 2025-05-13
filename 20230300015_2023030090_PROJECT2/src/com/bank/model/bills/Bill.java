@@ -15,15 +15,17 @@ public class Bill implements Storable{
     public boolean isPaid = true;
 
 
-    public Bill(String paymentCode, String billNumber, Account issuer, double amount, LocalDate issueDate, LocalDate dueDate) {
-        this.paymentCode = paymentCode;
+    public Bill(String billNumber, String paymentCode, double amount, Account issuer) {
         this.billNumber = billNumber;
-        this.issuer = issuer;
+        this.paymentCode = paymentCode;
         this.amount = amount;
-        this.issueDate = issueDate;
-        this.dueDate = dueDate;
-
+        this.issuer = issuer;
+        this.issueDate = LocalDate.now();
+        this.dueDate = LocalDate.now().plusDays(30);
+        this.isPaid = false;
     }
+    
+    
 
 
     public String getPaymentCode() {
@@ -85,5 +87,31 @@ public class Bill implements Storable{
         ", Due Date: " + dueDate + 
         '}';
     }
+
+        @Override
+    public String marshal() {
+        return String.join(",",
+            billNumber,
+            paymentCode,
+            String.valueOf(amount),
+            issuer.getIban(),
+            issueDate.toString(),
+            dueDate.toString(),
+            String.valueOf(isPaid)
+        );
+    }
+
+    @Override
+    public void unmarshal(String data) {
+        String[] parts = data.split(",");
+        this.billNumber = parts[0];
+        this.paymentCode = parts[1];
+        this.amount = Double.parseDouble(parts[2]);
+        // issuer πρέπει να ανατεθεί από έξω (δεν έχουμε access σε AccountManager εδώ)
+        this.issueDate = LocalDate.parse(parts[4]);
+        this.dueDate = LocalDate.parse(parts[5]);
+        this.isPaid = Boolean.parseBoolean(parts[6]);
+    }
+    
     
 }

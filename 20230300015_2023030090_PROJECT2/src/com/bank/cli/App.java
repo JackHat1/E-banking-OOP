@@ -2,8 +2,18 @@ package com.bank.cli;
 
 import com.bank.manager.UserManager;
 import com.bank.manager.AccountManager;
+import com.bank.manager.BillManager;
+import com.bank.manager.TransactionManager;
+import com.bank.manager.StatementManager;
 import com.bank.model.users.*;
 import com.bank.model.accounts.*;
+import com.bank.model.bills.Bill;
+import com.bank.model.statements.StatementEntry;
+import com.bank.model.transactions.Deposit;
+import com.bank.model.transactions.Payment;
+import com.bank.model.transactions.Transaction;
+import com.bank.model.transactions.Transfer;
+import com.bank.model.transactions.Withdrawal;
 
 import java.io.File;
 import java.time.LocalDate;
@@ -12,10 +22,13 @@ import java.util.*;
 public class App {
 
     private UserManager userManager = new UserManager();
+    private TransactionManager transactionManager = new TransactionManager();
     private AccountManager accountManager = new AccountManager(userManager);
     private Scanner scanner = new Scanner(System.in);
     private User loggedInUser;
     private LocalDate currentDate = LocalDate.of(2025, 5, 1); // αρχική ημερομηνία συστήματος
+    private BillManager billManager = new BillManager();
+
 
 
     public void run() {
@@ -50,7 +63,7 @@ public class App {
     
     private void withdrawMenu() {
         System.out.println("📤 Λογαριασμοί σου για ανάληψη:");
-    
+
         List<Account> myAccounts = new ArrayList<>();
         int index = 1;
         for (Account acc : accountManager.getAllAccounts()) {
@@ -60,38 +73,41 @@ public class App {
                 index++;
             }
         }
-    
+
         if (myAccounts.isEmpty()) {
             System.out.println("❌ Δεν έχεις λογαριασμούς.");
             return;
         }
-    
+
         System.out.print("👉 Διάλεξε αριθμό: ");
         int choice = Integer.parseInt(scanner.nextLine());
-    
+
         if (choice < 1 || choice > myAccounts.size()) {
             System.out.println("❌ Μη έγκυρη επιλογή.");
             return;
         }
-    
+
         Account acc = myAccounts.get(choice - 1);
-    
+
         System.out.print("💶 Ποσό ανάληψης: ");
         double amount = Double.parseDouble(scanner.nextLine());
-    
+
         if (amount <= 0) {
             System.out.println("❌ Μη έγκυρο ποσό.");
             return;
         }
-    
+
         if (acc.getBalance() < amount) {
             System.out.println("❌ Δεν υπάρχει αρκετό υπόλοιπο.");
             return;
         }
-    
-        acc.withdraw(amount);
+
+        Transaction transaction = new Withdrawal(acc, amount, loggedInUser, "Ανάληψη μέσω CLI");
+        transactionManager.execute(transaction); // ✅
+
         System.out.println("✅ Ανάληψη " + amount + "€ από τον " + acc.getIban());
     }
+
     
     private void payBillMenu() {
         System.out.println("📨 Πληρωμή Λογαριασμού");
@@ -120,7 +136,7 @@ public class App {
     
         Account from = myAccounts.get(accChoice - 1);
     
-        System.out.print("🔢 RF κωδικός (τυχαίος): ");
+        System.out.print("🔢 RF κωδικός: ");
         String rfCode = scanner.nextLine();
     
         System.out.print("💶 Ποσό πληρωμής: ");
@@ -136,14 +152,85 @@ public class App {
             return;
         }
     
-        from.withdraw(amount);
+        // ✅ Ανάκτηση λογαριασμού επιχείρησης – first account που ΔΕΝ ανήκει στον loggedInUser
+        Account business = null;
+        for (Account acc : accountManager.getAllAccounts()) {
+            if (!acc.getOwner().equals(loggedInUser)) {
+                business = acc;
+                break;
+            }
+        }
+    
+        if (business == null) {
+            System.out.println("❌ Δεν βρέθηκε λογαριασμός επιχείρησης για πληρωμή.");
+            return;
+        }
+    
+        // ✅ Δημιουργία Bill αφού βρήκες τον business λογαριασμό
+        Bill bill = billManager.getBill(rfCode);
+
+        if (bill == null) {
+            System.out.println("❌ Ο RF δεν αντιστοιχεί σε κάποιον λογαριασμό.");
+            return;
+        }
+        
+        if (bill.isPaid) {
+            System.out.println("⚠️ Ο λογαριασμός έχει ήδη πληρωθεί.");
+            return;
+        }
+        
+    
+        Transaction payment = new Payment(bill, from, business, loggedInUser);
+        transactionManager.execute(payment);
+    
         System.out.println("✅ Πληρώθηκε RF " + rfCode + " από τον " + from.getIban());
     }
     
+
+    
     
     private void showStatementMenu() {
-        System.out.println("📄 Προβολή Κινήσεων: (θα υλοποιηθεί σύντομα)");
+        System.out.println("📄 Προβολή Κινήσεων:");
+
+        List<Account> myAccounts = new ArrayList<>();
+        int index = 1;
+        for (Account acc : accountManager.getAllAccounts()) {
+            if (acc.getOwner().equals(loggedInUser)) {
+                myAccounts.add(acc);
+                System.out.println(index + ". " + acc.getIban());
+                index++;
+            }
+        }
+
+        if (myAccounts.isEmpty()) {
+            System.out.println("❌ Δεν έχεις λογαριασμούς.");
+            return;
+        }
+
+        System.out.print("👉 Διάλεξε αριθμό λογαριασμού για προβολή κινήσεων: ");
+        int choice = Integer.parseInt(scanner.nextLine());
+
+        if (choice < 1 || choice > myAccounts.size()) {
+            System.out.println("❌ Μη έγκυρη επιλογή.");
+            return;
+        }
+
+        Account selectedAccount = myAccounts.get(choice - 1);
+
+        StatementManager statementManager = new StatementManager();
+        List<StatementEntry> entries = statementManager.load(selectedAccount);
+
+        if (entries.isEmpty()) {
+            System.out.println("ℹ️ Δεν υπάρχουν καταγεγραμμένες κινήσεις.");
+            return;
+        }
+
+        System.out.println("📜 Κινήσεις για λογαριασμό " + selectedAccount.getIban() + ":");
+        for (StatementEntry entry : entries) {
+            System.out.println(entry);
+        }
     }
+
     
 
     private void menu() {
@@ -237,27 +324,20 @@ public class App {
         System.out.print("💶 Ποσό κατάθεσης: ");
         double amount = Double.parseDouble(scanner.nextLine());
 
-        acc.deposit(amount);
-        System.out.println("✅ Κατατέθηκαν " + amount + "€ στον " + acc.getIban());
-    }
-        private void simulateNextDay() {
-        currentDate = currentDate.plusDays(1);
-        System.out.println("📅 Προχωρήσαμε στην ημερομηνία: " + currentDate);
-
-        String filename = "./data/bills/" + currentDate + ".csv";
-        File file = new File(filename);
-        if (file.exists()) {
-            System.out.println("📥 Φόρτωση νέων λογαριασμών από: " + filename);
-            billManager.loadDailyBills(filename); // Εδώ θα φορτώσεις τα bills
-        } else {
-            System.out.println("ℹ️ Δεν υπάρχουν λογαριασμοί για την ημερομηνία.");
+        if (amount <= 0) {
+            System.out.println("❌ Μη έγκυρο ποσό.");
+            return;
         }
 
-        // TODO: Εκτέλεση standing orders (όταν υλοποιηθούν)
+        Transaction transaction = new Deposit(acc, amount, loggedInUser, "Κατάθεση μέσω CLI");
+        transactionManager.execute(transaction); // ✅ Χρήση TransactionManager
+
+        System.out.println("✅ Κατατέθηκαν " + amount + "€ στον " + acc.getIban());
     }
 
 
-    private void transferMenu() {
+
+        private void transferMenu() {
         System.out.println("🔁 Λογαριασμοί σου για αποστολή:");
 
         List<Account> myAccounts = new ArrayList<>();
@@ -307,12 +387,34 @@ public class App {
             return;
         }
 
-        fromAccount.withdraw(amount);
-        toAccount.deposit(amount);
+        System.out.print("✍️ Αιτιολογία για αποστολέα: ");
+        String senderReason = scanner.nextLine();
+
+        System.out.print("✍️ Αιτιολογία για παραλήπτη: ");
+        String receiverReason = scanner.nextLine();
+
+        Transaction transfer = new Transfer(fromAccount, toAccount, amount, loggedInUser, senderReason, receiverReason);
+        transactionManager.execute(transfer);
 
         System.out.println("✅ Μεταφέρθηκαν " + amount + "€ από " + fromAccount.getIban() + " σε " + toIban);
-
-        
     }
+
+    private void simulateNextDay() {
+        currentDate = currentDate.plusDays(1);
+        System.out.println("📅 Προχωρήσαμε στην ημερομηνία: " + currentDate);
+    
+        String filename = "./data/bills/" + currentDate + ".csv";
+        File file = new File(filename);
+        if (file.exists()) {
+            System.out.println("📥 Φόρτωση νέων λογαριασμών από: " + filename);
+            // billManager.loadDailyBills(filename); // Μπορείς να το ενεργοποιήσεις αν υλοποιηθεί
+        } else {
+            System.out.println("ℹ️ Δεν υπάρχουν λογαριασμοί για την ημερομηνία.");
+        }
+    
+        // TODO: Εκτέλεση standing orders (όταν υλοποιηθούν)
+    }
+    
+
     
 }

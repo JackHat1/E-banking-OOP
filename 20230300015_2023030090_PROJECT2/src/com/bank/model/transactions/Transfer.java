@@ -28,19 +28,39 @@ public class Transfer extends Transaction {
         if (from.getBalance() >= amount) {
             from.withdraw(amount);
             to.deposit(amount);
-            System.out.println("Tranfer of the amount  " + amount + "€ from " + from.getIban() + " to " + to.getIban());
-            System.out.println("Sender Reason: "+ senderReason);
-            System.out.println("Receiver reason: "+ receiverReason);
 
-            StatementEntry fromAccountEntry = new StatementEntry(getTransactor().getUsername(), from.getIban(), to.getIban(), amount, senderReason, "Debit", LocalDateTime.now(), from.getBalance() );
-            StatementEntry toAccountEntry = new StatementEntry(getTransactor().getUsername(), from.getIban(), to.getIban(), amount, receiverReason, "Credit", LocalDateTime.now(), to.getBalance() );
+            System.out.println("Transfer of " + amount + "€ from " + from.getIban() + " to " + to.getIban());
+            System.out.println("Sender Reason: " + senderReason);
+            System.out.println("Receiver Reason: " + receiverReason);
+
+            StatementEntry fromAccountEntry = new StatementEntry(
+                getTransactor().getUsername(),
+                from.getIban(),
+                to.getIban(),
+                amount,
+                senderReason,
+                "Debit",
+                LocalDateTime.now(),
+                from.getBalance()
+            );
+
+            StatementEntry toAccountEntry = new StatementEntry(
+                getTransactor().getUsername(),
+                from.getIban(),
+                to.getIban(),
+                amount,
+                receiverReason,
+                "Credit",
+                LocalDateTime.now(),
+                to.getBalance()
+            );
 
             StatementManager statementManager = new StatementManager();
-            statementManager.addStatement(fromAccountEntry);
-            statementManager.addStatement(toAccountEntry);
+            statementManager.save(from, fromAccountEntry);
+            statementManager.save(to, toAccountEntry);
 
         } else {
-            System.out.println("Unavailable tranfer due to isufficient balance");
+            System.out.println("Unavailable transfer due to insufficient balance.");
         }
     }
 }

@@ -18,30 +18,35 @@ public class Withdrawal extends Transaction {
         this.amount = amount;
     }
 
-
     public double getAmount() {
         return amount;
     }
+
     public void setAmount(double amount) {
         this.amount = amount;
     }
 
     @Override
     public void execute() {
-
-        if(account.getBalance()>= amount){
+        if (account.getBalance() >= amount) {
             account.withdraw(amount);
-            System.out.println("The amount of " + amount +"€ has been withdrawaled from " + account.getIban());
+            System.out.println("The amount of " + amount + "€ has been withdrawn from " + account.getIban());
 
-            StatementEntry entry = new StatementEntry(getTransactor().getUsername(), account.getIban(), null, amount, "Withdrawal", "Debit", LocalDateTime.now(), account.getBalance() );
+            StatementEntry entry = new StatementEntry(
+                getTransactor().getUsername(),
+                account.getIban(),
+                null,
+                amount,
+                "Withdrawal",
+                "Debit",
+                LocalDateTime.now(),
+                account.getBalance()
+            );
 
             StatementManager statementManager = new StatementManager();
-            statementManager.addStatement(entry);
-
-        }else {
-            System.out.println("Unavailable to withdraw due to isufficient balance.");
+            statementManager.save(account, entry); // ✅ Σωστό!
+        } else {
+            System.out.println("Unavailable to withdraw due to insufficient balance.");
         }
-
     }
-
 }

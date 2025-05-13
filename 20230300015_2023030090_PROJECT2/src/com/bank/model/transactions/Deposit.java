@@ -17,17 +17,23 @@ public class Deposit extends Transaction {
         this.amount = amount;
     }
 
-
     @Override
     public void execute() {
         account.deposit(amount);
         System.out.println("Deposit of " + amount + "€ in " + account.getIban());
 
-        StatementEntry entry = new StatementEntry(getTransactor().getUsername(), null, account.getIban(), amount, "Deposit", "Credit", LocalDateTime.now(), account.getBalance() );
+        StatementEntry entry = new StatementEntry(
+            getTransactor().getUsername(),
+            null,
+            account.getIban(),
+            amount,
+            "Deposit",
+            "Credit",
+            LocalDateTime.now(),
+            account.getBalance()
+        );
 
         StatementManager statementManager = new StatementManager();
-        statementManager.addStatement(entry);
-
-
+        statementManager.save(account, entry); // ✅ Σωστή μέθοδος
     }
 }

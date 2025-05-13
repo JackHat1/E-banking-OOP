@@ -13,17 +13,14 @@ public class Payment extends Transaction {
     private Account from;
     private Account business;
 
-
     public Payment(Bill bill, Account from, Account business, User transactor) {
         super(transactor, "Payment");
         this.bill = bill;
         this.from = from;
         this.business = business;
-
     }
 
-    
-    public Bill getBill(){
+    public Bill getBill() {
         return bill;
     }
 
@@ -33,17 +30,37 @@ public class Payment extends Transaction {
             from.withdraw(bill.getAmount());
             business.deposit(bill.getAmount());
             bill.isPaid = true;
-            System.out.println("Payment from " + bill.getAmount() + "€ to business " + business.getIban() + " [RF: " + bill.getPaymentCode() + "]");
 
-            StatementEntry fromAccountEntry = new StatementEntry(getTransactor().getUsername(), from.getIban(), business.getIban(), bill.getAmount(), "Payment ["+ bill.getPaymentCode()+"]", "Debit", LocalDateTime.now(), from.getBalance() );
-            StatementEntry businessAccountEntry = new StatementEntry(getTransactor().getUsername(), from.getIban(), business.getIban(), bill.getAmount(), "Receive Payment ["+ bill.getPaymentCode()+"]", "Credit", LocalDateTime.now(), business.getBalance() );
+            System.out.println("Payment of " + bill.getAmount() + "€ to business " + business.getIban() + " [RF: " + bill.getPaymentCode() + "]");
+
+            StatementEntry fromAccountEntry = new StatementEntry(
+                getTransactor().getUsername(),
+                from.getIban(),
+                business.getIban(),
+                bill.getAmount(),
+                "Payment [" + bill.getPaymentCode() + "]",
+                "Debit",
+                LocalDateTime.now(),
+                from.getBalance()
+            );
+
+            StatementEntry businessAccountEntry = new StatementEntry(
+                getTransactor().getUsername(),
+                from.getIban(),
+                business.getIban(),
+                bill.getAmount(),
+                "Receive Payment [" + bill.getPaymentCode() + "]",
+                "Credit",
+                LocalDateTime.now(),
+                business.getBalance()
+            );
 
             StatementManager statementManager = new StatementManager();
-            statementManager.addStatement(fromAccountEntry);
-            statementManager.addStatement(businessAccountEntry);
+            statementManager.save(from, fromAccountEntry);
+            statementManager.save(business, businessAccountEntry);
 
         } else {
-            System.out.println(" Unavailable payment due to insufficient balance.");
+            System.out.println("Unavailable payment due to insufficient balance.");
         }
     }
 }
