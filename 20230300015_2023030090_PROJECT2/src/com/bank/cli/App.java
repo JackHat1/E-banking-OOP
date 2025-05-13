@@ -5,6 +5,8 @@ import com.bank.manager.AccountManager;
 import com.bank.model.users.*;
 import com.bank.model.accounts.*;
 
+import java.io.File;
+import java.time.LocalDate;
 import java.util.*;
 
 public class App {
@@ -13,6 +15,8 @@ public class App {
     private AccountManager accountManager = new AccountManager(userManager);
     private Scanner scanner = new Scanner(System.in);
     private User loggedInUser;
+    private LocalDate currentDate = LocalDate.of(2025, 5, 1); // αρχική ημερομηνία συστήματος
+
 
     public void run() {
         userManager.load();
@@ -154,7 +158,8 @@ public class App {
             System.out.println("0. Έξοδος");
     
             String option = scanner.nextLine();
-    
+            System.out.println("7. Προώθηση Ημέρας (Simulate Time Passing)");
+
             switch (option) {
                 case "1":
                     showAccounts();
@@ -174,6 +179,10 @@ public class App {
                 case "6":
                     showStatementMenu();
                     break;
+                 case "7":
+                    simulateNextDay();
+                    break;
+                
                 case "0":
                     System.out.println("📦 Αποθήκευση...");
                     userManager.saveAll();
@@ -182,6 +191,8 @@ public class App {
                     return;
                 default:
                     System.out.println("❌ Άκυρη επιλογή.");
+
+
             }
         }
     }
@@ -229,6 +240,22 @@ public class App {
         acc.deposit(amount);
         System.out.println("✅ Κατατέθηκαν " + amount + "€ στον " + acc.getIban());
     }
+        private void simulateNextDay() {
+        currentDate = currentDate.plusDays(1);
+        System.out.println("📅 Προχωρήσαμε στην ημερομηνία: " + currentDate);
+
+        String filename = "./data/bills/" + currentDate + ".csv";
+        File file = new File(filename);
+        if (file.exists()) {
+            System.out.println("📥 Φόρτωση νέων λογαριασμών από: " + filename);
+            billManager.loadDailyBills(filename); // Εδώ θα φορτώσεις τα bills
+        } else {
+            System.out.println("ℹ️ Δεν υπάρχουν λογαριασμοί για την ημερομηνία.");
+        }
+
+        // TODO: Εκτέλεση standing orders (όταν υλοποιηθούν)
+    }
+
 
     private void transferMenu() {
         System.out.println("🔁 Λογαριασμοί σου για αποστολή:");
@@ -287,4 +314,5 @@ public class App {
 
         
     }
+    
 }
