@@ -25,8 +25,6 @@ public class Bill implements Storable{
         this.isPaid = false;
     }
     
-    
-
 
     public String getPaymentCode() {
         return paymentCode;

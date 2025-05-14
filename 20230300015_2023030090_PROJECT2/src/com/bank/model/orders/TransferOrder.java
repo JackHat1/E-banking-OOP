@@ -26,6 +26,59 @@ public class TransferOrder extends StandingOrder{
         
     }
 
+    @Override
+    public String marshal(){
+        StringBuffer sb = new StringBuffer();
+        sb.append("type:TransferOrder,");
+        sb.append("orderId:").append(getOrderId()).append(",");
+        sb.append("title:").append(getTitle()).append(",");
+        sb.append("description:").append(getDescription()).append(",");
+        //customer??den jerw akoma
+        sb.append("amount:").append(amount).append(",");
+        sb.append("startDate:").append(getStartingDate()).append(",");
+        sb.append("endDate:").append(getEndingDate()).append(",");
+        //fee?? 
+        sb.append("chargeAccount:").append(from.getIban()).append(",");
+        sb.append("creditAccount:").append(to.getIban()).append(",");
+        sb.append("frequencyInMonths:").append(transferFreq).append(",");
+        sb.append("dayOfMonth").append(transferDay);
+        return sb.toString();
+    }
+
+    @Override
+    public void unmarshal(String data){
+        String[] keyValue= data.split(",");
+        String key= keyValue[0];
+        String value= "";
+
+        if(keyValue.length > 1){
+            value= keyValue[1];
+        }
+
+        if(key.equals("orderId")){
+            this.orderId= value;
+        } else if(key.equals("title")){
+            this.title= value;
+        } else if(key.equals("description")){
+            this.description= value;
+        } else if(key.equals("amount")){
+            this.amount= Double.parseDouble(value);
+        } else if(key.equals("startDate")){
+            this.startingDate= LocalDate.parse(value);
+        } else if(key.equals("endDate")){
+            this.endingDate= LocalDate.parse(value);
+        } else if(key.equals("chargeAccount")){
+            this.from = new Account(value, 0.0); // den jerw akoma
+        } else if(key.equals("creditAccount")){
+            this.to = new Account(value, 0.0);
+        } else if(key.equals("frequencyInMonths")){
+            this.transferFreq= Integer.parseInt(value);
+        } else if(key.equals("dayOfMonth")){
+            this.transferDay= Integer.parseInt(value);
+        } 
+      
+    }
+
 
     
 }

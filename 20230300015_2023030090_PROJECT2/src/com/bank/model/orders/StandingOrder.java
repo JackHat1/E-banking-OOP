@@ -5,12 +5,12 @@ import java.util.UUID;
 
 public abstract class StandingOrder {
     
-    private String orderId;
-    private String title;
+    protected String orderId;
+    protected String title;
     public String description;
     public Boolean isActive = true;
-    private LocalDate startingDate;
-    private LocalDate endingDate;
+    protected LocalDate startingDate;
+    protected LocalDate endingDate;
 
 
     public StandingOrder(String title, String description, LocalDate startingDate, LocalDate endingDate){
@@ -49,6 +49,9 @@ public abstract class StandingOrder {
 
     //pulic void activewithinperiod()
     public abstract void execute();
+
+    public abstract String marshal();
+    public abstract void unmarshal(String data);
 
 
 }
