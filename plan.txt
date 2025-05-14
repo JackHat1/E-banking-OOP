@@ -216,4 +216,25 @@ private static TransactionManager instance = null;
     }
 
   --------------------------------------------
-  
+  TI ALLAXA 13/5
+  StatementEntry.java αποθηκευτεί/διαβαστεί σε αρχείο CSV. 
+  EVALA marshal/unmarshal GIA ton parapano logo 
+
+
+  BILL.java
+ evgala ton constructor με dummy arguments (Company X, boolean) me pragmatikes times .
+
+ TransactionManager.java
+ gia abstract evala execute gia na einai pio sosto opos to thelei to pdf
+ 
+ StatementManager.java
+
+ public void save(Account acc, StatementEntry entry)
+public List<StatementEntry> load(Account acc)
+
+save () apothikeyei data/statements/<IBAN>.csv
+
+load() olo to history apo to account .
+
+
+//////////////////////////
