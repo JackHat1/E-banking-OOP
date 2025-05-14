@@ -19,8 +19,21 @@ public class PaymentOrder extends StandingOrder{
     }
 
     @Override
-    public void execute(){
+    public void execute(){          //na ftaiksw gia ton xrono
         
+        if(bill.getAmount() <= maxAmount ){
+
+            if(bill.getAmount() <= from.getBalance()){
+                from.withdraw(bill.getAmount());
+                bill.setPaid(true);
+                System.out.println("Payment executed for bill " + bill.getPaymentCode());
+            } else{
+                System.out.println("Payment failed due to insufficient funds.");
+            }
+        } else{
+            System.out.println("Payment failed due to exceeding max amount.");
+        }
+
     }
 
     @Override

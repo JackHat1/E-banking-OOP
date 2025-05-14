@@ -12,7 +12,7 @@ public class Bill implements Storable{
     private Account issuer;
     private LocalDate issueDate;
     private LocalDate dueDate;
-    public boolean isPaid = true;
+    public boolean isPaid;
 
 
     public Bill(String billNumber, String paymentCode, double amount, Account issuer) {
@@ -22,7 +22,7 @@ public class Bill implements Storable{
         this.issuer = issuer;
         this.issueDate = LocalDate.now();
         this.dueDate = LocalDate.now().plusDays(30);
-        this.isPaid = false;
+        //this.isPaid = false;
     }
     
 
@@ -74,7 +74,16 @@ public class Bill implements Storable{
         this.dueDate = dueDate;
     }
 
+    //-------------------toys thelw
+    public boolean isPaid() {
+        return isPaid;
+    }
 
+
+    public void setPaid(boolean isPaid) {
+        this.isPaid = isPaid;
+    }
+    //----------------
 
     public String toString(){
         return "Bill{ "+ "Payment Code: "+ paymentCode + 

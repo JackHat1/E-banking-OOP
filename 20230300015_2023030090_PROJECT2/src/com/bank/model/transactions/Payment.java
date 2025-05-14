@@ -29,7 +29,7 @@ public class Payment extends Transaction {
         if (from.getBalance() >= bill.getAmount()) {
             from.withdraw(bill.getAmount());
             business.deposit(bill.getAmount());
-            bill.isPaid = true;
+            bill.setPaid(true);
 
             System.out.println("Payment of " + bill.getAmount() + "€ to business " + business.getIban() + " [RF: " + bill.getPaymentCode() + "]");
 
