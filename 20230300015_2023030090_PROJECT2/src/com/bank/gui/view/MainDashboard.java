@@ -13,7 +13,7 @@ public class MainDashboard extends JFrame {
     private CardLayout cardLayout;
     private JPanel contentPanel;
 
-    public MainDashboard(User user, AccountManager accountManager) {
+    public MainDashboard(User user, AccountManager accountManager, UserManager userManager) {
         setTitle("Bank Of TUC");
         setSize(1000, 650);
         setLocationRelativeTo(null);
@@ -76,6 +76,7 @@ public class MainDashboard extends JFrame {
             ));
 
             JPanel panel;
+
             switch (item) {
                 case "Λογαριασμοί":
                     panel = new AccountsPanel(user, accountManager); break;
@@ -94,7 +95,7 @@ public class MainDashboard extends JFrame {
                 case "Εισερχόμενες Πληρωμές":
                     panel = new CompanyPaymentsPanel(user, accountManager); break;
                 case "Όλοι οι Πελάτες":
-                    panel = new AdminCustomerListPanel(); break;
+                    panel = new AdminCustomerListPanel(userManager); break;
                 case "Δημιουργία Πελάτη":
                     panel = new AdminCreateCustomerPanel(); break;
                 case "Εισαγωγή RF":

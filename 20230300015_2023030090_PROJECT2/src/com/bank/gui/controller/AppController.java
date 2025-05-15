@@ -38,7 +38,7 @@ public class AppController {
 
     private void showDashboard(User user) {
         System.out.println(">>> Συνδέθηκε: " + user.getClass().getSimpleName());
-        new MainDashboard(user, accountManager);
+        new MainDashboard(user, accountManager,userManager);
     }
 
     
