@@ -1,8 +1,6 @@
 package com.bank.gui.view.panel;
 
-import com.bank.manager.AccountManager;
-import com.bank.manager.BillManager;
-import com.bank.manager.TransactionManager;
+import com.bank.manager.*;
 import com.bank.model.accounts.Account;
 import com.bank.model.bills.Bill;
 import com.bank.model.transactions.Payment;
@@ -14,7 +12,7 @@ import java.util.List;
 
 public class PayBillPanel extends JPanel {
 
-    public PayBillPanel(User user, AccountManager accountManager) {
+    public PayBillPanel(User user, AccountManager accountManager, UserManager userManager) {
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);
 
@@ -94,7 +92,8 @@ public class PayBillPanel extends JPanel {
             String rf = rfField.getText().trim();
 
             try {
-                double amount = Double.parseDouble(amountField.getText().trim());
+                String amountText = amountField.getText().trim().replace(",", ".");
+                double amount = Double.parseDouble(amountText);
 
                 if (amount <= 0 || rf.isEmpty()) {
                     JOptionPane.showMessageDialog(this, "❌ Συμπλήρωσε σωστά όλα τα πεδία.");
@@ -102,13 +101,14 @@ public class PayBillPanel extends JPanel {
                 }
 
                 BillManager billManager = new BillManager();
-                Bill bill = billManager.getBill(rf);
+                billManager.load(userManager, accountManager);
+                Bill bill = billManager.getBillByRF(rf);
 
                 if (bill == null) {
                     JOptionPane.showMessageDialog(this, "❌ Δεν βρέθηκε RF: " + rf);
                     return;
                 }
-                if (bill.isPaid) {
+                if (bill.isPaid()) {
                     JOptionPane.showMessageDialog(this, "⚠️ Ο λογαριασμός έχει ήδη πληρωθεί.");
                     return;
                 }

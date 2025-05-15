@@ -87,7 +87,7 @@ public class MainDashboard extends JFrame {
                 case "Μεταφορά":
                     panel = new TransferPanel(user, accountManager); break;
                 case "Πληρωμή RF":
-                    panel = new PayBillPanel(user, accountManager); break;
+                    panel = new PayBillPanel(user, accountManager, userManager);  break;
                 case "Κινήσεις":
                     panel = new StatementPanel(user, accountManager); break;
                 case "Προώθηση Ημέρας":

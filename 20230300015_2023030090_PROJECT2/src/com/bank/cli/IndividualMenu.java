@@ -125,7 +125,7 @@ public class IndividualMenu {
         String rf = scanner.nextLine();
         System.out.print("💶 Ποσό: ");
         double amount = Double.parseDouble(scanner.nextLine());
-        Bill bill = billManager.getBill(rf);
+        Bill bill = billManager.getBillByRF(rf);
         if (bill == null || bill.isPaid || from.getBalance() < amount) {
             System.out.println("❌ Μη έγκυρη πληρωμή.");
             return;

@@ -47,6 +47,16 @@ public class BillManager {
         }
     }
 
+    public Bill getBillByRF(String rfCode) {
+        for (Bill bill : bills) {
+            if (bill.getPaymentCode().equals(rfCode)) {
+                return bill;
+            }
+        }
+        return null;
+    }
+
+
 
     public void payBills(String billNumber){
         Bill bill = getBill(billNumber);
@@ -63,6 +73,8 @@ public class BillManager {
             //transactionManager.transactionExecution(transaction);
 
         }
+
+        
 
     }
 
