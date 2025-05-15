@@ -1,6 +1,3 @@
-// New structure for cleaner separation
-
-// === FILE: MainDashboard.java ===
 package com.bank.gui.view;
 
 import javax.swing.*;
@@ -12,6 +9,7 @@ import com.bank.manager.*;
 import com.bank.model.users.*;
 
 public class MainDashboard extends JFrame {
+
     private CardLayout cardLayout;
     private JPanel contentPanel;
 
@@ -39,28 +37,43 @@ public class MainDashboard extends JFrame {
         headerPanel.add(titleLabel, BorderLayout.CENTER);
         add(headerPanel, BorderLayout.NORTH);
 
-        // Menu
-        JPanel menuPanel = new JPanel(new GridLayout(8, 1, 5, 5));
-        menuPanel.setBackground(new Color(240, 240, 240));
-        menuPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        // === Menu items ανάλογα με user type ===
+        String[] menuItems;
 
-        String[] menuItems = {
-            "Αρχική", "Λογαριασμοί", "Κατάθεση", "Ανάληψη",
-            "Μεταφορά", "Πληρωμή RF", "Κινήσεις", "Αποσύνδεση"
-        };
+        if (user instanceof Individual) {
+            menuItems = new String[] {
+                "Αρχική", "Λογαριασμοί", "Κατάθεση", "Ανάληψη",
+                "Μεταφορά", "Πληρωμή RF", "Κινήσεις", "Προώθηση Ημέρας", "Αποσύνδεση"
+            };
+        } else if (user instanceof Company) {
+            menuItems = new String[] {
+                "Αρχική", "Εισερχόμενες Πληρωμές", "Αποσύνδεση"
+            };
+        } else if (user instanceof Admin) {
+            menuItems = new String[] {
+                "Αρχική", "Όλοι οι Πελάτες", "Δημιουργία Πελάτη", "Εισαγωγή RF", "Αποσύνδεση"
+            };
+        } else {
+            menuItems = new String[] { "Αρχική", "Αποσύνδεση" };
+        }
+
+        // === Layout setup ===
+        JPanel menuPanel = new JPanel(new GridLayout(0, 1, 10, 10));
+        menuPanel.setBackground(new Color(245, 245, 245));
+        menuPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         cardLayout = new CardLayout();
         contentPanel = new JPanel(cardLayout);
 
-        Map<String, JPanel> pages = new LinkedHashMap<>();
         for (String item : menuItems) {
             JButton btn = new JButton(item);
             btn.setFocusPainted(false);
             btn.setBackground(Color.WHITE);
-            btn.setFont(new Font("SansSerif", Font.PLAIN, 14));
-            btn.setPreferredSize(new Dimension(160, 35));
-            btn.addActionListener(e -> cardLayout.show(contentPanel, item));
-            menuPanel.add(btn);
+            btn.setFont(new Font("SansSerif", Font.BOLD, 14));
+            btn.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(200, 200, 200)),
+                BorderFactory.createEmptyBorder(10, 20, 10, 20)
+            ));
 
             JPanel panel;
             switch (item) {
@@ -70,12 +83,36 @@ public class MainDashboard extends JFrame {
                     panel = new DepositPanel(user, accountManager); break;
                 case "Ανάληψη":
                     panel = new WithdrawPanel(user, accountManager); break;
+                case "Μεταφορά":
+                    panel = new TransferPanel(user, accountManager); break;
+                case "Πληρωμή RF":
+                    panel = new PayBillPanel(user, accountManager); break;
+                case "Κινήσεις":
+                    panel = new StatementPanel(user, accountManager); break;
+                case "Προώθηση Ημέρας":
+                    panel = new SimulateDatePanel(); break;
+                case "Εισερχόμενες Πληρωμές":
+                    panel = new CompanyPaymentsPanel(user, accountManager); break;
+                case "Όλοι οι Πελάτες":
+                    panel = new AdminCustomerListPanel(); break;
+                case "Δημιουργία Πελάτη":
+                    panel = new AdminCreateCustomerPanel(); break;
+                case "Εισαγωγή RF":
+                    panel = new AdminImportRFPanel(); break;
+                case "Αποσύνδεση":
+                    btn.addActionListener(e -> {
+                        dispose();
+                        new LoginWindow();
+                    });
+                    panel = new JPanel(); break;
                 default:
                     panel = new JPanel();
                     panel.setBackground(Color.WHITE);
                     panel.add(new JLabel("📄 Ενότητα: " + item)); break;
             }
 
+            btn.addActionListener(e -> cardLayout.show(contentPanel, item));
+            menuPanel.add(btn);
             contentPanel.add(panel, item);
         }
 

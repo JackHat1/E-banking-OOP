@@ -37,19 +37,9 @@ public class AppController {
     }
 
     private void showDashboard(User user) {
-        System.out.println(">>> Συνδέθηκε ο χρήστης: " + user.getClass().getSimpleName());
-    
-        if (user instanceof Individual || user instanceof Customer) {
-            new MainDashboard(user, accountManager); // ✅ Χρήση νέου GUI
-        } else if (user instanceof Company) {
-            JOptionPane.showMessageDialog(null, "🚧 Company Dashboard δεν έχει υλοποιηθεί ακόμα.");
-        } else if (user instanceof Admin) {
-            JOptionPane.showMessageDialog(null, "🚧 Admin Dashboard δεν έχει υλοποιηθεί ακόμα.");
-        } else {
-            JOptionPane.showMessageDialog(null,
-                "❌ Ο ρόλος του χρήστη δεν υποστηρίζεται: " + user.getClass().getSimpleName(),
-                "Άγνωστος Χρήστης", JOptionPane.ERROR_MESSAGE);
-        }
+        System.out.println(">>> Συνδέθηκε: " + user.getClass().getSimpleName());
+        new MainDashboard(user, accountManager);
     }
+
     
 }
