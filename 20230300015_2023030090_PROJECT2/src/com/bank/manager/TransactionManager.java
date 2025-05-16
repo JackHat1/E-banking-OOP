@@ -17,11 +17,12 @@ public class TransactionManager {
             transaction.execute();
             history.add(transaction);
 
+        
             // Αν είναι Deposit ή Withdrawal ή Transfer κ.λπ.
             // Το StatementEntry δημιουργείται ΜΕΣΑ στο transaction.execute()
             // Άρα εδώ δεν κάνουμε τίποτα άλλο
         } catch (Exception e) {
-            System.err.println("❌ Σφάλμα κατά την εκτέλεση συναλλαγής: " + e.getMessage());
+            System.err.println("Error at the transaction execution : " + e.getMessage());
         }
     }
 

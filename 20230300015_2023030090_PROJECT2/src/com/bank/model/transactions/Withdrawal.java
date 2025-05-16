@@ -44,7 +44,7 @@ public class Withdrawal extends Transaction {
             );
 
             StatementManager statementManager = new StatementManager();
-            statementManager.save(account, entry); // ✅ Σωστό!
+            statementManager.save(account, entry); 
         } else {
             System.out.println("Unavailable to withdraw due to insufficient balance.");
         }

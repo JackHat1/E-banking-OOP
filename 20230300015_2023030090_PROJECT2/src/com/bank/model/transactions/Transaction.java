@@ -1,10 +1,12 @@
 package com.bank.model.transactions;
 
+import com.bank.model.statements.StatementEntry;
 import com.bank.model.users.User;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 public abstract class Transaction {
+    protected StatementEntry statementEntry;
     protected String transactionId;
     protected LocalDateTime timestamp;
     protected User transactor;
@@ -18,6 +20,9 @@ public abstract class Transaction {
         this.reason = reason;
     }
 
+    public StatementEntry getStatementEntry(){
+        return statementEntry;
+    }
 
     public String getTransactionId() { 
         return transactionId; 

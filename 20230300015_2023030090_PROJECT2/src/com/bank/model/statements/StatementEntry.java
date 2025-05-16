@@ -63,7 +63,7 @@ public class StatementEntry {
 
             return new StatementEntry(transactor, fromIban, toIban, amount, reason, type, timestamp, balance);
         } catch (Exception e) {
-            System.err.println("❌ Σφάλμα unmarshal StatementEntry: " + e.getMessage());
+            System.err.println("Error unmarshal StatementEntry: " + e.getMessage());
             return null;
         }
     }

@@ -17,13 +17,13 @@ public class StatementManager {
     }
 
     public void save(Account acc, StatementEntry entry) {
-        String path = basePath + acc.getIban() + ".csv";
+        String fullPath = basePath + acc.getIban() + ".csv";
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(path, true))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fullPath, true))) {
             writer.write(entry.marshal());
             writer.newLine();
         } catch (IOException e) {
-            System.err.println("❌ Σφάλμα στην αποθήκευση statement: " + e.getMessage());
+            System.err.println("Error in statement save: " + e.getMessage());
         }
     }
 
@@ -40,7 +40,7 @@ public class StatementManager {
                 if (entry != null) list.add(entry);
             }
         } catch (IOException e) {
-            System.err.println("❌ Σφάλμα στην ανάγνωση statement: " + e.getMessage());
+            System.err.println("Error in statement load: " + e.getMessage());
         }
 
         return list;
