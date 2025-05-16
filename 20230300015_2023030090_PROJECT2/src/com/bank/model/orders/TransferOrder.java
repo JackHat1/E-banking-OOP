@@ -11,6 +11,7 @@ public class TransferOrder extends StandingOrder{
     private double amount;
     private int transferFreq; // se mines
     private int transferDay;
+    private int failedAttempts= 0;
 
     public TransferOrder(String title, String description, Account from, Account to, double amount, int transferFreq, int transferDay, LocalDate startingDate, LocalDate endingDate){
         super(title, description, startingDate, endingDate);
@@ -22,10 +23,40 @@ public class TransferOrder extends StandingOrder{
     }
 
     @Override
-    public void execute(){
+    public void execute(LocalDate trDayDate){
+
+        if(!trDayDate.isBefore(getStartingDate()) && !trDayDate.isAfter(getEndingDate())) {
+            if(trDayDate.getDayOfMonth()== transferDay){
+
+                if(amount <= from.getBalance()){
+                    from.withdraw(amount);
+                    to.deposit(amount);
+                    failedAttempts= 0;
+                    System.out.println("Transfer executed "+ amount+ " from "+ from.getIban()+ " to "+to.getIban()+".");
+
+                }else{
+                    failedAttempts++;
+                    System.out.println("Transfer failed due to insuffincient amount in balance.");
+                }
+
+            } else{
+                System.out.println("Tranfer not thiw month.");
+            }
+
+        }else {
+            System.out.println("Transfer not this period.");
+        }
+
+  
+        if(failedAttempts > 3){
+            System.out.println("Maximum failed attempts reached. ");
+            return;
+        }
+
         
     }
 
+    
     @Override
     public String marshal(){
         StringBuffer sb = new StringBuffer();

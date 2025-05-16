@@ -50,13 +50,14 @@ public class Bill implements Storable{
         this.amount = amount;
     }
 
-    private Account getIssuer() {
+    public Account getIssuer() {
         return issuer;
     }
 
-    private void setIssuer(Account issuer) {
+    public void setIssuer(Account issuer) {
         this.issuer = issuer;
     }
+
 
     private LocalDate getIssueDate() {
         return issueDate;
@@ -66,7 +67,7 @@ public class Bill implements Storable{
         this.issueDate = issueDate;
     }
 
-    private LocalDate getDueDate() {
+    public LocalDate getDueDate() {
         return dueDate;
     }
 

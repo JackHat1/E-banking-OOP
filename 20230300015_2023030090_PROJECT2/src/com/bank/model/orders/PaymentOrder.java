@@ -10,6 +10,8 @@ public class PaymentOrder extends StandingOrder{
     private Bill bill;
     private Account from;
     private double maxAmount;
+    private int failedAttempts= 0;
+    
 
     public PaymentOrder(String title, String description, Bill bill, Account from, double maxAmount, LocalDate startingDate, LocalDate endingDate){
         super(title , description, startingDate, endingDate);
@@ -19,19 +21,32 @@ public class PaymentOrder extends StandingOrder{
     }
 
     @Override
-    public void execute(){          //na ftaiksw gia ton xrono
-        
-        if(bill.getAmount() <= maxAmount ){
+    public void execute(LocalDate paymentDay){  //na ftaiksw gia ton xrono
 
-            if(bill.getAmount() <= from.getBalance()){
-                from.withdraw(bill.getAmount());
-                bill.setPaid(true);
-                System.out.println("Payment executed for bill " + bill.getPaymentCode());
+        if(bill.getDueDate().isEqual(paymentDay)){
+
+            if(bill.getAmount() <= maxAmount ){
+
+                if(bill.getAmount() <= from.getBalance()){
+                    from.withdraw(bill.getAmount());
+                    bill.setPaid(true);
+                    failedAttempts= 0;
+                    System.out.println("Payment executed for bill " + bill.getPaymentCode());
+                } else{
+                    failedAttempts++;
+                    System.out.println("Payment failed due to insufficient funds.");
+                }
             } else{
-                System.out.println("Payment failed due to insufficient funds.");
+                failedAttempts++;
+                System.out.println("Payment failed due to exceeding max amount.");
             }
-        } else{
-            System.out.println("Payment failed due to exceeding max amount.");
+
+        }
+
+        if(failedAttempts > 3){
+            System.out.println("Maximum failed attempts reached. ");
+            return;
+
         }
 
     }
@@ -86,9 +101,6 @@ public class PaymentOrder extends StandingOrder{
         }
         
         
-
-
-
     }
 
     

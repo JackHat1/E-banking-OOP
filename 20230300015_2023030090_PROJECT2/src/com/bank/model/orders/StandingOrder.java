@@ -49,8 +49,7 @@ public abstract class StandingOrder implements Storable {
     }
 
 
-    //pulic void activewithinperiod()
-    public abstract void execute();
+    public abstract void execute(LocalDate date);
 
     public abstract String marshal();
     public abstract void unmarshal(String data);
