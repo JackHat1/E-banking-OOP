@@ -2,6 +2,7 @@ package com.bank.model.orders;
 
 import java.time.LocalDate;
 
+import com.bank.manager.TransactionManager;
 import com.bank.model.accounts.Account;
 
 public class TransferOrder extends StandingOrder{
@@ -23,7 +24,7 @@ public class TransferOrder extends StandingOrder{
     }
 
     @Override
-    public void execute(LocalDate trDayDate){
+    public void execute(LocalDate trDayDate){  //na ftaiksw gia ton xrono
 
         if(!trDayDate.isBefore(getStartingDate()) && !trDayDate.isAfter(getEndingDate())) {
             if(trDayDate.getDayOfMonth()== transferDay){
@@ -60,7 +61,7 @@ public class TransferOrder extends StandingOrder{
     @Override
     public String marshal(){
         StringBuffer sb = new StringBuffer();
-        sb.append("type:TransferOrder,");
+        sb.append("type:TransferOrder").append(",");
         sb.append("orderId:").append(getOrderId()).append(",");
         sb.append("title:").append(getTitle()).append(",");
         sb.append("description:").append(getDescription()).append(",");

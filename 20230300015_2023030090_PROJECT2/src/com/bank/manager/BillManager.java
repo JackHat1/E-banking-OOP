@@ -1,10 +1,6 @@
 package com.bank.manager;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +8,7 @@ import com.bank.model.accounts.Account;
 import com.bank.model.bills.Bill;
 import com.bank.model.transactions.Payment;
 import com.bank.model.users.User;
+import com.bank.storage.CsvStorageManager;
 
 
 public class BillManager {
@@ -19,6 +16,7 @@ public class BillManager {
     private final List<Bill> bills = new ArrayList<>();
     private final String billsFolder= "./data/bills/";
     private AccountManager accountManager;
+    private final CsvStorageManager storage= new CsvStorageManager();
 
 
     public BillManager(AccountManager accountManager){
@@ -27,11 +25,11 @@ public class BillManager {
 
 
 
-    public void create(Bill bill){
+    public void createBill(Bill bill){
         bills.add(bill);
     }
 
-    public void delete(Bill bill){
+    public void deleteBill(Bill bill){
         if (bills.contains(bill)){
 
             bills.remove(bill);
@@ -39,9 +37,10 @@ public class BillManager {
 
     }
 
-    public void save(String fileName){
+    public void saveBill(){
 
-        try(BufferedWriter writer= new BufferedWriter(new FileWriter(fileName))){
+        storage.saveAll(bills, billsFolder, false);
+        /*try(BufferedWriter writer= new BufferedWriter(new FileWriter(fileName))){
             for(Bill bill: bills){
                 writer.write(bill.marshal());
                 writer.newLine();
@@ -49,7 +48,7 @@ public class BillManager {
 
         }catch(IOException e){
             System.err.println("Error saving file: "+ e.getMessage());
-        }
+        }*/
 
     }
 
@@ -63,9 +62,23 @@ public class BillManager {
     }
 
 
-    public void loadBills(String fileName){
+    public void loadBills(){
+
+        List<String> lines = storage.loadLines(billsFolder);
         
-        String fullPath = billsFolder+ fileName;
+        for(String line: lines){
+            Bill bill= new Bill("", "", 0.0,null);
+                bill.unmarshal(line);
+
+                String[] parts= line.split(",");
+                String issuer = parts[3];
+                Account issuerAcc = accountManager.findByIban(issuer);
+                bill.setIssuer(issuerAcc);
+                bills.add(bill);
+
+        }
+        /* 
+        String fullPath = billsFolder;
         try( BufferedReader reader= new BufferedReader(new FileReader(fullPath))){
             String line;
 
@@ -82,7 +95,7 @@ public class BillManager {
             }
         } catch(IOException e){
             System.err.println("Error reading file: "+ e.getMessage());
-        }
+        }*/
 
     }
 

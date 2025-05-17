@@ -2,6 +2,8 @@ package com.bank.model.orders;
 
 import java.time.LocalDate;
 import com.bank.model.bills.Bill;
+import com.bank.model.transactions.Transaction;
+import com.bank.manager.TransactionManager;
 import com.bank.model.accounts.Account;
 import com.bank.model.accounts.BusinessAccount;
 
@@ -28,6 +30,7 @@ public class PaymentOrder extends StandingOrder{
             if(bill.getAmount() <= maxAmount ){
 
                 if(bill.getAmount() <= from.getBalance()){
+
                     from.withdraw(bill.getAmount());
                     bill.setPaid(true);
                     failedAttempts= 0;
@@ -54,7 +57,7 @@ public class PaymentOrder extends StandingOrder{
     @Override
     public String marshal() {
         StringBuffer sb = new StringBuffer();
-        sb.append("type:PaymentOrder,");
+        sb.append("type:PaymentOrder").append(",");
         sb.append("orderId:").append(getOrderId()).append(",");
         sb.append("paymentCode:").append(bill.getPaymentCode()).append(",");
         sb.append("title:").append(getTitle()).append(",");
@@ -83,6 +86,7 @@ public class PaymentOrder extends StandingOrder{
             if(key.equals("orderId")){
                 this.orderId = value;
             } else if(key.equals("paymentCode")){
+                
                 this.bill= new Bill("", value, 0.0, null); // den jerw akoma
             } else if(key.equals("title")){
                 this.title= value;
@@ -95,7 +99,8 @@ public class PaymentOrder extends StandingOrder{
             } else if(key.equals("endDate")){
                 this.endingDate= LocalDate.parse(value);
             } else if(key.equals("chargeAccount")){
-                this.from = new Account(value, 0.0); // mhpws na baloyme to ibam ston constructor?
+                //this.from= accountManager.findByIban(value);
+                //this.from = new Account(value, 0.0); // mhpws na baloyme to ibam ston constructor?
             }
 
         }
