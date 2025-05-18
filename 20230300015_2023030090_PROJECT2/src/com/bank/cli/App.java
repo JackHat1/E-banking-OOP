@@ -6,16 +6,16 @@ import com.bank.model.users.*;
 import java.time.LocalDate;
 import java.util.Scanner;
 
-public class App {
+public class Main {
 
-    private final UserManager userManager = new UserManager();
-    private final TransactionManager transactionManager = new TransactionManager();
-    private final AccountManager accountManager = new AccountManager(userManager);
-    private final BillManager billManager = new BillManager();
-    private final Scanner scanner = new Scanner(System.in);
-    private User loggedInUser;
+    private static final UserManager userManager = new UserManager();
+    private static final TransactionManager transactionManager = new TransactionManager();
+    private static final AccountManager accountManager = new AccountManager(userManager);
+    private static final BillManager billManager = new BillManager();
+    private static final Scanner scanner = new Scanner(System.in);
+    private static User loggedInUser;
 
-    public void run() {
+    public static void main(String[] args) {
         userManager.load();
         accountManager.load();
 
@@ -34,7 +34,7 @@ public class App {
         saveAndExit();
     }
 
-    private void login() {
+    private static void login() {
         System.out.println("Σύνδεση Χρήστη");
         System.out.print("Username: ");
         String username = scanner.nextLine();
@@ -51,7 +51,7 @@ public class App {
         }
     }
 
-    private void saveAndExit() {
+    private static void saveAndExit() {
         System.out.println("📦 Αποθήκευση...");
         userManager.saveAll();
         accountManager.saveAll();
