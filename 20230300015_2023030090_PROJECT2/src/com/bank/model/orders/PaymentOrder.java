@@ -19,6 +19,8 @@ public class PaymentOrder extends StandingOrder{
     private int failedAttempts= 0;
     private String fromIban;
     private String paymentCode;
+    private String customerVat;
+    private double fee;
     
 
     public PaymentOrder(String title, String description, String paymentCode, String fromIban/*Bill bill, Account from*/, double maxAmount, LocalDate startingDate, LocalDate endingDate){
@@ -81,10 +83,11 @@ public class PaymentOrder extends StandingOrder{
         sb.append("paymentCode:").append(paymentCode).append(",");
         sb.append("title:").append(getTitle()).append(",");
         sb.append("description:").append(getDescription()).append(",");
-        //customer??den jerw akoma
+        sb.append("customer:").append(customerVat).append(",");
         sb.append("maxAmount:").append(maxAmount).append(",");
         sb.append("startDate:").append(getStartingDate()).append(",");
         sb.append("endDate:").append(getEndingDate()).append(",");
+        sb.append("fee:").append(fee).append(",");
         sb.append("chargeAccount:").append(fromIban);
         return sb.toString();
     }
@@ -111,12 +114,16 @@ public class PaymentOrder extends StandingOrder{
                 this.title= value;
             } else if(key.equals("description")){
                 this.description= value;
+            } else if(key.equals("customer")){
+                this.customerVat= value;
             } else if(key.equals("maxAmount")){
                 this.maxAmount= Double.parseDouble(value);
             } else if(key.equals("startDate")){
                 this.startingDate= LocalDate.parse(value);
             } else if(key.equals("endDate")){
                 this.endingDate= LocalDate.parse(value);
+            } else if(key.equals("fee")){
+                this.fee= Double.parseDouble(value);
             } else if(key.equals("chargeAccount")){
                 this.fromIban= value;
                 //Account from = accountManager.findByIban(fromIban);

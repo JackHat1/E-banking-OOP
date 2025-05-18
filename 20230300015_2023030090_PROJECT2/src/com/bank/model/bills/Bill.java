@@ -12,7 +12,7 @@ public class Bill implements Storable{
     private Account issuer;
     private LocalDate issueDate;
     private LocalDate dueDate;
-    public boolean isPaid;
+    private boolean isPaid;
 
 
     public Bill(String billNumber, String paymentCode, double amount, Account issuer) {

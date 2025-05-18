@@ -25,6 +25,6 @@ public class Deposit extends Transaction {
         StatementEntry entry = new StatementEntry(getTransactor().getUsername(),null,account.getIban(),amount,reason,"Credit", LocalDateTime.now(),account.getBalance() );
 
         StatementManager statementManager = new StatementManager();
-        statementManager.save(account, entry); 
+        statementManager.saveStatement(account, entry); 
     }
 }

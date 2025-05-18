@@ -38,8 +38,8 @@ public class Transfer extends Transaction {
             StatementEntry toAccountEntry = new StatementEntry(getTransactor().getUsername(),from.getIban(),to.getIban(),amount,receiverReason,"Credit",LocalDateTime.now(),to.getBalance());
 
             StatementManager statementManager = new StatementManager();
-            statementManager.save(from, fromAccountEntry);
-            statementManager.save(to, toAccountEntry);
+            statementManager.saveStatement(from, fromAccountEntry);
+            statementManager.saveStatement(to, toAccountEntry);
 
         } else {
             System.out.println("Unavailable transfer due to insufficient balance.");

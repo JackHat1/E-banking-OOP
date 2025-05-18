@@ -20,6 +20,8 @@ public class TransferOrder extends StandingOrder{
     private int transferFreq; // se mines
     private int transferDay;
     private int failedAttempts= 0;
+    private String customerVat;
+    private double fee;
 
     public TransferOrder(String title, String description, String fromIban, String toIban/*Account from, Account to*/, double amount, int transferFreq, int transferDay, LocalDate startingDate, LocalDate endingDate){
         super(title, description, startingDate, endingDate);
@@ -83,11 +85,11 @@ public class TransferOrder extends StandingOrder{
         sb.append("orderId:").append(getOrderId()).append(",");
         sb.append("title:").append(getTitle()).append(",");
         sb.append("description:").append(getDescription()).append(",");
-        //customer??den jerw akoma
+        sb.append("customer:").append(customerVat).append(",");
         sb.append("amount:").append(amount).append(",");
         sb.append("startDate:").append(getStartingDate()).append(",");
         sb.append("endDate:").append(getEndingDate()).append(",");
-        //fee?? 
+        sb.append("fee:").append(fee).append(",");
         sb.append("chargeAccount:").append(fromIban).append(",");
         sb.append("creditAccount:").append(toIban).append(",");
         sb.append("frequencyInMonths:").append(transferFreq).append(",");
@@ -116,12 +118,16 @@ public class TransferOrder extends StandingOrder{
                 this.title= value;
             } else if(key.equals("description")){
                 this.description= value;
+            } else if(key.equals("customer")){
+                this.customerVat= value;
             } else if(key.equals("amount")){
                 this.amount= Double.parseDouble(value);
             } else if(key.equals("startDate")){
                 this.startingDate= LocalDate.parse(value);
             } else if(key.equals("endDate")){
                 this.endingDate= LocalDate.parse(value);
+            } else if(key.equals("fee")){
+                this.fee= Double.parseDouble(value);
             } else if(key.equals("chargeAccount")){
                 this.fromIban= value;
                 //this.from= accountMan.findByIban(value);
@@ -137,9 +143,6 @@ public class TransferOrder extends StandingOrder{
             }
 
         }
-
-
- 
       
     }
 

@@ -19,30 +19,34 @@ public class AdminMenu {
 
     public void run() {
         while (true) {
-            System.out.println("\n⚙️ Διαχειριστικό Μενού:");
-            System.out.println("1. Προβολή Πελατών");
-            System.out.println("2. Προβολή Λογαριασμών");
-            System.out.println("0. Έξοδος");
+            System.out.println("\nAdmin Menu:");
+            System.out.println("1. View Users");
+            System.out.println("2. View Accounts");
+            System.out.println("0. Exit");
 
             String option = scanner.nextLine();
             switch (option) {
                 case "1": showUsers(); break;
                 case "2": showAccounts(); break;
                 case "0": return;
-                default: System.out.println("❌ Άκυρη επιλογή.");
+                default: System.out.println("Invalid option.");
             }
         }
     }
 
     private void showUsers() {
-        for (User u : userManager.getAllUsers()) {
+        List<User> users = userManager.getAllUsers();
+        for (int i = 0; i < users.size(); i++) {
+            User u = users.get(i);
             System.out.println("- " + u.getUsername() + " (" + u.getFullName() + ")");
         }
     }
 
     private void showAccounts() {
-        for (Account a : accountManager.getAllAccounts()) {
-            System.out.println("- " + a.getIban() + " | Κάτοχος: " + a.getOwner().getFullName());
+        List<Account> accounts = accountManager.getAllAccounts();
+        for (int i = 0; i < accounts.size(); i++) {
+            Account a = accounts.get(i);
+            System.out.println("- " + a.getIban() + " | Owner: " + a.getOwner().getFullName());
         }
     }
 }

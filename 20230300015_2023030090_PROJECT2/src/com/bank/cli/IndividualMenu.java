@@ -17,11 +17,7 @@ public class IndividualMenu {
     private final StatementManager statementManager;
     private final Scanner scanner;
 
-    public IndividualMenu(User user, AccountManager accountManager,
-                          TransactionManager transactionManager,
-                          BillManager billManager,
-                          StatementManager statementManager,
-                          Scanner scanner) {
+    public IndividualMenu(User user, AccountManager accountManager,TransactionManager transactionManager, BillManager billManager, StatementManager statementManager, Scanner scanner) {
         this.user = user;
         this.accountManager = accountManager;
         this.transactionManager = transactionManager;
@@ -32,14 +28,14 @@ public class IndividualMenu {
 
     public void run() {
         while (true) {
-            System.out.println("\n🔽 Επιλέξτε λειτουργία:");
-            System.out.println("1. Προβολή Λογαριασμών");
-            System.out.println("2. Κατάθεση");
-            System.out.println("3. Ανάληψη");
-            System.out.println("4. Μεταφορά");
-            System.out.println("5. Πληρωμή Λογαριασμού");
-            System.out.println("6. Προβολή Κινήσεων");
-            System.out.println("0. Έξοδος");
+            System.out.println("\nSelect an operation:");
+            System.out.println("1. View Accounts");
+            System.out.println("2. Deposit");
+            System.out.println("3. Withdraw");
+            System.out.println("4. Transfer");
+            System.out.println("5. Pay Bill");
+            System.out.println("6. View Statements");
+            System.out.println("0. Exit");
 
             String option = scanner.nextLine();
 
@@ -51,68 +47,77 @@ public class IndividualMenu {
                 case "5": payBill(); break;
                 case "6": showStatements(); break;
                 case "0": return;
-                default: System.out.println("❌ Άκυρη επιλογή.");
+                default: System.out.println("Invalid option.");
             }
         }
     }
 
     private List<Account> getUserAccounts() {
         List<Account> list = new ArrayList<>();
-        for (Account acc : accountManager.getAllAccounts()) {
-            if (acc.getOwner().equals(user)) list.add(acc);
+        List<Account> allAccounts = accountManager.getAllAccounts();
+        for (int i = 0; i < allAccounts.size(); i++) {
+            Account acc = allAccounts.get(i);
+            if (acc.getOwner().equals(user)) {
+                list.add(acc);
+            }
         }
         return list;
     }
 
     private Account selectAccount(List<Account> accounts) {
-        for (int i = 0; i < accounts.size(); i++) {
+        for (int i = 0; i < accounts.size(); i++)
             System.out.println((i + 1) + ". " + accounts.get(i).getIban());
-        }
-        System.out.print("👉 Επιλογή: ");
-        int idx = Integer.parseInt(scanner.nextLine()) - 1;
-        return (idx >= 0 && idx < accounts.size()) ? accounts.get(idx) : null;
+        System.out.print("Select account: ");
+        int choice = Integer.parseInt(scanner.nextLine()) - 1;
+        if (choice >= 0 && choice < accounts.size())
+            return accounts.get(choice);
+        return null;
     }
 
     private void showAccounts() {
-        getUserAccounts().forEach(acc -> System.out.println("- " + acc.getIban() + " | Υπόλοιπο: " + acc.getBalance()));
+        List<Account> accounts = getUserAccounts();
+        for (int i = 0; i < accounts.size(); i++) {
+            Account acc = accounts.get(i);
+            System.out.println("- " + acc.getIban() + " | Balance: " + acc.getBalance());
+        }
     }
 
     private void deposit() {
         List<Account> accounts = getUserAccounts();
-        Account acc = selectAccount(accounts);
-        if (acc == null) return;
-        System.out.print("💶 Ποσό κατάθεσης: ");
+        Account account = selectAccount(accounts);
+        if (account == null) return;
+        System.out.print("Deposit amount: ");
         double amount = Double.parseDouble(scanner.nextLine());
-        transactionManager.execute(new Deposit(acc, amount, user, "Κατάθεση μέσω CLI"));
+        transactionManager.execute(new Deposit(account, amount, user, "Deposit via CLI"));
     }
 
     private void withdraw() {
         List<Account> accounts = getUserAccounts();
-        Account acc = selectAccount(accounts);
-        if (acc == null) return;
-        System.out.print("💶 Ποσό ανάληψης: ");
+        Account account = selectAccount(accounts);
+        if (account == null) return;
+        System.out.print("Withdrawal amount: ");
         double amount = Double.parseDouble(scanner.nextLine());
-        if (amount > acc.getBalance()) {
-            System.out.println("❌ Ανεπαρκές υπόλοιπο.");
+        if (amount > account.getBalance()) {
+            System.out.println("Insufficient balance.");
             return;
         }
-        transactionManager.execute(new Withdrawal(acc, amount, user, "Ανάληψη μέσω CLI"));
+        transactionManager.execute(new Withdrawal(account, amount, user, "Withdrawal via CLI"));
     }
 
     private void transfer() {
         List<Account> myAccounts = getUserAccounts();
         Account from = selectAccount(myAccounts);
         if (from == null) return;
-        System.out.print("📨 IBAN παραλήπτη: ");
+        System.out.print("Recipient IBAN: ");
         String toIban = scanner.nextLine();
         Account to = accountManager.findByIban(toIban);
         if (to == null || from.getIban().equals(toIban)) {
-            System.out.println("❌ Άκυρος IBAN.");
+            System.out.println("Invalid IBAN.");
             return;
         }
-        System.out.print("💸 Ποσό: ");
+        System.out.print("Amount: ");
         double amount = Double.parseDouble(scanner.nextLine());
-        System.out.print("✍️ Αιτιολογία: ");
+        System.out.print("Reason: ");
         String reason = scanner.nextLine();
         transactionManager.execute(new Transfer(from, to, amount, user, reason, reason));
     }
@@ -121,19 +126,26 @@ public class IndividualMenu {
         List<Account> accounts = getUserAccounts();
         Account from = selectAccount(accounts);
         if (from == null) return;
-        System.out.print("🔢 RF: ");
+        System.out.print("Bill RF: ");
         String rf = scanner.nextLine();
-        System.out.print("💶 Ποσό: ");
+        System.out.print("Amount: ");
         double amount = Double.parseDouble(scanner.nextLine());
         Bill bill = billManager.getBillByRF(rf);
         if (bill == null || bill.isPaid || from.getBalance() < amount) {
-            System.out.println("❌ Μη έγκυρη πληρωμή.");
+            System.out.println("Invalid payment.");
             return;
         }
-        Account business = accountManager.getAllAccounts().stream()
-                .filter(acc -> !acc.getOwner().equals(user)).findFirst().orElse(null);
+        Account business = null;
+        List<Account> allAccounts = accountManager.getAllAccounts();
+        for (int i = 0; i < allAccounts.size(); i++) {
+            Account acc = allAccounts.get(i);
+            if (!acc.getOwner().equals(user)) {
+                business = acc;
+                break;
+            }
+        }
         if (business == null) {
-            System.out.println("❌ Δεν υπάρχει λογαριασμός επιχείρησης.");
+            System.out.println("No business account found.");
             return;
         }
         transactionManager.execute(new Payment(bill, from, business, user));
@@ -141,13 +153,15 @@ public class IndividualMenu {
 
     private void showStatements() {
         List<Account> accounts = getUserAccounts();
-        Account acc = selectAccount(accounts);
-        if (acc == null) return;
-        List<StatementEntry> entries = statementManager.load(acc);
+        Account account = selectAccount(accounts);
+        if (account == null) return;
+        List<StatementEntry> entries = statementManager.load(account);
         if (entries.isEmpty()) {
-            System.out.println("ℹ️ Δεν υπάρχουν κινήσεις.");
+            System.out.println("No transactions found.");
             return;
         }
-        entries.forEach(System.out::println);
-    }
+        for (int i = 0; i < entries.size(); i++) {
+            System.out.println(entries.get(i));
+        }
+}
 }

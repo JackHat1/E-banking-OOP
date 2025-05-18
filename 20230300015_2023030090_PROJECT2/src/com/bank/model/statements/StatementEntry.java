@@ -3,7 +3,9 @@ package com.bank.model.statements;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class StatementEntry {
+import com.bank.storage.Storable;
+
+public class StatementEntry implements Storable{
 
     private String transactor;
     private String reason;
@@ -25,6 +27,10 @@ public class StatementEntry {
         this.type = type;
         this.timestamp = timestamp;
         this.balance = balance;
+    }
+
+    public StatementEntry(){
+        //deafault min to sviseis
     }
 
     public String getTransactor() { return transactor; }
@@ -49,25 +55,25 @@ public class StatementEntry {
         );
     }
 
-    public static StatementEntry unmarshal(String line) {
+    public /*static StatementEntry*/void unmarshal(String data) {
         try {
-            String[] parts = line.split(",", -1);
-            String transactor = parts[0];
-            String fromIban = parts[1];
-            String toIban = parts[2];
-            double amount = Double.parseDouble(parts[3]);
-            String reason = parts[4];
-            String type = parts[5];
-            LocalDateTime timestamp = LocalDateTime.parse(parts[6], formatter);
-            double balance = Double.parseDouble(parts[7]);
+            String[] parts = data.split(",", -1);
+            this.transactor = parts[0];
+            this.fromIban = parts[1];
+            this.toIban = parts[2];
+            this.amount = Double.parseDouble(parts[3]);
+            this.reason = parts[4];
+            this.type = parts[5];
+            this.timestamp = LocalDateTime.parse(parts[6], formatter);
+            this.balance = Double.parseDouble(parts[7]);
 
-            return new StatementEntry(transactor, fromIban, toIban, amount, reason, type, timestamp, balance);
+            //return new StatementEntry(transactor, fromIban, toIban, amount, reason, type, timestamp, balance);
         } catch (Exception e) {
             System.err.println("Error unmarshal StatementEntry: " + e.getMessage());
-            return null;
+            //return null;
         }
     }
-
+//----------------------------------------------------
     @Override
     public String toString() {
         return "Statement: " +

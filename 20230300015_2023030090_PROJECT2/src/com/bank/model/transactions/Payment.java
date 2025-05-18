@@ -38,8 +38,8 @@ public class Payment extends Transaction {
             StatementEntry businessAccountEntry = new StatementEntry( getTransactor().getUsername(),from.getIban(),business.getIban(),bill.getAmount(),"Receive Payment [" + bill.getPaymentCode() + "]","Credit",LocalDateTime.now(),business.getBalance());
 
             StatementManager statementManager = new StatementManager();
-            statementManager.save(from, fromAccountEntry);
-            statementManager.save(business, businessAccountEntry);
+            statementManager.saveStatement(from, fromAccountEntry);
+            statementManager.saveStatement(business, businessAccountEntry);
 
         } 
         else {

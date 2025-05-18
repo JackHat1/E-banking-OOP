@@ -32,19 +32,10 @@ public class Withdrawal extends Transaction {
             account.withdraw(amount);
             System.out.println("The amount of " + amount + "€ has been withdrawn from " + account.getIban());
 
-            StatementEntry entry = new StatementEntry(
-                getTransactor().getUsername(),
-                account.getIban(),
-                null,
-                amount,
-                "Withdrawal",
-                "Debit",
-                LocalDateTime.now(),
-                account.getBalance()
-            );
+            StatementEntry entry = new StatementEntry(getTransactor().getUsername(),account.getIban(),null,amount,"Withdrawal","Debit",LocalDateTime.now(),account.getBalance()  );
 
             StatementManager statementManager = new StatementManager();
-            statementManager.save(account, entry); 
+            statementManager.saveStatement(account, entry); 
         } else {
             System.out.println("Unavailable to withdraw due to insufficient balance.");
         }

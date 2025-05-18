@@ -5,7 +5,7 @@ import com.bank.model.users.User;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public abstract class Transaction {
+public abstract class Transaction    {
     protected StatementEntry statementEntry;
     protected String transactionId;
     protected LocalDateTime timestamp;
@@ -41,7 +41,9 @@ public abstract class Transaction {
     }
 
 
-    public abstract void execute();
+    public abstract void execute();{
+
+    }
 
 
 }

@@ -68,13 +68,19 @@ public class BillManager {
         
         for(String line: lines){
             Bill bill= new Bill("", "", 0.0,null);
-                bill.unmarshal(line);
+            bill.unmarshal(line);
 
-                String[] parts= line.split(",");
-                String issuer = parts[3];
-                Account issuerAcc = accountManager.findByIban(issuer);
-                bill.setIssuer(issuerAcc);
-                bills.add(bill);
+            String[] parts= line.split(",");
+            String issuer = parts[3];
+            Account issuerAcc = accountManager.findByIban(issuer);
+
+            if(issuerAcc ==null){
+                 System.out.println("No issuer found for bill "+ bill.getPaymentCode());
+                continue;
+            }
+
+            bill.setIssuer(issuerAcc);
+            bills.add(bill);
 
         }
         /* 
