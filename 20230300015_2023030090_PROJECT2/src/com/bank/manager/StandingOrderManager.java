@@ -15,8 +15,11 @@ import com.bank.storage.CsvStorageManager;
 public class StandingOrderManager {
 
     private final List<StandingOrder> orders= new ArrayList<>();
-    private final String filePath = ".data/orders/active.csv";
+    private final String activeFilePath = ".data/orders/active.csv";
     private final CsvStorageManager storage= new CsvStorageManager();
+
+    private final String expiredFilePath= ".data/orders/expired.csv";
+    private final String failedFilePath= ".data/orders/failed.csv";
 
     public StandingOrderManager(){
         
@@ -28,10 +31,10 @@ public class StandingOrderManager {
     }
 
     public void deleteOrder(StandingOrder order){
-        if(orders.contains(order)){
+       // if(orders.contains(order)){
 
             orders.remove(order);
-        }
+        //}
 
     }
 
@@ -45,15 +48,24 @@ public class StandingOrderManager {
         return null;
     }
 
+    //----------------------------------------------
 
-    public void saveOrders(){
-        storage.saveAll(orders,filePath, false);
+    public void saveOrders(List<StandingOrder> orders){
+        storage.saveAll(orders,activeFilePath, false);
     }
 
+    public void saveExpiredOrders(List<StandingOrder> expiredOrders){
+        storage.saveAll(expiredOrders, expiredFilePath, false);
+    }
 
+    public void saveFailedOrders(List<StandingOrder> failedOrders){
+        storage.saveAll(failedOrders, failedFilePath, false);
+    }
+
+    //-----------------------------------------------
     public void loadOrders(){
 
-        List<String> lines= storage.loadLines(filePath);
+        List<String> lines= storage.loadLines(activeFilePath);
 
         for(String line: lines){
             String[] parts = line.split(",");
@@ -78,9 +90,30 @@ public class StandingOrderManager {
     }
 
     public void executeAllOrders(LocalDate date, BillManager billMan, AccountManager accountMan, TransactionManager transactionMan, User user){
+        List<StandingOrder> stillActive= new ArrayList<>();
+        List<StandingOrder> expiredOrders= new ArrayList<>();
+        List<StandingOrder> failedOrders= new ArrayList<>();
+
+
         for(StandingOrder order: orders){
             order.execute(date, billMan, accountMan, transactionMan, user);
-            //Transaction transaction = order.createTransaction();
+            
+            if(order.isExpired()){
+                expiredOrders.add(order);
+                
+            }else if(order.isFailed()){
+                failedOrders.add(order);
+
+            }else{
+                stillActive.add(order);
+            }
+
+            saveOrders(stillActive);
+            saveExpiredOrders(expiredOrders);
+            saveFailedOrders(failedOrders);
+
+            orders.clear();
+            orders.addAll(stillActive);
 
         }
     }

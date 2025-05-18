@@ -22,18 +22,9 @@ public class Deposit extends Transaction {
         account.deposit(amount);
         System.out.println("Deposit of " + amount + "€ in " + account.getIban());
 
-        StatementEntry entry = new StatementEntry(
-            getTransactor().getUsername(),
-            null,
-            account.getIban(),
-            amount,
-            "Deposit",
-            "Credit",
-            LocalDateTime.now(),
-            account.getBalance()
-        );
+        StatementEntry entry = new StatementEntry(getTransactor().getUsername(),null,account.getIban(),amount,reason,"Credit", LocalDateTime.now(),account.getBalance() );
 
         StatementManager statementManager = new StatementManager();
-        statementManager.save(account, entry); // ✅ Σωστή μέθοδος
+        statementManager.save(account, entry); 
     }
 }

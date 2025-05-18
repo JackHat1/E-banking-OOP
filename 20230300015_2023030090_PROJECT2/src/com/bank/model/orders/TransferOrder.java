@@ -70,6 +70,11 @@ public class TransferOrder extends StandingOrder{
         
     }
 
+    @Override
+    public boolean isFailed(){
+        return failedAttempts>3;
+    }
+
     
     @Override
     public String marshal(){
@@ -86,7 +91,7 @@ public class TransferOrder extends StandingOrder{
         sb.append("chargeAccount:").append(fromIban).append(",");
         sb.append("creditAccount:").append(toIban).append(",");
         sb.append("frequencyInMonths:").append(transferFreq).append(",");
-        sb.append("dayOfMonth").append(transferDay);
+        sb.append("dayOfMonth:").append(transferDay);
         return sb.toString();
     }
 

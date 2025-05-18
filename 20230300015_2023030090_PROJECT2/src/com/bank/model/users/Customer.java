@@ -8,5 +8,6 @@ public abstract class Customer extends User {
         this.vat = vat;
     }
 
-    public String getVat() { return vat; }
+    public String getVat() { 
+        return vat; }
 }

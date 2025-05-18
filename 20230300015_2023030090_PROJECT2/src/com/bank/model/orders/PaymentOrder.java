@@ -36,6 +36,7 @@ public class PaymentOrder extends StandingOrder{
         Bill bill = billMan.getBillByRF(paymentCode);
         Account from= accountMan.findByIban(fromIban);
 
+
         if(bill.getDueDate().isEqual(paymentDay)){
 
             if(bill.getAmount() <= maxAmount ){
@@ -66,6 +67,12 @@ public class PaymentOrder extends StandingOrder{
 
     }
 
+    @Override
+    public boolean isFailed(){
+        return failedAttempts>3;
+    }
+
+    
     @Override
     public String marshal() {
         StringBuffer sb = new StringBuffer();

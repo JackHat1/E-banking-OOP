@@ -7,7 +7,7 @@ import java.util.List;
 public class CsvStorageManager {
 
     // Αποθήκευση ενός αντικειμένου
-    public void save(Storable s, String filePath) {
+     public void save(Storable s, String filePath) {
         try (PrintWriter writer = new PrintWriter(new FileWriter(filePath, true))) {
             writer.println(s.marshal());
         } catch (IOException e) {

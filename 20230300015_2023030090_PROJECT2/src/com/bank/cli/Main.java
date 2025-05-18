@@ -3,7 +3,6 @@ package com.bank.cli;
 import com.bank.manager.*;
 import com.bank.model.users.*;
 
-import java.time.LocalDate;
 import java.util.Scanner;
 
 public class Main {
@@ -11,9 +10,9 @@ public class Main {
     private static final UserManager userManager = new UserManager();
     private static final TransactionManager transactionManager = new TransactionManager();
     private static final AccountManager accountManager = new AccountManager(userManager);
-    private static final BillManager billManager = new BillManager();
+    private static final BillManager billManager = new BillManager(accountManager);
     private static final Scanner scanner = new Scanner(System.in);
-    private static User loggedInUser;
+     private static User loggedInUser;
 
     public static void main(String[] args) {
         userManager.load();
@@ -28,14 +27,14 @@ public class Main {
         } else if (loggedInUser instanceof Admin) {
             new AdminMenu(userManager, accountManager, scanner).run();
         } else {
-            System.out.println("❌ Ο τύπος χρήστη δεν υποστηρίζεται.");
+            System.out.println("User type not supported.");
         }
 
         saveAndExit();
     }
 
     private static void login() {
-        System.out.println("Σύνδεση Χρήστη");
+        System.out.println("User Login");
         System.out.print("Username: ");
         String username = scanner.nextLine();
         System.out.print("Password: ");
@@ -44,17 +43,17 @@ public class Main {
         User user = userManager.findByUsername(username);
         if (user != null && user.checkPassword(password)) {
             loggedInUser = user;
-            System.out.println("Καλωσήρθες " + user.getFullName());
+            System.out.println("Welcome " + user.getFullName());
         } else {
-            System.out.println("❌ Λάθος στοιχεία.");
+            System.out.println("Invalid credentials.");
             System.exit(0);
         }
     }
 
     private static void saveAndExit() {
-        System.out.println("📦 Αποθήκευση...");
+        System.out.println("Saving data...");
         userManager.saveAll();
         accountManager.saveAll();
-        System.out.println("✅ Έγινε αποθήκευση. Αντίο!");
+        System.out.println("Save complete. Goodbye!");
     }
 }
