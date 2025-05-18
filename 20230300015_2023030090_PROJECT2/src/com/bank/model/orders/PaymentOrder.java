@@ -2,38 +2,48 @@ package com.bank.model.orders;
 
 import java.time.LocalDate;
 import com.bank.model.bills.Bill;
+import com.bank.model.transactions.Payment;
 import com.bank.model.transactions.Transaction;
+import com.bank.model.users.User;
 import com.bank.manager.AccountManager;
+import com.bank.manager.BillManager;
 import com.bank.manager.TransactionManager;
 import com.bank.model.accounts.Account;
-import com.bank.model.accounts.BusinessAccount;
+//import com.bank.model.accounts.BusinessAccount;
 
 public class PaymentOrder extends StandingOrder{
 
-    private Bill bill;
-    private Account from;
+    //private Bill bill;
+    //private Account from;
     private double maxAmount;
     private int failedAttempts= 0;
     private String fromIban;
+    private String paymentCode;
     
 
-    public PaymentOrder(String title, String description, Bill bill, Account from, double maxAmount, LocalDate startingDate, LocalDate endingDate){
+    public PaymentOrder(String title, String description, String paymentCode, String fromIban/*Bill bill, Account from*/, double maxAmount, LocalDate startingDate, LocalDate endingDate){
         super(title , description, startingDate, endingDate);
-        this.bill = bill;
-        this.from = from;
+        //this.bill = bill;
+        this.paymentCode= paymentCode;
+        this.fromIban=  fromIban;
+        //this.from = from;
         this.maxAmount = maxAmount;
     }
 
     @Override
-    public void execute(LocalDate paymentDay){  //na ftaiksw gia ton xrono
+    public void execute(LocalDate paymentDay, BillManager billMan, AccountManager accountMan, TransactionManager transMan, User user){  //na ftaiksw gia ton xrono
+
+        Bill bill = billMan.getBillByRF(paymentCode);
+        Account from= accountMan.findByIban(fromIban);
 
         if(bill.getDueDate().isEqual(paymentDay)){
 
             if(bill.getAmount() <= maxAmount ){
 
                 if(bill.getAmount() <= from.getBalance()){
-
-                    from.withdraw(bill.getAmount());
+                    Transaction transaction= new Payment(bill, from, bill.getIssuer(), user);
+                    transMan.execute(transaction);
+                    //from.withdraw(bill.getAmount());
                     bill.setPaid(true);
                     failedAttempts= 0;
                     System.out.println("Payment executed for bill " + bill.getPaymentCode());
@@ -61,14 +71,14 @@ public class PaymentOrder extends StandingOrder{
         StringBuffer sb = new StringBuffer();
         sb.append("type:PaymentOrder").append(",");
         sb.append("orderId:").append(getOrderId()).append(",");
-        sb.append("paymentCode:").append(bill.getPaymentCode()).append(",");
+        sb.append("paymentCode:").append(paymentCode).append(",");
         sb.append("title:").append(getTitle()).append(",");
         sb.append("description:").append(getDescription()).append(",");
         //customer??den jerw akoma
         sb.append("maxAmount:").append(maxAmount).append(",");
         sb.append("startDate:").append(getStartingDate()).append(",");
         sb.append("endDate:").append(getEndingDate()).append(",");
-        sb.append("chargeAccount:").append(from.getIban());
+        sb.append("chargeAccount:").append(fromIban);
         return sb.toString();
     }
 
@@ -88,8 +98,8 @@ public class PaymentOrder extends StandingOrder{
             if(key.equals("orderId")){
                 this.orderId = value;
             } else if(key.equals("paymentCode")){
-                
-                this.bill= new Bill("", value, 0.0, null); // den jerw akoma
+                this.paymentCode= value;
+                //this.bill= new Bill("", value, 0.0, null); // den jerw akoma
             } else if(key.equals("title")){
                 this.title= value;
             } else if(key.equals("description")){

@@ -1,7 +1,7 @@
 package com.bank.model.bills;
 
 import java.time.LocalDate;
-import com.bank.model.users.User;
+//import com.bank.model.users.User;
 import com.bank.storage.Storable;
 import com.bank.model.accounts.Account;
 
@@ -30,25 +30,25 @@ public class Bill implements Storable{
         return paymentCode;
     }
 
-    private void setPaymentCode(String paymentCode) {
+    /*private void setPaymentCode(String paymentCode) {
         this.paymentCode = paymentCode;
-    }
+    }*/
 
     public String getBillNumber() {
         return billNumber;
     }
 
-    private void setBillNumber(String billNumber) {
+    /*private void setBillNumber(String billNumber) {
         this.billNumber = billNumber;
-    }
+    }*/
 
     public double getAmount() {
         return amount;
     }
 
-    private void setAmount(double amount) {
+    /*private void setAmount(double amount) {
         this.amount = amount;
-    }
+    }*/
 
     public Account getIssuer() {
         return issuer;
@@ -59,21 +59,21 @@ public class Bill implements Storable{
     }
 
 
-    private LocalDate getIssueDate() {
+    /*private LocalDate getIssueDate() {
         return issueDate;
-    }
+    }*/
 
-    private void setIssueDate(LocalDate issueDate) {
+    /*private void setIssueDate(LocalDate issueDate) {
         this.issueDate = issueDate;
-    }
+    }*/
 
     public LocalDate getDueDate() {
         return dueDate;
     }
 
-    private void setDueDate(LocalDate dueDate) {
+    /*private void setDueDate(LocalDate dueDate) {
         this.dueDate = dueDate;
-    }
+    }*/
 
     //-------------------toys thelw
     public boolean isPaid() {

@@ -8,7 +8,8 @@ import java.util.List;
 import com.bank.model.orders.PaymentOrder;
 import com.bank.model.orders.StandingOrder;
 import com.bank.model.orders.TransferOrder;
-import com.bank.model.transactions.Transaction;
+//import com.bank.model.transactions.Transaction;
+import com.bank.model.users.User;
 import com.bank.storage.CsvStorageManager;
 
 public class StandingOrderManager {
@@ -76,9 +77,9 @@ public class StandingOrderManager {
         
     }
 
-    public void executeAllOrders(LocalDate date){
+    public void executeAllOrders(LocalDate date, BillManager billMan, AccountManager accountMan, TransactionManager transactionMan, User user){
         for(StandingOrder order: orders){
-            order.execute(date);
+            order.execute(date, billMan, accountMan, transactionMan, user);
             //Transaction transaction = order.createTransaction();
 
         }

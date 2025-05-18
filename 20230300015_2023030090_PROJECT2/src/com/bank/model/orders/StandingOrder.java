@@ -4,6 +4,9 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 import com.bank.manager.AccountManager;
+import com.bank.manager.BillManager;
+import com.bank.manager.TransactionManager;
+import com.bank.model.users.User;
 import com.bank.storage.Storable;
 
 public abstract class StandingOrder implements Storable {
@@ -50,7 +53,7 @@ public abstract class StandingOrder implements Storable {
     }
 
 
-    public abstract void execute(LocalDate date);
+    public abstract void execute(LocalDate date, BillManager billMan, AccountManager accountMan, TransactionManager transMan, User user);
 
     public abstract String marshal();
     public abstract void unmarshal(String data);
