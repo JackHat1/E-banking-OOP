@@ -3,44 +3,91 @@ package com.bank.model.accounts;
 import com.bank.model.users.Customer;
 import com.bank.storage.Storable;
 import java.time.LocalDate;
+import java.util.Random;
 
 public abstract class Account implements Storable {
     protected String iban;
     protected Customer owner;
     protected double balance;
     protected double interestRate;
-    protected LocalDate dateCreated; // ✅ Προσθήκη
+    protected LocalDate dateCreated;
 
     public Account(Customer owner, double interestRate) {
-        this.iban = IBANGenerator.generate(this.getAccountTypeCode());
+        this.iban = generateIBAN(getAccountTypeCode());
         this.owner = owner;
         this.interestRate = interestRate;
         this.balance = 0.0;
-        this.dateCreated = LocalDate.now(); // ✅ Αρχικοποίηση
+        this.dateCreated = LocalDate.now();
     }
 
-    public String getIban() { return iban; }
-    public void setIban(String iban) { this.iban = iban; }
+    public String getIban() {
+        return iban;
+    }
 
-    public Customer getOwner() { return owner; }
-    public double getBalance() { return balance; }
-    public double getInterestRate() { return interestRate; }
+    public void setIban(String iban) {
+        this.iban = iban;
+    }
 
-    public void deposit(double amount) { balance += amount; }
-    public void withdraw(double amount) { balance -= amount; }
+    public Customer getOwner() {
+        return owner;
+    }
 
-    public abstract String getAccountTypeCode(); // π.χ. "100" ή "200"
+    public double getBalance() {
+        return balance;
+    }
+
+    public double getInterestRate() {
+        return interestRate;
+    }
+
+    public void deposit(double amount) {
+        balance += amount;
+    }
+
+    public void withdraw(double amount) {
+        balance -= amount;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
+
+    public void setDateCreated(LocalDate dateCreated) {
+    this.dateCreated = dateCreated;
+    }   
+
+
+    public abstract String getAccountTypeCode();
 
     @Override
     public String marshal() {
-        return getAccountTypeCode() + "," + iban + "," + owner.getVat() + "," + balance + "," + interestRate;
-    }
+        return "type:" + getAccountTypeCode() +",iban:" + iban +",primaryOwner:" + owner.getVat() +",dateCreated:" + dateCreated +",rate:" + interestRate +",balance:" + balance;  
+     }
 
     @Override
     public void unmarshal(String data) {
         String[] parts = data.split(",");
-        this.iban = parts[1];
-        this.balance = Double.parseDouble(parts[3]);
-        this.interestRate = Double.parseDouble(parts[4]);
+        for (int i = 0; i < parts.length; i++) {
+            String[] kv = parts[i].split(":", 2);
+            if (kv.length == 2) {
+                if (kv[0].equals("iban")) iban = kv[1];
+                else if (kv[0].equals("dateCreated")) dateCreated = LocalDate.parse(kv[1]);
+                else if (kv[0].equals("rate")) interestRate = Double.parseDouble(kv[1]);
+                else if (kv[0].equals("balance")) balance = Double.parseDouble(kv[1]);
+            }
+        }
+    }
+
+
+        public static String generateIBAN(String typeCode) {
+        String country = "GR";
+        Random rand = new Random();
+
+        StringBuilder accountNumber = new StringBuilder();
+        for (int i = 0; i < 15; i++) {
+            accountNumber.append(rand.nextInt(10));
+        }
+
+        return country + typeCode + accountNumber;
     }
 }

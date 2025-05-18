@@ -24,18 +24,25 @@ TI EXW TSEKAREI @andreas
   { Storable.java  }
 
 
-.transactions folder
-➤ Ο TransactionManager είναι ο αποκλειστικός υπεύθυνος για την ενημέρωση υπολοίπου τραπεζικών λογαριασμών.
-{
-deposit.java
-Transfer.java
-withdrawl.java 
-payment.java }
+.transactions folder complete 
 
-Transaction complete
+  { deposit.java   }
+  { Transfer.java  }
+  { withdrawl.java }
+  { payment.java   }
 
+.accounts folder complete 
 
+  { Account.java          }
+  { BusinessAccount.java  }
+  { PersonalAccount.java }
+
+.manager folder complete 
+
+  { AccountManager.java          }
+  { UserManager.java  }
+  { TransactionManager.java }
 
 TODO
 IBAN GENERATOR 
-NA TSEKARW accounts , BILLS ,manager (account,user, transactions) , gui , app , controller ,accounts.
+NA TSEKARW accounts , BILLS  , gui , app , controller 

@@ -1,4 +1,4 @@
-type:PersonalAccount,iban:GR100202503111546001,primaryOwner:067688302,dateCreated:2025-05-15,rate:0.02,balance:1288.0
+type:PersonalAccount,iban:GR100202503111546001,primaryOwner:067688302,dateCreated:2025-05-15,rate:0.02,balance:1588.0
 type:PersonalAccount,iban:GR100202503111546002,primaryOwner:067688303,dateCreated:2025-05-15,rate:0.02,balance:2012.0
 type:PersonalAccount,iban:GR100202503111546003,primaryOwner:067688304,dateCreated:2025-05-15,rate:0.02,balance:3050.0
 type:PersonalAccount,iban:GR100202503111546004,primaryOwner:067688302,dateCreated:2025-05-15,rate:0.02,balance:1742.0

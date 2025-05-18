@@ -49,32 +49,38 @@ public class UserManager {
                 users.add(user);
             }
         }
+        
     }
     
 
     public void saveAll() {
         List<Storable> list = new ArrayList<>();
-        for (User u : users) {
-            list.add(u);
+        for (int i = 0; i < users.size(); i++) {
+            list.add(users.get(i));
         }
         storage.saveAll(list, path);
     }
 
     public void addUser(User user) {
+        if (findByUsername(user.getUsername()) != null) {
+            System.out.println("Username already exists: " + user.getUsername());
+            return;
+        }
         users.add(user);
     }
 
     public User findByUsername(String username) {
-        for (User u : users) {
-            if (u.getUsername().equals(username)) {
-                return u;
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getUsername().equals(username)) {
+                return users.get(i);
             }
         }
         return null;
     }
 
     public Customer findByVat(String vat) {
-        for (User u : users) {
+        for (int i = 0; i < users.size(); i++) {
+            User u = users.get(i);
             if (u instanceof Customer && ((Customer) u).getVat().equals(vat)) {
                 return (Customer) u;
             }

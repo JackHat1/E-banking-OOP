@@ -46,4 +46,13 @@ public class Payment extends Transaction {
              System.out.println("Unavailable payment due to insufficient balance.");
         }
     }
+
+    public Account getFrom() { 
+        return from; 
+    }
+
+    public Account getBusiness() { 
+        return business; 
+    }
+
 }

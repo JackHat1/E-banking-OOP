@@ -5,8 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.bank.model.accounts.Account;
+import com.bank.model.accounts.BusinessAccount;
 import com.bank.model.bills.Bill;
 import com.bank.model.transactions.Payment;
+import com.bank.model.users.Company;
+import com.bank.model.users.Customer;
 import com.bank.model.users.User;
 import com.bank.storage.CsvStorageManager;
 
@@ -17,10 +20,11 @@ public class BillManager {
     private final String billsFolder= "./data/bills/";
     private AccountManager accountManager;
     private final CsvStorageManager storage= new CsvStorageManager();
+    private UserManager userManager;
 
-
-    public BillManager(AccountManager accountManager){
-        this.accountManager= accountManager;     
+    public BillManager(AccountManager accountManager, UserManager userManager) {
+        this.accountManager = accountManager;
+        this.userManager = userManager;
     }
 
 
@@ -37,19 +41,16 @@ public class BillManager {
 
     }
 
-    public void saveBill(){
-
-        storage.saveAll(bills, billsFolder, false);
-        /*try(BufferedWriter writer= new BufferedWriter(new FileWriter(fileName))){
-            for(Bill bill: bills){
-                writer.write(bill.marshal());
-                writer.newLine();
-            }
-
-        }catch(IOException e){
-            System.err.println("Error saving file: "+ e.getMessage());
-        }*/
-
+    public void saveBill() {
+        for (int i = 0; i < bills.size(); i++) {
+            Bill bill = bills.get(i);
+            String date = bill.getIssueDate().toString(); // π.χ. 2025-05-01
+            String filePath = billsFolder + date + ".csv";
+            List<Bill> singleBillList = new ArrayList<>();
+            singleBillList.add(bill);
+            // append true για να μην διαγράφει τα υπόλοιπα bills της ίδιας μέρας
+            storage.saveAll(singleBillList, filePath, true);
+        }
     }
 
     public Bill getBillByRF(String rfCode) {
@@ -62,27 +63,59 @@ public class BillManager {
     }
 
 
-    public void loadBills(){
-
-        List<String> lines = storage.loadLines(billsFolder);
-        
-        for(String line: lines){
-            Bill bill= new Bill("", "", 0.0,null);
-            bill.unmarshal(line);
-
-            String[] parts= line.split(",");
-            String issuer = parts[3];
-            Account issuerAcc = accountManager.findByIban(issuer);
-
-            if(issuerAcc ==null){
-                 System.out.println("No issuer found for bill "+ bill.getPaymentCode());
-                continue;
+      public void loadBills() {
+        java.io.File folder = new java.io.File(billsFolder);
+        java.io.File[] files = folder.listFiles((dir, name) -> name.endsWith(".csv"));
+        if (files == null) return;
+    
+        for (int i = 0; i < files.length; i++) {
+            List<String> lines = storage.loadLines(files[i].getPath());
+            for (int j = 0; j < lines.size(); j++) {
+                String line = lines.get(j);
+                Bill bill = new Bill("", "", 0.0, null);
+                bill.unmarshal(line);
+    
+                String issuerVat = null;
+                String[] parts = line.split(",");
+                for (int k = 0; k < parts.length; k++) {
+                    String[] kv = parts[k].split(":", 2);
+                    if (kv.length == 2 && kv[0].equals("issuer")) {
+                        issuerVat = kv[1];
+                        break;
+                    }
+                }
+    
+                if (issuerVat == null) {
+                    System.out.println("No issuer VAT found for bill " + bill.getPaymentCode());
+                    continue;
+                }
+    
+                Customer company = userManager.findByVat(issuerVat);
+                if (company == null || !(company instanceof Company)) {
+                    // System.out.println("Company with VAT " + issuerVat + " not found.");
+                    continue;
+                }
+    
+                Account issuerAcc = null;
+                List<Account> allAccounts = accountManager.getAllAccounts();
+                for (int a = 0; a < allAccounts.size(); a++) {
+                    Account acc = allAccounts.get(a);
+                    if (acc instanceof BusinessAccount && acc.getOwner().equals(company)) {
+                        issuerAcc = acc;
+                        break;
+                    }
+                }
+    
+                if (issuerAcc == null) {
+                    System.out.println("No business account found for company VAT " + issuerVat);
+                    continue;
+                }
+    
+                bill.setIssuer(issuerAcc);
+                bills.add(bill);
             }
-
-            bill.setIssuer(issuerAcc);
-            bills.add(bill);
-
         }
+    }
         /* 
         String fullPath = billsFolder;
         try( BufferedReader reader= new BufferedReader(new FileReader(fullPath))){
@@ -103,7 +136,7 @@ public class BillManager {
             System.err.println("Error reading file: "+ e.getMessage());
         }*/
 
-    }
+    
 
 
     public void payBills(String rfCode, Account from, User transactor){

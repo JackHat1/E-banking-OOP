@@ -18,16 +18,27 @@ public class BusinessAccount extends Account {
     public String getAccountTypeCode() {
         return "200";
     }
+    
     @Override
     public String marshal() {
-        return "type:BusinessAccount"
-             + ",iban:" + getIban()
-             + ",primaryOwner:" + getOwner().getVat()
-             + ",dateCreated:" + dateCreated.toString()
-             + ",rate:" + getInterestRate()
-             + ",balance:" + getBalance()
-             + ",fee:" + getMonthlyFee();
+        return "type:BusinessAccount,iban:" + getIban() + ",primaryOwner:" + getOwner().getVat() + ",dateCreated:" + dateCreated + ",rate:" + getInterestRate() + ",balance:" + getBalance() + ",fee:" + getMonthlyFee();
     }
+
+    @Override
+    public void unmarshal(String data) {
+        super.unmarshal(data); 
+
+        String[] parts = data.split(",");
+        for (int i = 0; i < parts.length; i++) {
+            String[] kv = parts[i].split(":", 2);
+            if (kv.length == 2) {
+                if (kv[0].equals("fee")) {
+                    this.monthlyFee = Double.parseDouble(kv[1]);
+                }
+            }
+        }
+    }
+
     
     
 

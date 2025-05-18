@@ -131,7 +131,7 @@ public class IndividualMenu {
         System.out.print("Amount: ");
         double amount = Double.parseDouble(scanner.nextLine());
         Bill bill = billManager.getBillByRF(rf);
-        if (bill == null || bill.isPaid || from.getBalance() < amount) {
+        if (bill == null || bill.isPaid() || from.getBalance() < amount) {
             System.out.println("Invalid payment.");
             return;
         }

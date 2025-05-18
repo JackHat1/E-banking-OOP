@@ -10,13 +10,14 @@ public class Main {
     private static final UserManager userManager = new UserManager();
     private static final TransactionManager transactionManager = new TransactionManager();
     private static final AccountManager accountManager = new AccountManager(userManager);
-    private static final BillManager billManager = new BillManager(accountManager);
+    private static final BillManager billManager = new BillManager(accountManager , userManager);
     private static final Scanner scanner = new Scanner(System.in);
      private static User loggedInUser;
 
     public static void main(String[] args) {
         userManager.load();
         accountManager.load();
+        billManager.loadBills();
 
         login();
 

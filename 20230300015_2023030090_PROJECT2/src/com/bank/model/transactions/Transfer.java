@@ -45,4 +45,14 @@ public class Transfer extends Transaction {
             System.out.println("Unavailable transfer due to insufficient balance.");
         }
     }
+
+    public Account getFrom() { 
+        return from; 
+    }
+    public Account getTo() {
+         return to; 
+    }
+    public double getAmount() {
+         return amount;
+    }
 }

@@ -25,6 +25,10 @@ public class Withdrawal extends Transaction {
     public void setAmount(double amount) {
         this.amount = amount;
     }
+    public Account getAccount() { 
+        return account; 
+    }
+
 
     @Override
     public void execute() {

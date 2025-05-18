@@ -19,7 +19,7 @@ public class Deposit extends Transaction {
 
     @Override
     public void execute() {
-        account.deposit(amount);
+        // account.deposit(amount);
         System.out.println("Deposit of " + amount + "€ in " + account.getIban());
 
         StatementEntry entry = new StatementEntry(getTransactor().getUsername(),null,account.getIban(),amount,reason,"Credit", LocalDateTime.now(),account.getBalance() );
@@ -27,4 +27,12 @@ public class Deposit extends Transaction {
         StatementManager statementManager = new StatementManager();
         statementManager.saveStatement(account, entry); 
     }
+
+        public Account getAccount() {
+        return account;
+    }
+
+        public double getAmount() {
+            return amount;
+        }
 }
