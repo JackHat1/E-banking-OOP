@@ -2,6 +2,8 @@
 @mits
 ->NA balw fee kai customer sta orders
 ->NA ftaksw CsvStorageManager
+->StatementManager mhpws to kanw storage.
+bill, statement, ordew manager
 ----------------------------------------
 TI EXW TSEKAREI @andreas
 
@@ -28,3 +30,6 @@ Transaction complete
 
 
 
+TODO
+IBAN GENERATOR 
+NA TSEKARW accounts , BILLS ,manager (account,user, transactions) , gui , app , controller 

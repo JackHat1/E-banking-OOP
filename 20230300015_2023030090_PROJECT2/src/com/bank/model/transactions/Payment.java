@@ -33,34 +33,17 @@ public class Payment extends Transaction {
 
             System.out.println("Payment of " + bill.getAmount() + "€ to business " + business.getIban() + " [RF: " + bill.getPaymentCode() + "]");
 
-            StatementEntry fromAccountEntry = new StatementEntry(
-                getTransactor().getUsername(),
-                from.getIban(),
-                business.getIban(),
-                bill.getAmount(),
-                "Payment [" + bill.getPaymentCode() + "]",
-                "Debit",
-                LocalDateTime.now(),
-                from.getBalance()
-            );
+            StatementEntry fromAccountEntry = new StatementEntry(getTransactor().getUsername(),from.getIban(),business.getIban(),bill.getAmount(),"Payment [" + bill.getPaymentCode() + "]","Debit",LocalDateTime.now(),from.getBalance());
 
-            StatementEntry businessAccountEntry = new StatementEntry(
-                getTransactor().getUsername(),
-                from.getIban(),
-                business.getIban(),
-                bill.getAmount(),
-                "Receive Payment [" + bill.getPaymentCode() + "]",
-                "Credit",
-                LocalDateTime.now(),
-                business.getBalance()
-            );
+            StatementEntry businessAccountEntry = new StatementEntry( getTransactor().getUsername(),from.getIban(),business.getIban(),bill.getAmount(),"Receive Payment [" + bill.getPaymentCode() + "]","Credit",LocalDateTime.now(),business.getBalance());
 
             StatementManager statementManager = new StatementManager();
             statementManager.save(from, fromAccountEntry);
             statementManager.save(business, businessAccountEntry);
 
-        } else {
-            System.out.println("Unavailable payment due to insufficient balance.");
+        } 
+        else {
+             System.out.println("Unavailable payment due to insufficient balance.");
         }
     }
 }

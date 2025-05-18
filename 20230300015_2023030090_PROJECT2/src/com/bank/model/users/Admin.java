@@ -25,12 +25,12 @@ public class Admin extends User {
     @Override
     public void unmarshal(String line) {
         String[] parts = line.split(",");
-        for (String part : parts) {
-            String[] kv = part.split(":");
-            switch (kv[0]) {
-                case "legalName": fullName = kv[1]; break;
-                case "userName": username = kv[1]; break;
-                case "password": password = kv[1]; break;
+        for (int i = 0; i < parts.length; i++) {
+            String[] kv = parts[i].split(":");
+            if (kv.length == 2) {
+                if (kv[0].equals("legalName")) fullName = kv[1];
+                else if (kv[0].equals("userName")) username = kv[1];
+                else if (kv[0].equals("password")) password = kv[1];
             }
         }
     }

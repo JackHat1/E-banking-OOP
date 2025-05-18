@@ -33,27 +33,9 @@ public class Transfer extends Transaction {
             System.out.println("Sender Reason: " + senderReason);
             System.out.println("Receiver Reason: " + receiverReason);
 
-            StatementEntry fromAccountEntry = new StatementEntry(
-                getTransactor().getUsername(),
-                from.getIban(),
-                to.getIban(),
-                amount,
-                senderReason,
-                "Debit",
-                LocalDateTime.now(),
-                from.getBalance()
-            );
+            StatementEntry fromAccountEntry = new StatementEntry(getTransactor().getUsername(),from.getIban(),to.getIban(),amount,senderReason,"Debit",LocalDateTime.now(),from.getBalance());
 
-            StatementEntry toAccountEntry = new StatementEntry(
-                getTransactor().getUsername(),
-                from.getIban(),
-                to.getIban(),
-                amount,
-                receiverReason,
-                "Credit",
-                LocalDateTime.now(),
-                to.getBalance()
-            );
+            StatementEntry toAccountEntry = new StatementEntry(getTransactor().getUsername(),from.getIban(),to.getIban(),amount,receiverReason,"Credit",LocalDateTime.now(),to.getBalance());
 
             StatementManager statementManager = new StatementManager();
             statementManager.save(from, fromAccountEntry);
