@@ -2,6 +2,7 @@ package com.bank.model.orders;
 
 import java.time.LocalDate;
 
+import com.bank.manager.AccountManager;
 import com.bank.manager.TransactionManager;
 import com.bank.model.accounts.Account;
 
@@ -100,9 +101,11 @@ public class TransferOrder extends StandingOrder{
         } else if(key.equals("endDate")){
             this.endingDate= LocalDate.parse(value);
         } else if(key.equals("chargeAccount")){
-            this.from = new Account(value, 0.0); // den jerw akoma
+            //this.from= accountMan.findByIban(value);
+            //this.from = new Account(value, 0.0); // den jerw akoma
         } else if(key.equals("creditAccount")){
-            this.to = new Account(value, 0.0);
+            //this.to= accountMan.findByIban(value);
+            //this.to = new Account(value, 0.0);
         } else if(key.equals("frequencyInMonths")){
             this.transferFreq= Integer.parseInt(value);
         } else if(key.equals("dayOfMonth")){

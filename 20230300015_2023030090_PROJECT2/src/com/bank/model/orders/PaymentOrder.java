@@ -3,6 +3,7 @@ package com.bank.model.orders;
 import java.time.LocalDate;
 import com.bank.model.bills.Bill;
 import com.bank.model.transactions.Transaction;
+import com.bank.manager.AccountManager;
 import com.bank.manager.TransactionManager;
 import com.bank.model.accounts.Account;
 import com.bank.model.accounts.BusinessAccount;
@@ -13,6 +14,7 @@ public class PaymentOrder extends StandingOrder{
     private Account from;
     private double maxAmount;
     private int failedAttempts= 0;
+    private String fromIban;
     
 
     public PaymentOrder(String title, String description, Bill bill, Account from, double maxAmount, LocalDate startingDate, LocalDate endingDate){
@@ -72,7 +74,7 @@ public class PaymentOrder extends StandingOrder{
 
     @Override
     public void unmarshal(String data) {
-        String][] parts = data.split(",");
+        String[] parts = data.split(",");
 
         for(String part: parts){
             String[] keyValue= part.split(":");
@@ -93,13 +95,15 @@ public class PaymentOrder extends StandingOrder{
             } else if(key.equals("description")){
                 this.description= value;
             } else if(key.equals("maxAmount")){
-                this.maxAmount= Double.parseDouble(value)
+                this.maxAmount= Double.parseDouble(value);
             } else if(key.equals("startDate")){
                 this.startingDate= LocalDate.parse(value);
             } else if(key.equals("endDate")){
                 this.endingDate= LocalDate.parse(value);
             } else if(key.equals("chargeAccount")){
-                //this.from= accountManager.findByIban(value);
+                this.fromIban= value;
+                //Account from = accountManager.findByIban(fromIban);
+                //this.from= accountMan.findByIban(value);
                 //this.from = new Account(value, 0.0); // mhpws na baloyme to ibam ston constructor?
             }
 

@@ -3,6 +3,7 @@ package com.bank.model.orders;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import com.bank.manager.AccountManager;
 import com.bank.storage.Storable;
 
 public abstract class StandingOrder implements Storable {
