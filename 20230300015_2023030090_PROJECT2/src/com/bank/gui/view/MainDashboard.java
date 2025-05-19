@@ -140,10 +140,12 @@ public class MainDashboard extends JFrame {
                     break;
                 case "Logout":
                     btn.addActionListener(e -> {
-                        dispose();
-                        new LoginWindow();
+                        getContentPane().removeAll();
+                        repaint();
+                        revalidate();
+                        dispose(); // This triggers the overridden dispose() in EBankingApp
                     });
-                    panel = new JPanel(); 
+                    panel = new JPanel();
                     break;
                 default:
                     panel = new JPanel();

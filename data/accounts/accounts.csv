@@ -9,3 +9,4 @@ type:BusinessAccount,iban:GR200202503131719401,primaryOwner:090800700,dateCreate
 type:BusinessAccount,iban:GR200202503131719402,primaryOwner:090800800,dateCreated:2025-05-15,rate:0.03,balance:20500.0,fee:0.0
 type:BusinessAccount,iban:GR200202503131719403,primaryOwner:090800900,dateCreated:2025-05-15,rate:0.03,balance:100000.0,fee:0.0
 type:BusinessAccount,iban:GR200202503131719404,primaryOwner:090800600,dateCreated:2025-05-15,rate:0.03,balance:7230.0,fee:0.0
+type:BusinessAccount,iban:GR200528363012929325,primaryOwner:178960890,dateCreated:2025-05-19,rate:0.2,balance:0.0,fee:100.0

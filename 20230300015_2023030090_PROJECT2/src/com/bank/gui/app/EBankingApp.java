@@ -41,7 +41,6 @@ public class EBankingApp {
                     @Override
                     public void dispose() {
                         super.dispose();
-                        // Όταν γίνεται logout, ξαναδείξε το login παράθυρο
                         EBankingApp.showLoginWindow(userManager, accountManager);
                     }
                 };
