@@ -13,7 +13,7 @@ public class AccountsPanel extends JPanel {
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);
 
-        JLabel title = new JLabel("\uD83D\uDCC4 Οι Λογαριασμοί μου", JLabel.CENTER);
+        JLabel title = new JLabel("My Accounts", JLabel.CENTER);
         title.setFont(new Font("SansSerif", Font.BOLD, 20));
         title.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
         add(title, BorderLayout.NORTH);
@@ -24,10 +24,11 @@ public class AccountsPanel extends JPanel {
 
         StringBuilder sb = new StringBuilder();
         List<Account> accounts = accountManager.getAllAccounts();
-        for (Account acc : accounts) {
+        for (int i = 0; i < accounts.size(); i++) {
+            Account acc = accounts.get(i);
             if (acc.getOwner().equals(user)) {
                 sb.append("IBAN: ").append(acc.getIban())
-                  .append("\nΥπόλοιπο: ").append(String.format("%.2f €", acc.getBalance()))
+                  .append("\nBalance: ").append(String.format("%.2f €", acc.getBalance()))
                   .append("\n\n");
             }
         }
@@ -38,4 +39,4 @@ public class AccountsPanel extends JPanel {
         scrollPane.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
         add(scrollPane, BorderLayout.CENTER);
     }
-} 
+}

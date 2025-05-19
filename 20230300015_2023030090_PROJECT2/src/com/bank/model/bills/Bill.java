@@ -67,9 +67,9 @@ public class Bill implements Storable{
     //     this.issueDate = issueDate;
     // }
 
-    // public LocalDate getDueDate() {
-    //     return dueDate;
-    // }
+    public LocalDate getDueDate() {
+        return dueDate;
+    }
 
     /*private void setDueDate(LocalDate dueDate) {
         this.dueDate = dueDate;

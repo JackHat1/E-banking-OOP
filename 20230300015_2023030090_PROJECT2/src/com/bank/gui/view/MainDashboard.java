@@ -7,6 +7,8 @@ import java.util.*;
 import com.bank.gui.view.panel.*;
 import com.bank.manager.*;
 import com.bank.model.users.*;
+import com.bank.gui.view.panel.AdminCustomerListPanel;
+import com.bank.gui.view.panel.AdminCreateCustomerPanel;
 
 public class MainDashboard extends JFrame {
 
@@ -14,6 +16,10 @@ public class MainDashboard extends JFrame {
     private JPanel contentPanel;
 
     public MainDashboard(User user, AccountManager accountManager, UserManager userManager) {
+        // Initialize managers needed for panels
+        BillManager billManager = new BillManager(accountManager, userManager);
+        TransactionManager transactionManager = new TransactionManager();
+
         setTitle("Bank Of TUC");
         setSize(1000, 650);
         setLocationRelativeTo(null);
@@ -38,23 +44,38 @@ public class MainDashboard extends JFrame {
         add(headerPanel, BorderLayout.NORTH);
 
         // === Menu items ανάλογα με user type ===
+        // ...existing code...
+        
         String[] menuItems;
-
+        
         if (user instanceof Individual) {
             menuItems = new String[] {
-                "Αρχική", "Λογαριασμοί", "Κατάθεση", "Ανάληψη",
-                "Μεταφορά", "Πληρωμή RF", "Κινήσεις", "Προώθηση Ημέρας", "Αποσύνδεση"
+                "Accounts",      // View accounts and balances
+                "Deposit",       // Deposit to own account
+                "Withdraw",      // Withdraw from own account
+                "Transfer",      // Transfer to another IBAN
+                "Pay Bill",      // Pay active bill by RF
+                "Statements",    // View account statements
+                "Logout"         // Exit to login
             };
         } else if (user instanceof Company) {
             menuItems = new String[] {
-                "Αρχική", "Εισερχόμενες Πληρωμές", "Αποσύνδεση"
+                "Accounts",         // View company accounts and balances
+                "Issue Bill",       // Create new bill (bill number, RF code, amount, customer VAT)
+                "Issued Bills",     // All bills issued by the company
+                "Paid Bills",       // Only bills that are already paid
+                "Logout"            // Exit to login
             };
         } else if (user instanceof Admin) {
             menuItems = new String[] {
-                "Αρχική", "Όλοι οι Πελάτες", "Δημιουργία Πελάτη", "Εισαγωγή RF", "Αποσύνδεση"
+                "All Users",        // View all users
+                "All Accounts",     // View all accounts
+                "Create User",      // Create new user (Admin, Individual, Company)
+                "Create Account",   // Create new account for user by VAT
+                "Logout"            // Exit to login
             };
         } else {
-            menuItems = new String[] { "Αρχική", "Αποσύνδεση" };
+            menuItems = new String[] { "Logout" };
         }
 
         // === Layout setup ===
@@ -77,39 +98,58 @@ public class MainDashboard extends JFrame {
 
             JPanel panel;
 
-            switch (item) {
-                case "Λογαριασμοί":
-                    panel = new AccountsPanel(user, accountManager); break;
-                case "Κατάθεση":
-                    panel = new DepositPanel(user, accountManager); break;
-                case "Ανάληψη":
-                    panel = new WithdrawPanel(user, accountManager); break;
-                case "Μεταφορά":
-                    panel = new TransferPanel(user, accountManager); break;
-                case "Πληρωμή RF":
-                    panel = new PayBillPanel(user, accountManager, userManager);  break;
-                case "Κινήσεις":
-                    panel = new StatementPanel(user, accountManager); break;
-                case "Προώθηση Ημέρας":
-                    panel = new SimulateDatePanel(); break;
-                case "Εισερχόμενες Πληρωμές":
-                    panel = new CompanyPaymentsPanel(user, accountManager); break;
-                case "Όλοι οι Πελάτες":
-                    panel = new AdminCustomerListPanel(userManager); break;
-                case "Δημιουργία Πελάτη":
-                    panel = new AdminCreateCustomerPanel(); break;
-                case "Εισαγωγή RF":
-                    panel = new AdminImportRFPanel(); break;
-                case "Αποσύνδεση":
+             switch (item) {
+                case "Accounts":
+                    panel = new AccountsPanel(user, accountManager);
+                     break;
+                case "Deposit":
+                    panel = new DepositPanel(user, accountManager);
+                     break;
+                case "Withdraw":
+                    panel = new WithdrawPanel(user, accountManager);
+                     break;
+                case "Transfer":
+                    panel = new TransferPanel(user, accountManager);
+                     break;
+                case "Pay Bill":
+                    panel = new PayBillPanel(user, accountManager, billManager, transactionManager);
+                     break;
+                case "Statements":
+                    panel = new StatementPanel(user, accountManager); 
+                    break;
+                case "Issue Bill":
+                    panel = new CompanyIssueBillPanel(user, accountManager, userManager, billManager); 
+                    break;
+                case "Issued Bills":
+                    panel = new CompanyIssuedBillsPanel(user, billManager); 
+                    break;
+                case "Paid Bills":
+                    panel = new CompanyPaidBillsPanel(user, billManager); 
+                    break;
+                case "All Users":
+                    panel = new AdminCustomerListPanel(userManager); 
+                    break;
+                case "All Accounts":
+                    panel = new AdminAccountListPanel(accountManager);
+                     break;
+                case "Create User":
+                    panel = new AdminCreateCustomerPanel(userManager); 
+                    break;
+                case "Create Account":
+                    panel = new AdminCreateAccountPanel(accountManager, userManager);
+                    break;
+                case "Logout":
                     btn.addActionListener(e -> {
                         dispose();
                         new LoginWindow();
                     });
-                    panel = new JPanel(); break;
+                    panel = new JPanel(); 
+                    break;
                 default:
                     panel = new JPanel();
                     panel.setBackground(Color.WHITE);
-                    panel.add(new JLabel("📄 Ενότητα: " + item)); break;
+                    panel.add(new JLabel("Section: " + item)); 
+                    break;
             }
 
             btn.addActionListener(e -> cardLayout.show(contentPanel, item));

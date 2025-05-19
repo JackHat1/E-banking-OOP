@@ -4,10 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 
 public class LoginWindow extends JFrame {
-    private JTextField usernameField;
-    private JPasswordField passwordField;
-    private JButton loginButton;
-
+    private JTextField usernameField = new JTextField();
+    private JPasswordField passwordField = new JPasswordField();
+    private JButton loginButton = new JButton("Login");
     private LoginListener loginListener;
 
     public LoginWindow() {
@@ -17,14 +16,11 @@ public class LoginWindow extends JFrame {
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        // 🔷 Header με logo + τίτλο
         JPanel header = new JPanel(new BorderLayout());
         header.setBackground(new Color(0, 51, 102));
         header.setPreferredSize(new Dimension(400, 80));
 
-        ImageIcon rawLogo = new ImageIcon("./data/logo/tuc.png");
-        Image scaledImage = rawLogo.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
-        ImageIcon logoIcon = new ImageIcon(scaledImage);
+        ImageIcon logoIcon = new ImageIcon(new ImageIcon("./data/logo/tuc.png").getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH));
         JLabel logoLabel = new JLabel(logoIcon);
         logoLabel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 10));
 
@@ -34,39 +30,25 @@ public class LoginWindow extends JFrame {
 
         header.add(logoLabel, BorderLayout.WEST);
         header.add(titleLabel, BorderLayout.CENTER);
-
         add(header, BorderLayout.NORTH);
 
-        // 🧩 Κεντρικό Panel με inputs
-        JPanel form = new JPanel();
-        form.setLayout(new GridLayout(4, 1, 10, 10));
+        JPanel form = new JPanel(new GridLayout(4, 1, 10, 10));
         form.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
         form.setBackground(Color.WHITE);
-
-        usernameField = new JTextField();
-        passwordField = new JPasswordField();
-        loginButton = new JButton("Σύνδεση");
-
         form.add(new JLabel("Username:"));
         form.add(usernameField);
         form.add(new JLabel("Password:"));
         form.add(passwordField);
-
         add(form, BorderLayout.CENTER);
 
-        // 🔘 Κουμπί login
         JPanel buttonPanel = new JPanel();
         buttonPanel.setBackground(Color.WHITE);
         buttonPanel.add(loginButton);
         add(buttonPanel, BorderLayout.SOUTH);
 
-        // Listener για σύνδεση
         loginButton.addActionListener(e -> {
             if (loginListener != null) {
-                loginListener.onLogin(
-                    usernameField.getText(),
-                    new String(passwordField.getPassword())
-                );
+                loginListener.onLogin(usernameField.getText(), new String(passwordField.getPassword()));
             }
         });
 
@@ -82,6 +64,6 @@ public class LoginWindow extends JFrame {
     }
 
     public void showError(String message) {
-        JOptionPane.showMessageDialog(this, message, "Σφάλμα", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
 }

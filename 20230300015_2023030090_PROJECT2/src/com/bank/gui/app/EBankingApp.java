@@ -1,15 +1,43 @@
 package com.bank.gui.app;
 
-import com.bank.gui.controller.AppController;
-import com.bank.gui.view.LoginWindow;
+import com.bank.manager.*;
+import com.bank.model.users.*;
+import com.bank.gui.view.*;
+
+import javax.swing.*;
 
 public class EBankingApp {
+
     public static void main(String[] args) {
-        javax.swing.SwingUtilities.invokeLater(() -> {
+        SwingUtilities.invokeLater(() -> {
+            UserManager userManager = new UserManager();
+            AccountManager accountManager = new AccountManager(userManager);
+            BillManager billManager = new BillManager(accountManager, userManager);
+            TransactionManager transactionManager = new TransactionManager();
+            StatementManager statementManager = new StatementManager();
+
+            try {
+                userManager.load();
+                accountManager.load();
+                billManager.loadBills();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null,
+                        "Error loading data files.\nCheck the /data/ folders.",
+                        "Failure", JOptionPane.ERROR_MESSAGE);
+                System.exit(1);
+            }
+
             LoginWindow login = new LoginWindow();
-            new AppController(login);
-            
+
+            login.setLoginListener((username, password) -> {
+                User user = userManager.findByUsername(username);
+                if (user != null && user.checkPassword(password)) {
+                    login.dispose();
+                    new MainDashboard(user, accountManager, userManager);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Wrong login credentials.", "Failure", JOptionPane.ERROR_MESSAGE);
+                }
+            });
         });
     }
-
 }

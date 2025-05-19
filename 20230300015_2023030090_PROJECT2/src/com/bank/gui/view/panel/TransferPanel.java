@@ -16,7 +16,7 @@ public class TransferPanel extends JPanel {
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);
 
-        JLabel title = new JLabel("🔁 Μεταφορά Χρημάτων", JLabel.CENTER);
+        JLabel title = new JLabel("Transfer Money", JLabel.CENTER);
         title.setFont(new Font("SansSerif", Font.BOLD, 18));
         title.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
         add(title, BorderLayout.NORTH);
@@ -38,51 +38,49 @@ public class TransferPanel extends JPanel {
         JTextField toIbanField = new JTextField(12);
         JTextField amountField = new JTextField(12);
         JTextField reasonField = new JTextField(12);
-        JLabel balanceLabel = new JLabel("Υπόλοιπο: - €");
+        JLabel balanceLabel = new JLabel("Balance: - €");
         balanceLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
         balanceLabel.setForeground(Color.DARK_GRAY);
 
-        JButton transferBtn = new JButton("🔄 Εκτέλεση Μεταφοράς");
+        JButton transferBtn = new JButton("Transfer");
         transferBtn.setBackground(new Color(0, 102, 204));
         transferBtn.setForeground(Color.WHITE);
         transferBtn.setFocusPainted(false);
 
-        // === Ενημέρωση υπολοίπου ===
         fromBox.addActionListener(e -> {
             String iban = (String) fromBox.getSelectedItem();
             Account selected = accountManager.findByIban(iban);
             if (selected != null) {
-                balanceLabel.setText("Υπόλοιπο: " + String.format("%.2f €", selected.getBalance()));
+                balanceLabel.setText("Balance: " + String.format("%.2f €", selected.getBalance()));
             }
         });
         if (!myAccounts.isEmpty()) {
             Account selected = accountManager.findByIban((String) fromBox.getSelectedItem());
-            balanceLabel.setText("Υπόλοιπο: " + String.format("%.2f €", selected.getBalance()));
+            balanceLabel.setText("Balance: " + String.format("%.2f €", selected.getBalance()));
         }
 
-        // === Προσθήκη στο Grid ===
         gbc.gridx = 0; gbc.gridy = 0;
-        form.add(new JLabel("Από Λογαριασμό:"), gbc);
+        form.add(new JLabel("From Account:"), gbc);
         gbc.gridx = 1;
         form.add(fromBox, gbc);
 
         gbc.gridx = 0; gbc.gridy = 1;
-        form.add(new JLabel("Σε IBAN:"), gbc);
+        form.add(new JLabel("To IBAN:"), gbc);
         gbc.gridx = 1;
         form.add(toIbanField, gbc);
 
         gbc.gridx = 0; gbc.gridy = 2;
-        form.add(new JLabel("Ποσό (€):"), gbc);
+        form.add(new JLabel("Amount (€):"), gbc);
         gbc.gridx = 1;
         form.add(amountField, gbc);
 
         gbc.gridx = 0; gbc.gridy = 3;
-        form.add(new JLabel("Αιτιολογία:"), gbc);
+        form.add(new JLabel("Description:"), gbc);
         gbc.gridx = 1;
         form.add(reasonField, gbc);
 
         gbc.gridx = 0; gbc.gridy = 4;
-        form.add(new JLabel("Υπόλοιπο:"), gbc);
+        form.add(new JLabel("Balance:"), gbc);
         gbc.gridx = 1;
         form.add(balanceLabel, gbc);
 
@@ -91,7 +89,6 @@ public class TransferPanel extends JPanel {
 
         add(form, BorderLayout.CENTER);
 
-        // === Εκτέλεση μεταφοράς ===
         transferBtn.addActionListener(e -> {
             String fromIban = (String) fromBox.getSelectedItem();
             Account from = accountManager.findByIban(fromIban);
@@ -102,34 +99,34 @@ public class TransferPanel extends JPanel {
                 String reason = reasonField.getText().trim();
 
                 if (amount <= 0 || reason.isEmpty()) {
-                    JOptionPane.showMessageDialog(this, "❌ Συμπλήρωσε σωστά όλα τα πεδία.");
+                    JOptionPane.showMessageDialog(this, "Please fill all fields correctly.");
                     return;
                 }
 
                 if (to == null || from.getIban().equals(to.getIban())) {
-                    JOptionPane.showMessageDialog(this, "❌ Άκυρος ή ίδιος IBAN παραλήπτη.");
+                    JOptionPane.showMessageDialog(this, "Invalid or same recipient IBAN.");
                     return;
                 }
 
                 if (from.getBalance() < amount) {
-                    JOptionPane.showMessageDialog(this, "❌ Ανεπαρκές υπόλοιπο.");
+                    JOptionPane.showMessageDialog(this, "Insufficient balance.");
                     return;
                 }
 
                 TransactionManager tm = new TransactionManager();
-                Transfer tx = new Transfer(from, to, amount, user, reason, reason); // κοινή αιτιολογία
+                Transfer tx = new Transfer(from, to, amount, user, reason, reason);
                 tm.execute(tx);
 
-                JOptionPane.showMessageDialog(this, "✅ Επιτυχής μεταφορά " + amount + "€ στον " + to.getIban());
+                JOptionPane.showMessageDialog(this, "Transferred " + amount + "€ to " + to.getIban());
                 amountField.setText("");
                 toIbanField.setText("");
                 reasonField.setText("");
-                balanceLabel.setText("Υπόλοιπο: " + String.format("%.2f €", from.getBalance()));
+                balanceLabel.setText("Balance: " + String.format("%.2f €", from.getBalance()));
 
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "❌ Μη έγκυρο ποσό.");
+                JOptionPane.showMessageDialog(this, "Invalid amount.");
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "⚠️ Σφάλμα: " + ex.getMessage());
+                JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
             }
         });
     }
