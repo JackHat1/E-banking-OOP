@@ -27,17 +27,27 @@ public class EBankingApp {
                 System.exit(1);
             }
 
-            LoginWindow login = new LoginWindow();
+            showLoginWindow(userManager, accountManager);
+        });
+    }
 
-            login.setLoginListener((username, password) -> {
-                User user = userManager.findByUsername(username);
-                if (user != null && user.checkPassword(password)) {
-                    login.dispose();
-                    new MainDashboard(user, accountManager, userManager);
-                } else {
-                    JOptionPane.showMessageDialog(null, "Wrong login credentials.", "Failure", JOptionPane.ERROR_MESSAGE);
-                }
-            });
+    private static void showLoginWindow(UserManager userManager, AccountManager accountManager) {
+        LoginWindow login = new LoginWindow();
+        login.setLoginListener((username, password) -> {
+            User user = userManager.findByUsername(username);
+            if (user != null && user.checkPassword(password)) {
+                login.dispose();
+                new MainDashboard(user, accountManager, userManager) {
+                    @Override
+                    public void dispose() {
+                        super.dispose();
+                        // Όταν γίνεται logout, ξαναδείξε το login παράθυρο
+                        EBankingApp.showLoginWindow(userManager, accountManager);
+                    }
+                };
+            } else {
+                JOptionPane.showMessageDialog(null, "Wrong login credentials.", "Failure", JOptionPane.ERROR_MESSAGE);
+            }
         });
     }
 }
