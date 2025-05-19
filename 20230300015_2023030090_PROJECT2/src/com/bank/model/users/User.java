@@ -15,8 +15,15 @@ public abstract class User implements Storable {
 
     public abstract String getRole();
 
-    public String getUsername() { return username; }
-    public String getFullName() { return fullName; }
+    public String getUsername() {
+         return username; 
+    }
+    public String getPassword() {
+         return password; 
+    }
+    public String getFullName() {
+         return fullName;
+    }
 
     public boolean checkPassword(String input) {
         return this.password.equals(input);

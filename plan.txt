@@ -51,7 +51,7 @@ TODO
 Προβολή πληροφοριών λογαριασμού (Show Bank Account Info)
 Προβολή κινήσεων λογαριασμού (Show Bank Account Statements)
 Προβολή/φόρτωση εταιρικών λογαριασμών/λογαριασμών (Show/Load Company Bills)
-Πληρωμή λογαριασμού πελάτη (Pay Customer’s Bill)
+Πληρωμή λογαριασμού πελάτη (Pay Customer’s Bill) 
 
 show Customer Details
 Εμφάνιση στοιχείων συγκεκριμένου πελάτη (με βάση username ή VAT).
