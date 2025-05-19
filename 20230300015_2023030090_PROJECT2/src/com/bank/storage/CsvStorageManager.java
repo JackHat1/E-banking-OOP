@@ -4,8 +4,35 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CsvStorageManager {
+public class CsvStorageManager implements StorageManager{
 
+
+    @Override
+    public void load(Storable s, String filePath){
+        try(BufferedReader reader= new BufferedReader(new FileReader(filePath))){
+            String line= reader.readLine();
+            if(line!= null){
+                s.unmarshal(line);
+            }
+        }catch(IOException e){
+            System.out.println("Load failed: "+ filePath);
+        }
+
+    }
+
+    @Override
+    public void save(Storable s, String filePath, boolean append){
+
+        try(BufferedWriter writer= new BufferedWriter(new FileWriter(filePath))){
+            writer.println(s.marshal());
+        }catch(IOException e){
+                System.out.println("Save failed: "+ filePath);
+        }
+
+    }
+
+
+/* 
     // Αποθήκευση ενός αντικειμένου
      public void save(Storable s, String filePath) {
         try (PrintWriter writer = new PrintWriter(new FileWriter(filePath, true))) {
@@ -46,4 +73,5 @@ public class CsvStorageManager {
         }
         return lines;
     }
+*/
 }
