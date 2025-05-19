@@ -12,7 +12,7 @@ public class AdminCreateCustomerPanel extends JPanel {
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);
 
-        JLabel title = new JLabel("Create Customer", SwingConstants.CENTER);
+        JLabel title = new JLabel("Create New User", SwingConstants.CENTER);
         title.setFont(new Font("SansSerif", Font.BOLD, 20));
         title.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
         add(title, BorderLayout.NORTH);
@@ -23,7 +23,7 @@ public class AdminCreateCustomerPanel extends JPanel {
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        String[] roles = {"Individual", "Company"};
+        String[] roles = {"Individual", "Company", "Admin"};
         JComboBox<String> roleBox = new JComboBox<>(roles);
         JTextField fullNameField = new JTextField(15);
         JTextField usernameField = new JTextField(15);
@@ -55,7 +55,14 @@ public class AdminCreateCustomerPanel extends JPanel {
 
         add(form, BorderLayout.CENTER);
 
-        // === Action ===
+        // === Hide VAT field if Admin is selected ===
+        roleBox.addActionListener(e -> {
+            boolean isAdmin = "Admin".equals(roleBox.getSelectedItem());
+            vatField.setEnabled(!isAdmin);
+            vatField.setText(isAdmin ? "" : vatField.getText());
+        });
+
+        // === Create button logic ===
         createBtn.addActionListener(e -> {
             String role = (String) roleBox.getSelectedItem();
             String fullName = fullNameField.getText().trim();
@@ -63,8 +70,10 @@ public class AdminCreateCustomerPanel extends JPanel {
             String password = new String(passwordField.getPassword()).trim();
             String vat = vatField.getText().trim();
 
-            if (fullName.isEmpty() || username.isEmpty() || password.isEmpty() || vat.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Please fill all fields.");
+            boolean needsVat = !role.equals("Admin");
+
+            if (fullName.isEmpty() || username.isEmpty() || password.isEmpty() || (needsVat && vat.isEmpty())) {
+                JOptionPane.showMessageDialog(this, "Please fill all required fields.");
                 return;
             }
 
@@ -74,16 +83,26 @@ public class AdminCreateCustomerPanel extends JPanel {
             }
 
             User newUser;
-            if (role.equals("Individual")) {
-                newUser = new Individual(username, password, fullName, vat);
-            } else {
-                newUser = new Company(username, password, fullName, vat);
+            switch (role) {
+                case "Individual":
+                    newUser = new Individual(username, password, fullName, vat);
+                    break;
+                case "Company":
+                    newUser = new Company(username, password, fullName, vat);
+                    break;
+                case "Admin":
+                    newUser = new Admin(username, password, fullName);
+                    break;
+                default:
+                    JOptionPane.showMessageDialog(this, "Invalid user type.");
+                    return;
             }
 
             userManager.addUser(newUser);
             userManager.saveAll();
 
-            JOptionPane.showMessageDialog(this, "User created successfully!");
+            JOptionPane.showMessageDialog(this, "✅ User created successfully!");
+
             fullNameField.setText("");
             usernameField.setText("");
             passwordField.setText("");
