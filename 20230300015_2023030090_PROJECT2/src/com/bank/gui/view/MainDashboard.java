@@ -7,8 +7,6 @@ import java.util.*;
 import com.bank.gui.view.panel.*;
 import com.bank.manager.*;
 import com.bank.model.users.*;
-import com.bank.gui.view.panel.AdminCustomerListPanel;
-import com.bank.gui.view.panel.AdminCreateCustomerPanel;
 
 public class MainDashboard extends JFrame {
 
@@ -68,12 +66,19 @@ public class MainDashboard extends JFrame {
             };
         } else if (user instanceof Admin) {
             menuItems = new String[] {
-                "All Users",        // View all users
-                "All Accounts",     // View all accounts
-                "Create User",      // Create new user (Admin, Individual, Company)
-                "Create Account",   // Create new account for user by VAT
-                "Logout"            // Exit to login
+                "All Users",
+                "Customer Details",
+                "All Accounts",
+                "Account Info",
+                "Account Statements",
+                "Issued Bills",
+                "Paid Bills",
+                "List Orders",
+                "Admin Pay Bill",
+                "Simulate Time Passing",
+                "Logout"
             };
+
         } else {
             menuItems = new String[] { "Logout" };
         }
@@ -96,63 +101,90 @@ public class MainDashboard extends JFrame {
                 BorderFactory.createEmptyBorder(10, 20, 10, 20)
             ));
 
-            JPanel panel;
+        JPanel panel;
 
-             switch (item) {
-                case "Accounts":
-                    panel = new AccountsPanel(user, accountManager);
-                     break;
-                case "Deposit":
-                    panel = new DepositPanel(user, accountManager);
-                     break;
-                case "Withdraw":
-                    panel = new WithdrawPanel(user, accountManager);
-                     break;
-                case "Transfer":
-                    panel = new TransferPanel(user, accountManager);
-                     break;
-                case "Pay Bill":
-                    panel = new PayBillPanel(user, accountManager, billManager, transactionManager);
-                     break;
-                case "Statements":
-                    panel = new StatementPanel(user, accountManager); 
-                    break;
-                case "Issue Bill":
-                    panel = new CompanyIssueBillPanel(user, accountManager, userManager, billManager); 
-                    break;
-                case "Issued Bills":
-                    panel = new CompanyIssuedBillsPanel(user, billManager); 
-                    break;
-                case "Paid Bills":
-                    panel = new CompanyPaidBillsPanel(user, billManager); 
-                    break;
-                case "All Users":
-                    panel = new AdminCustomerListPanel(userManager); 
-                    break;
-                case "All Accounts":
-                    panel = new AdminAccountListPanel(accountManager);
-                     break;
-                case "Create User":
-                    panel = new AdminCreateCustomerPanel(userManager); 
-                    break;
-                case "Create Account":
-                    panel = new AdminCreateAccountPanel(accountManager, userManager);
-                    break;
-                case "Logout":
-                    btn.addActionListener(e -> {
-                        getContentPane().removeAll();
-                        repaint();
-                        revalidate();
-                        dispose(); // This triggers the overridden dispose() in EBankingApp
-                    });
-                    panel = new JPanel();
-                    break;
-                default:
-                    panel = new JPanel();
-                    panel.setBackground(Color.WHITE);
-                    panel.add(new JLabel("Section: " + item)); 
-                    break;
-            }
+        switch (item) {
+            // === Individual / Company Shared ===
+            case "Accounts":
+                panel = new AccountsPanel(user, accountManager);
+                break;
+            case "Deposit":
+                panel = new DepositPanel(user, accountManager);
+                break;
+            case "Withdraw":
+                panel = new WithdrawPanel(user, accountManager);
+                break;
+            case "Transfer":
+                panel = new TransferPanel(user, accountManager);
+                break;
+            case "Pay Bill":
+                panel = new PayBillPanel(user, accountManager, billManager, transactionManager);
+                break;
+            case "Statements":
+                panel = new StatementPanel(user, accountManager);
+                break;
+
+            // === Company Only ===
+            case "Issue Bill":
+                panel = new CompanyIssueBillPanel(user, accountManager, userManager, billManager);
+                break;
+            case "Issued Bills":
+                panel = new CompanyIssuedBillsPanel(user, billManager);
+                break;
+            case "Paid Bills":
+                panel = new CompanyPaidBillsPanel(user, billManager);
+                break;
+
+            // === Admin Only ===
+            case "All Users":
+                panel = new AdminCustomerListPanel(userManager);
+                break;
+            case "Customer Details":
+                panel = new AdminCustomerDetailsPanel(userManager, accountManager);
+                break;
+            case "All Accounts":
+                panel = new AdminAccountListPanel(accountManager);
+                break;
+            case "Account Info":
+                panel = new AdminAccountDetailsPanel(accountManager);
+                break;
+            case "Account Statements":
+                panel = new AdminAccountStatementsPanel(accountManager);
+                break;
+            case "List Orders":
+                panel = new AdminStandingOrdersPanel();
+                break;
+            case "Admin Pay Bill":
+                panel = new AdminPayBillPanel(accountManager, userManager);
+                break;
+            case "Simulate Time Passing":
+                panel = new AdminSimulateTimePanel(accountManager, userManager);
+                break;
+            case "Create User":
+                panel = new AdminCreateCustomerPanel(userManager);
+                break;
+            case "Create Account":
+                panel = new AdminCreateAccountPanel(accountManager, userManager);
+                break;
+
+            // === Common ===
+            case "Logout":
+                btn.addActionListener(e -> {
+                    getContentPane().removeAll();
+                    repaint();
+                    revalidate();
+                    dispose();
+                });
+                panel = new JPanel();
+                break;
+
+            default:
+                panel = new JPanel();
+                panel.setBackground(Color.WHITE);
+                panel.add(new JLabel("Section: " + item));
+                break;
+        }
+
 
             btn.addActionListener(e -> cardLayout.show(contentPanel, item));
             menuPanel.add(btn);

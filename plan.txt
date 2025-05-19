@@ -47,29 +47,3 @@ TI EXW TSEKAREI @andreas
 
 TODO
 
-Προβολή λεπτομερειών πελάτη (Show Customer Details)
-Προβολή πληροφοριών λογαριασμού (Show Bank Account Info)
-Προβολή κινήσεων λογαριασμού (Show Bank Account Statements)
-Προβολή/φόρτωση εταιρικών λογαριασμών/λογαριασμών (Show/Load Company Bills)
-Πληρωμή λογαριασμού πελάτη (Pay Customer’s Bill) 
-
-show Customer Details
-Εμφάνιση στοιχείων συγκεκριμένου πελάτη (με βάση username ή VAT).
-
-Show Bank Account Info
-Εμφάνιση στοιχείων συγκεκριμένου λογαριασμού (με βάση IBAN).
-
-Show Bank Account Statements
-Εμφάνιση κινήσεων λογαριασμού (statement).
-
-Show Issued Bills / Show Paid Bills / Load Company Bills
-Εμφάνιση και φόρτωση λογαριασμών εταιρειών.
-
-Pay Customer’s Bill
-Επιλογή λογαριασμού πελάτη και πληρωμή λογαριασμού.
-
-List Standing Orders
-Να καλείς το standingOrderManager και να εμφανίζεις τις πάγιες εντολές .
-
-Simulate Time Passing
-Να καλείς το standingOrderManager και να εκτελείς τις εντολές για κάθε μέρα 

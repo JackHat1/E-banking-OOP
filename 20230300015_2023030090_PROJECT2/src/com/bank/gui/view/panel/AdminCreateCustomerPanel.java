@@ -101,7 +101,7 @@ public class AdminCreateCustomerPanel extends JPanel {
             userManager.addUser(newUser);
             userManager.saveAll();
 
-            JOptionPane.showMessageDialog(this, "✅ User created successfully!");
+            JOptionPane.showMessageDialog(this, "User created successfully!");
 
             fullNameField.setText("");
             usernameField.setText("");
