@@ -2,8 +2,10 @@ package com.bank.cli;
 
 import com.bank.manager.*;
 import com.bank.model.accounts.*;
+import com.bank.model.orders.StandingOrder;
 import com.bank.model.users.*;
 
+import java.time.LocalDate;
 import java.util.*;
 
 public class AdminMenu {
@@ -24,6 +26,8 @@ public class AdminMenu {
             System.out.println("2. View Accounts");
             System.out.println("3. Create New User");
             System.out.println("4. Create New Account");
+            System.out.println("5. List Standing Orders");
+            System.out.println("6. Simulate Time Passing");
             System.out.println("0. Exit");
 
             System.out.print("Select option: ");
@@ -34,6 +38,8 @@ public class AdminMenu {
                 case "2": showAccounts(); break;
                 case "3": createUser(); break;
                 case "4": createAccount(); break;
+                case "5": listOrders(); break;
+                case "6": simulateTime(); break;
                 case "0": return;
                 default: System.out.println("Invalid option.");
             }
@@ -132,5 +138,58 @@ public class AdminMenu {
             accountManager.addAccount(newAccount);
             System.out.println("Account created with IBAN: " + newAccount.getIban());
         }
+    }
+
+    private void listOrders() {
+    //     // List<StandingOrder> orders = StandingOrderManager.loadFromFile("data/orders.dat");
+    //     // if (orders.isEmpty()) {
+    //     //     System.out.println("No standing orders found.");
+    //     //     return;
+    //     // }
+    //     // for (StandingOrder o : orders) {
+    //     //     System.out.println("- " + o.getTitle() + " | From: " + o.getStartingDate() + " to: " + o.getEndingDate());
+    //     // }
+    }
+
+     private void simulateTime() {
+    //     System.out.print("Target date (YYYY-MM-DD): ");
+    //     String input = scanner.nextLine();
+    //     LocalDate targetDate;
+    //     try {
+    //         targetDate = LocalDate.parse(input);
+    //     } catch (Exception e) {
+    //         System.out.println("Invalid date.");
+    //         return;
+    //     }
+
+    //     LocalDate today = LocalDate.now();
+    //     TransactionManager transMan = new TransactionManager();
+    //     BillManager billMan = new BillManager(accountManager, userManager);
+
+    //     // standingOrderManager.loadOrders();
+    //     // List<StandingOrder> orders = standingOrderManager.getAllOrders();
+
+    //     while (!today.isAfter(targetDate)) {
+    //         for (StandingOrder order : orders) {
+    //             if (order.getIsActive() && !order.isExpired()) {
+    //                 User user = userManager.findByVat(order.description); // ή άλλο πεδίο αν χρειάζεται
+    //                 order.execute(today, billMan, accountManager, transMan, user);
+    //             }
+    //         }
+
+    //         // Apply interest and monthly fees
+    //         for (Account acc : accountManager.getAllAccounts()) {
+    //             if (today.getDayOfMonth() == 1) {
+    //                 acc.deposit(acc.getBalance() * acc.getInterestRate());
+    //             }
+    //             if (acc instanceof BusinessAccount && today.getDayOfMonth() == 1) {
+    //                 acc.withdraw(((BusinessAccount) acc).getMonthlyFee());
+    //             }
+    //         }
+
+    //         today = today.plusDays(1);
+    //     }
+
+    //     System.out.println("Simulation completed.");
     }
 }
