@@ -22,7 +22,9 @@ public class UserManager {
     
             for (String field : fields) {
                 String[] parts = field.split(":");
-                if (parts.length < 2) continue;
+                if (parts.length < 2) {
+                    continue;
+                }
                 String key = parts[0].trim();
                 String value = parts[1].trim();
     
@@ -58,7 +60,7 @@ public class UserManager {
         for (int i = 0; i < users.size(); i++) {
             list.add(users.get(i));
         }
-        storage.saveAll(list, path);
+        storage.saveAll(list, path, false);
     }
 
     public void addUser(User user) {

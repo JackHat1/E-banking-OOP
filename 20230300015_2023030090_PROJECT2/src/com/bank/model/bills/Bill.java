@@ -1,7 +1,7 @@
 package com.bank.model.bills;
 
 import java.time.LocalDate;
-//import com.bank.model.users.User;
+
 import com.bank.storage.Storable;
 import com.bank.model.accounts.Account;
 
@@ -22,7 +22,6 @@ public class Bill implements Storable{
         this.issuer = issuer;
         this.issueDate = LocalDate.now();
         this.dueDate = LocalDate.now().plusDays(30);
-        //this.isPaid = false;
     }
     
 

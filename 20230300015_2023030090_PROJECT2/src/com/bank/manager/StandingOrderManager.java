@@ -22,7 +22,7 @@ public class StandingOrderManager {
     private final String failedFilePath= ".data/orders/failed.csv";
 
     public StandingOrderManager(){
-        
+        loadOrders();
     }
 
 
@@ -31,10 +31,8 @@ public class StandingOrderManager {
     }
 
     public void deleteOrder(StandingOrder order){
-       // if(orders.contains(order)){
-
-            orders.remove(order);
-        //}
+ 
+        orders.remove(order);
 
     }
 
@@ -108,14 +106,15 @@ public class StandingOrderManager {
                 stillActive.add(order);
             }
 
-            saveOrders(stillActive);
-            saveExpiredOrders(expiredOrders);
-            saveFailedOrders(failedOrders);
-
-            orders.clear();
-            orders.addAll(stillActive);
-
         }
+
+        saveOrders(stillActive);
+        saveExpiredOrders(expiredOrders);
+        saveFailedOrders(failedOrders);
+
+        orders.clear();
+        orders.addAll(stillActive);
+
     }
 
 

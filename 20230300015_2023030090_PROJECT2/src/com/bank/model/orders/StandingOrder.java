@@ -58,6 +58,7 @@ public abstract class StandingOrder implements Storable {
     public abstract String marshal();
     public abstract void unmarshal(String data);
 
+
     public boolean isExpired(){
         return LocalDate.now().isAfter(getEndingDate());
     }

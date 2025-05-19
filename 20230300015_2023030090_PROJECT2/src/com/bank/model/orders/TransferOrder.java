@@ -12,18 +12,16 @@ import com.bank.model.users.User;
 
 public class TransferOrder extends StandingOrder{
 
-    //private Account from;
-   // private Account to;
     private String fromIban;
     private String toIban;
     private double amount;
-    private int transferFreq; // se mines
+    private int transferFreq; 
     private int transferDay;
     private int failedAttempts= 0;
     private String customerVat;
     private double fee;
 
-    public TransferOrder(String title, String description, String fromIban, String toIban/*Account from, Account to*/, double amount, int transferFreq, int transferDay, LocalDate startingDate, LocalDate endingDate){
+    public TransferOrder(String title, String description, String fromIban, String toIban, double amount, int transferFreq, int transferDay, LocalDate startingDate, LocalDate endingDate){
         super(title, description, startingDate, endingDate);
         this.fromIban = fromIban;
         this.toIban = toIban;
@@ -33,7 +31,7 @@ public class TransferOrder extends StandingOrder{
     }
 
     @Override
-    public void execute(LocalDate trDayDate, BillManager billMan, AccountManager accountMan, TransactionManager transMan, User user){  //na ftaiksw gia ton xrono
+    public void execute(LocalDate trDayDate, BillManager billMan, AccountManager accountMan, TransactionManager transMan, User user){  
 
         Account from= accountMan.findByIban(fromIban);
         Account to= accountMan.findByIban(toIban);
@@ -45,8 +43,7 @@ public class TransferOrder extends StandingOrder{
 
                     Transaction transaction= new Transfer(from, to, amount, user, "StandingOrder Transfer", "StandingOrder Transfer");
                     transMan.execute(transaction);
-                    //from.withdraw(amount);
-                    //to.deposit(amount);
+
                     failedAttempts= 0;
                     System.out.println("Transfer executed "+ amount+ " from "+ from.getIban()+ " to "+to.getIban()+".");
 
@@ -130,12 +127,8 @@ public class TransferOrder extends StandingOrder{
                 this.fee= Double.parseDouble(value);
             } else if(key.equals("chargeAccount")){
                 this.fromIban= value;
-                //this.from= accountMan.findByIban(value);
-                //this.from = new Account(value, 0.0); // den jerw akoma
             } else if(key.equals("creditAccount")){
                 this.toIban= value;
-                //this.to= accountMan.findByIban(value);
-                //this.to = new Account(value, 0.0);
             } else if(key.equals("frequencyInMonths")){
                 this.transferFreq= Integer.parseInt(value);
             } else if(key.equals("dayOfMonth")){

@@ -51,6 +51,10 @@ public abstract class Account implements Storable {
     public void setBalance(double balance) {
         this.balance = balance;
     }
+    
+    public LocalDate getDateCreated() {
+        return dateCreated;
+    }
 
     public void setDateCreated(LocalDate dateCreated) {
     this.dateCreated = dateCreated;

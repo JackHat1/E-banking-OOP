@@ -66,7 +66,13 @@ public class BillManager {
       public void loadBills() {
         java.io.File folder = new java.io.File(billsFolder);
         java.io.File[] files = folder.listFiles((dir, name) -> name.endsWith(".csv"));
-        if (files == null) return;
+        if (files == null){
+            return;
+        }
+        
+
+        /* String today = java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+           String filePath = "./data/bills/" + today + ".csv"; */
     
         for (int i = 0; i < files.length; i++) {
             List<String> lines = storage.loadLines(files[i].getPath());

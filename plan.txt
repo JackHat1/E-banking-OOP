@@ -1,8 +1,7 @@
 //////////////////////////
 @mits
 ->NA balw fee kai customer sta orders(οκ)
-->NA ftaksw CsvStorageManager
-->StatementManager mhpws to kanw storage.
+gia to fee den jerw an paizoyn rolo se kati 
 bill, statement, ordew manager
 
 Τι εχω τσεκαρει @μητσος
@@ -10,6 +9,7 @@ bill, statement, ordew manager
 -> bill komple 
 -> statementEntry komple
 ->StatementManager komple
+->StandOrderManager komple
 ----------------------------------------
 TI EXW TSEKAREI @andreas
 

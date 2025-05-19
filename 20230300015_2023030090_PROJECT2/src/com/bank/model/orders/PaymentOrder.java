@@ -9,12 +9,10 @@ import com.bank.manager.AccountManager;
 import com.bank.manager.BillManager;
 import com.bank.manager.TransactionManager;
 import com.bank.model.accounts.Account;
-//import com.bank.model.accounts.BusinessAccount;
+
 
 public class PaymentOrder extends StandingOrder{
 
-    //private Bill bill;
-    //private Account from;
     private double maxAmount;
     private int failedAttempts= 0;
     private String fromIban;
@@ -23,17 +21,16 @@ public class PaymentOrder extends StandingOrder{
     private double fee;
     
 
-    public PaymentOrder(String title, String description, String paymentCode, String fromIban/*Bill bill, Account from*/, double maxAmount, LocalDate startingDate, LocalDate endingDate){
+    public PaymentOrder(String title, String description, String paymentCode, String fromIban, double maxAmount, LocalDate startingDate, LocalDate endingDate){
         super(title , description, startingDate, endingDate);
-        //this.bill = bill;
         this.paymentCode= paymentCode;
         this.fromIban=  fromIban;
-        //this.from = from;
         this.maxAmount = maxAmount;
     }
 
+
     @Override
-    public void execute(LocalDate paymentDay, BillManager billMan, AccountManager accountMan, TransactionManager transMan, User user){  //na ftaiksw gia ton xrono
+    public void execute(LocalDate paymentDay, BillManager billMan, AccountManager accountMan, TransactionManager transMan, User user){  
 
         Bill bill = billMan.getBillByRF(paymentCode);
         Account from= accountMan.findByIban(fromIban);
@@ -46,7 +43,7 @@ public class PaymentOrder extends StandingOrder{
                 if(bill.getAmount() <= from.getBalance()){
                     Transaction transaction= new Payment(bill, from, bill.getIssuer(), user);
                     transMan.execute(transaction);
-                    //from.withdraw(bill.getAmount());
+
                     bill.setPaid(true);
                     failedAttempts= 0;
                     System.out.println("Payment executed for bill " + bill.getPaymentCode());
@@ -109,7 +106,6 @@ public class PaymentOrder extends StandingOrder{
                 this.orderId = value;
             } else if(key.equals("paymentCode")){
                 this.paymentCode= value;
-                //this.bill= new Bill("", value, 0.0, null); // den jerw akoma
             } else if(key.equals("title")){
                 this.title= value;
             } else if(key.equals("description")){
@@ -126,15 +122,12 @@ public class PaymentOrder extends StandingOrder{
                 this.fee= Double.parseDouble(value);
             } else if(key.equals("chargeAccount")){
                 this.fromIban= value;
-                //Account from = accountManager.findByIban(fromIban);
-                //this.from= accountMan.findByIban(value);
-                //this.from = new Account(value, 0.0); // mhpws na baloyme to ibam ston constructor?
             }
 
         }
         
-        
     }
 
+    
     
 }

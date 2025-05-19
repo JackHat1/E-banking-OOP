@@ -20,18 +20,13 @@ public class StatementManager {
         if (!dir.exists()) dir.mkdirs();
     }
 
+
     public void saveStatement(Account acc, StatementEntry entry) {
         String fullPath = basePath + acc.getIban() + ".csv";
 
-        storage.save(entry,fullPath);
-
-        /*try (BufferedWriter writer = new BufferedWriter(new FileWriter(fullPath, true))) {
-            writer.write(entry.marshal());
-            writer.newLine();
-        } catch (IOException e) {
-            System.err.println("Error in statement save: " + e.getMessage());
-        }*/
+        storage.save(entry,fullPath, true);
     }
+
 
     public List<StatementEntry> load(Account acc) {
 
@@ -49,19 +44,8 @@ public class StatementManager {
         Collections.reverse(list); // gia na tis kanei anapoda poy leei h ekfonisi
         return list;
 
-        /*File file = new File(path);
-        if (!file.exists()) return list;
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                StatementEntry entry = StatementEntry.unmarshal(line);
-                if (entry != null) list.add(entry);
-            }
-        } catch (IOException e) {
-            System.err.println("Error in statement load: " + e.getMessage());
-        }
-
-        return list;*/
     }
+
+
+
 }
