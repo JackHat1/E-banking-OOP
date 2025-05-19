@@ -64,7 +64,7 @@ public class AdminMenu {
         System.out.println("\nUsers:");
         for (int i = 0; i < users.size(); i++) {
             User u = users.get(i);
-            System.out.print("- " + u.getUsername() + " (" + u.getFullName() + ") | Role: " + u.getRole());
+            System.out.print("\n- " + u.getUsername() + " (" + u.getFullName() + ") | Role: " + u.getRole());
             // if (u instanceof Customer) {
             //     System.out.print(" | VAT: " + ((Customer) u).getVat());
             // }
