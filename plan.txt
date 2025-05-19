@@ -43,6 +43,7 @@ TI EXW TSEKAREI @andreas
   { UserManager.java  }
   { TransactionManager.java }
 
+  cli complete 
+
 TODO
-IBAN GENERATOR 
-NA TSEKARW accounts , BILLS  , gui , app , controller 
+NA TSEKARW  gui   
