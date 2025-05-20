@@ -47,3 +47,4 @@ TI EXW TSEKAREI @andreas
 
 TODO
 
+fee στο fromIban στην execute()
