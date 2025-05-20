@@ -82,8 +82,8 @@ public class PaymentOrder extends StandingOrder{
         sb.append("description:").append(getDescription()).append(",");
         sb.append("customer:").append(customerVat).append(",");
         sb.append("maxAmount:").append(maxAmount).append(",");
-        sb.append("startDate:").append(getStartingDate()).append(",");
-        sb.append("endDate:").append(getEndingDate()).append(",");
+        sb.append("startDate:").append(this.startingDate.format(formatter)).append(",");
+        sb.append("endDate:").append(this.endingDate.format(formatter)).append(",");
         sb.append("fee:").append(fee).append(",");
         sb.append("chargeAccount:").append(fromIban);
         return sb.toString();

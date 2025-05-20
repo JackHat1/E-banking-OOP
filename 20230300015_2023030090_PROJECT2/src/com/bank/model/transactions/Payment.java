@@ -1,6 +1,6 @@
 package com.bank.model.transactions;
 
-import java.time.LocalDateTime;
+//import java.time.LocalDateTime;
 
 import com.bank.manager.StatementManager;
 import com.bank.model.accounts.Account;
@@ -33,9 +33,9 @@ public class Payment extends Transaction {
 
             System.out.println("Payment of " + bill.getAmount() + "€ to business " + business.getIban() + " [RF: " + bill.getPaymentCode() + "]");
 
-            StatementEntry fromAccountEntry = new StatementEntry(getTransactor().getUsername(),from.getIban(),business.getIban(),bill.getAmount(),"Payment [" + bill.getPaymentCode() + "]","Debit",LocalDateTime.now(),from.getBalance());
+            StatementEntry fromAccountEntry = new StatementEntry(getTransactor().getUsername(),from.getIban(),business.getIban(),bill.getAmount(),"Payment [" + bill.getPaymentCode() + "]","Debit", this.timestamp, from.getBalance());
 
-            StatementEntry businessAccountEntry = new StatementEntry( getTransactor().getUsername(),from.getIban(),business.getIban(),bill.getAmount(),"Receive Payment [" + bill.getPaymentCode() + "]","Credit",LocalDateTime.now(),business.getBalance());
+            StatementEntry businessAccountEntry = new StatementEntry( getTransactor().getUsername(),from.getIban(),business.getIban(),bill.getAmount(),"Receive Payment [" + bill.getPaymentCode() + "]","Credit", this.timestamp, business.getBalance());
 
             StatementManager statementManager = new StatementManager();
             statementManager.saveStatement(from, fromAccountEntry);

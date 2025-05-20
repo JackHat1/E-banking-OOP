@@ -2,6 +2,8 @@ package com.bank.model.transactions;
 
 import com.bank.model.statements.StatementEntry;
 import com.bank.model.users.User;
+import com.bank.utilities.GlobalClock;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -15,7 +17,7 @@ public abstract class Transaction    {
 
     public Transaction(User transactor, String reason) {
         this.transactionId = UUID.randomUUID().toString();
-        this.timestamp = LocalDateTime.now();
+        this.timestamp = GlobalClock.getDateTime();
         this.transactor = transactor;
         this.reason = reason;
     }

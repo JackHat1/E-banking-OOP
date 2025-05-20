@@ -70,9 +70,6 @@ public class BillManager {
             return;
         }
         
-
-        /* String today = java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-           String filePath = "./data/bills/" + today + ".csv"; */
     
         for (int i = 0; i < files.length; i++) {
             List<String> lines = storage.loadLines(files[i].getPath());

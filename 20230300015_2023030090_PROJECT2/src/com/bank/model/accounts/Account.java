@@ -2,6 +2,8 @@ package com.bank.model.accounts;
 
 import com.bank.model.users.Customer;
 import com.bank.storage.Storable;
+import com.bank.utilities.GlobalClock;
+
 import java.time.LocalDate;
 import java.util.Random;
 
@@ -17,7 +19,7 @@ public abstract class Account implements Storable {
         this.owner = owner;
         this.interestRate = interestRate;
         this.balance = 0.0;
-        this.dateCreated = LocalDate.now();
+        this.dateCreated = GlobalClock.getDate();
     }
 
     public String getIban() {
@@ -55,7 +57,7 @@ public abstract class Account implements Storable {
     public LocalDate getDateCreated() {
         return dateCreated;
     }
-
+    
     public void setDateCreated(LocalDate dateCreated) {
     this.dateCreated = dateCreated;
     }   

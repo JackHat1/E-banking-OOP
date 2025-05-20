@@ -26,6 +26,9 @@ public class TransferOrder extends StandingOrder{
         this.fromIban = fromIban;
         this.toIban = toIban;
         this.amount = amount;
+        if(transferDay >30 || transferDay <1){
+            throw new IllegalArgumentException("Invalid day of month. Must be between 1 and 30.");
+        }
         this.transferDay = transferDay;
         this.transferFreq = transferFreq;
     }
@@ -84,8 +87,8 @@ public class TransferOrder extends StandingOrder{
         sb.append("description:").append(getDescription()).append(",");
         sb.append("customer:").append(customerVat).append(",");
         sb.append("amount:").append(amount).append(",");
-        sb.append("startDate:").append(getStartingDate()).append(",");
-        sb.append("endDate:").append(getEndingDate()).append(",");
+        sb.append("startDate:").append(this.startingDate.format(formatter)).append(",");
+        sb.append("endDate:").append(this.endingDate.format(formatter)).append(",");
         sb.append("fee:").append(fee).append(",");
         sb.append("chargeAccount:").append(fromIban).append(",");
         sb.append("creditAccount:").append(toIban).append(",");
@@ -101,7 +104,7 @@ public class TransferOrder extends StandingOrder{
         
 
         for(String part: parts){
-            String[] keyValue= part.split(",");
+            String[] keyValue= part.split(":");
             String key= keyValue[0];
             String value= "";
 

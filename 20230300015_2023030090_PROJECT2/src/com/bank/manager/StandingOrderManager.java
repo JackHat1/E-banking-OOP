@@ -11,6 +11,7 @@ import com.bank.model.orders.TransferOrder;
 //import com.bank.model.transactions.Transaction;
 import com.bank.model.users.User;
 import com.bank.storage.CsvStorageManager;
+import com.bank.utilities.GlobalClock;
 
 public class StandingOrderManager {
 
@@ -71,10 +72,10 @@ public class StandingOrderManager {
 
                 StandingOrder order;
                 if(typeKey.equals("PaymentOrder")){
-                    order= new PaymentOrder("", "", null, null, 0.0, LocalDate.now(), LocalDate.now());
+                    order= new PaymentOrder("", "", null, null, 0.0, GlobalClock.getDate(), GlobalClock.getDate());
 
                 }else if (typeKey.equals("TransferOrder")){
-                    order= new TransferOrder("", "", null, null, 0.0, 0, 0, LocalDate.now(), LocalDate.now());
+                    order= new TransferOrder("", "", null, null, 0.0, 0, 0, GlobalClock.getDate(), GlobalClock.getDate());
 
                 }else{
                     continue;

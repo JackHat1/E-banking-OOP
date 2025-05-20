@@ -1,6 +1,6 @@
 package com.bank.model.transactions;
 
-import java.time.LocalDateTime;
+//import java.time.LocalDateTime;
 
 import com.bank.manager.StatementManager;
 import com.bank.model.accounts.Account;
@@ -36,7 +36,7 @@ public class Withdrawal extends Transaction {
             account.withdraw(amount);
             System.out.println("The amount of " + amount + "€ has been withdrawn from " + account.getIban());
 
-            StatementEntry entry = new StatementEntry(getTransactor().getUsername(),account.getIban(),null,amount,"Withdrawal","Debit",LocalDateTime.now(),account.getBalance()  );
+            StatementEntry entry = new StatementEntry(getTransactor().getUsername(),account.getIban(),null,amount,"Withdrawal","Debit", this.timestamp, account.getBalance()  );
 
             StatementManager statementManager = new StatementManager();
             statementManager.saveStatement(account, entry); 

@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import com.bank.storage.Storable;
+import com.bank.utilities.GlobalClock;
 
 public class StatementEntry implements Storable{
 
@@ -25,7 +26,7 @@ public class StatementEntry implements Storable{
         this.amount = amount;
         this.reason = reason;
         this.type = type;
-        this.timestamp = timestamp;
+        this.timestamp = GlobalClock.getDateTime();
         this.balance = balance;
     }
 

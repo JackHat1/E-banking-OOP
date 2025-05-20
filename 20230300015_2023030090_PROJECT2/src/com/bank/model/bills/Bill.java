@@ -1,8 +1,10 @@
 package com.bank.model.bills;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import com.bank.storage.Storable;
+import com.bank.utilities.GlobalClock;
 import com.bank.model.accounts.Account;
 
 public class Bill implements Storable{
@@ -15,13 +17,15 @@ public class Bill implements Storable{
     private boolean isPaid;
 
 
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
     public Bill(String billNumber, String paymentCode, double amount, Account issuer) {
         this.billNumber = billNumber;
         this.paymentCode = paymentCode;
         this.amount = amount;
         this.issuer = issuer;
-        this.issueDate = LocalDate.now();
-        this.dueDate = LocalDate.now().plusDays(30);
+        this.issueDate = GlobalClock.getDate();
+        this.dueDate = GlobalClock.getDate().plusDays(30);
     }
     
 
@@ -90,14 +94,14 @@ public class Bill implements Storable{
         ", Bill Number: " + billNumber + 
         ", Issuer: " + issuer.getIban() + 
         ", Amount: " + amount + 
-        ", Issue Date: " + issueDate + 
-        ", Due Date: " + dueDate + 
+        ", Issue Date: " + issueDate.format(formatter) + 
+        ", Due Date: " + dueDate.format(formatter) + 
         '}';
     }
 
         @Override
         public String marshal() {
-            return "type:Bill,paymentCode:" + paymentCode + ",billNumber:" + billNumber + ",issuer:" + issuer.getIban() + ",amount:" + amount + ",issueDate:" + issueDate + ",dueDate:" + dueDate + ",isPaid:" + isPaid;
+            return "type:Bill,paymentCode:" + paymentCode + ",billNumber:" + billNumber + ",issuer:" + issuer.getIban() + ",amount:" + amount + ",issueDate:" + issueDate.format(formatter) + ",dueDate:" + dueDate.format(formatter) + ",isPaid:" + isPaid;
         }
 
     @Override
@@ -109,8 +113,8 @@ public class Bill implements Storable{
                 if (kv[0].equals("paymentCode")) this.paymentCode = kv[1];
                 else if (kv[0].equals("billNumber")) this.billNumber = kv[1];
                 else if (kv[0].equals("amount")) this.amount = Double.parseDouble(kv[1]);
-                else if (kv[0].equals("issueDate")) this.issueDate = java.time.LocalDate.parse(kv[1]);
-                else if (kv[0].equals("dueDate")) this.dueDate = java.time.LocalDate.parse(kv[1]);
+                else if (kv[0].equals("issueDate")) this.issueDate = LocalDate.parse(kv[1]);
+                else if (kv[0].equals("dueDate")) this.dueDate = LocalDate.parse(kv[1]);
                 else if (kv[0].equals("isPaid")) this.isPaid = Boolean.parseBoolean(kv[1]);
                 // issuer ανατίθεται από έξω στο BillManager
             }

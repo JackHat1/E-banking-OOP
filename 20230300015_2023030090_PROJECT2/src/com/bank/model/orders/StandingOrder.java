@@ -1,6 +1,7 @@
 package com.bank.model.orders;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 import com.bank.manager.AccountManager;
@@ -8,6 +9,7 @@ import com.bank.manager.BillManager;
 import com.bank.manager.TransactionManager;
 import com.bank.model.users.User;
 import com.bank.storage.Storable;
+import com.bank.utilities.GlobalClock;
 
 public abstract class StandingOrder implements Storable {
     
@@ -18,13 +20,14 @@ public abstract class StandingOrder implements Storable {
     protected LocalDate startingDate;
     protected LocalDate endingDate;
 
+    protected static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public StandingOrder(String title, String description, LocalDate startingDate, LocalDate endingDate){
         this.orderId = UUID.randomUUID().toString();
         this.title = title;
         this.description = description;
-        this.startingDate = startingDate;
-        this.endingDate = endingDate;
+        this.startingDate = GlobalClock.getDate();
+        this.endingDate = GlobalClock.getDate();
     }
 
     
@@ -60,7 +63,7 @@ public abstract class StandingOrder implements Storable {
 
 
     public boolean isExpired(){
-        return LocalDate.now().isAfter(getEndingDate());
+        return GlobalClock.getDate().isAfter(getEndingDate());
     }
 
     public boolean isFailed(){
