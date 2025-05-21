@@ -4,7 +4,7 @@ import com.bank.manager.*;
 import com.bank.model.accounts.*;
 import com.bank.model.orders.StandingOrder;
 import com.bank.model.users.*;
-
+import com.bank.utilities.GlobalClock;
 import com.bank.model.bills.Bill;
 
 import java.time.LocalDate;
@@ -370,7 +370,8 @@ public class AdminMenu {
             return;
         }
 
-        LocalDate today = LocalDate.now();
+        //LocalDate today = LocalDate.now();
+        LocalDate today= GlobalClock.getDate(); // ebala ayto giati nomizv to .now to diazeirizomaste apo to clock
         BillManager billManager = new BillManager(accountManager, userManager);
         billManager.loadBills();
         StandingOrderManager orderManager = new StandingOrderManager();
