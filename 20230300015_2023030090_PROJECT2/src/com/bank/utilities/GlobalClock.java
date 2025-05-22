@@ -25,20 +25,6 @@ public class GlobalClock {
     }
 
 
-    // Tha kaleseiw aftes apo ton admin gia na diaxeiristeis tin hmetominia
-    /*public static void addDays(int days){
-        dateTime= dateTime.plusDays(days);
-    }
-
-    public static void addMonths(int months){
-        dateTime= dateTime.plusMonths(months);
-    }
-
-    public static void addYears(int years){
-        dateTime= dateTime.plusYears(years);
-    }*/
-
-
     public static void addTime(int hours, int minutes, int seconds){
         dateTime= dateTime.plusHours(hours);
         dateTime= dateTime.plusMinutes(minutes);

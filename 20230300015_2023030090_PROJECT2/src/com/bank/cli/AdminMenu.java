@@ -380,6 +380,8 @@ public class AdminMenu {
         TransactionManager transactionManager = new TransactionManager();
 
         while (!today.isAfter(target)) {
+            GlobalClock.setDate(today);
+            
             for (StandingOrder order : orderManager.getAllOrders()) {
                 User owner = userManager.findByVat(order.getDescription()); 
                 if (owner != null)
