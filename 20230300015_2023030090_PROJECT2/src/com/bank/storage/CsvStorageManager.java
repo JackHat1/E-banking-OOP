@@ -57,7 +57,6 @@ public class CsvStorageManager implements StorageManager{
             }
         } catch (IOException e) {
         System.out.println("Load failed: " + filePath);
-        e.printStackTrace();
         }
         return lines;
     }

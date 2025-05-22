@@ -26,9 +26,6 @@ public class TransferOrder extends StandingOrder{
         this.fromIban = fromIban;
         this.toIban = toIban;
         this.amount = amount;
-        if(transferDay >30 || transferDay <1){
-            throw new IllegalArgumentException("Invalid day of month. Must be between 1 and 30.");
-        }
         this.transferDay = transferDay;
         this.transferFreq = transferFreq;
     }
@@ -108,9 +105,9 @@ public class TransferOrder extends StandingOrder{
             String key= keyValue[0];
             String value= keyValue.length> 1 ? keyValue[1]: "";
 
-            if(keyValue.length > 1){
+            /*if(keyValue.length > 1){
                 value= keyValue[1];
-            }
+            }*/
 
             if(key.equals("orderId")){
                 this.orderId= value;

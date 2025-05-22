@@ -27,7 +27,6 @@ public class BillManager {
     }
 
 
-
     public void createBill(Bill bill){
         bills.add(bill);
     }

@@ -13,7 +13,7 @@ import com.bank.model.accounts.Account;
 
 public class PaymentOrder extends StandingOrder{
 
-    private double maxAmount;
+    private double maxAmount= 1000;
     private int failedAttempts= 0;
     private String fromIban;
     private String paymentCode;
@@ -98,9 +98,9 @@ public class PaymentOrder extends StandingOrder{
             String key = keyValue[0];
             String value= keyValue.length> 1 ? keyValue[1]: "";
 
-            if(value.length() >1){
+            /*if(value.length() >1){
                 value= keyValue[1];
-            }
+            }*/
 
             if(key.equals("orderId")){
                 this.orderId = value;

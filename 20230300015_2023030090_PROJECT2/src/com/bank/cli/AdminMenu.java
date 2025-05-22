@@ -334,6 +334,7 @@ public class AdminMenu {
         System.out.println("Bill paid successfully.");
     }
 
+
     private void listOrders() {
         StandingOrderManager orderManager = new StandingOrderManager();
         orderManager.loadOrders();
@@ -371,7 +372,7 @@ public class AdminMenu {
         }
 
         //LocalDate today = LocalDate.now();
-        LocalDate today= GlobalClock.getDate(); // ebala ayto giati nomizv to .now to diazeirizomaste apo to clock
+        LocalDate today= GlobalClock.getDate(); 
         BillManager billManager = new BillManager(accountManager, userManager);
         billManager.loadBills();
         StandingOrderManager orderManager = new StandingOrderManager();

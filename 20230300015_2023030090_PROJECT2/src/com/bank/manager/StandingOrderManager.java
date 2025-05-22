@@ -14,13 +14,13 @@ import com.bank.utilities.GlobalClock;
 public class StandingOrderManager {
 
     private final List<StandingOrder> orders= new ArrayList<>();
-    private final String activeFilePath = ".data/orders/active.csv";
-    //private final String activeFilePath = ".data/orders/";
+    private final String activeFilePath = "./data/orders/active.csv";
+    //private final String activeFilePath = ".data/orders/active";
     private final CsvStorageManager storage= new CsvStorageManager();
 
-    private final String expiredFilePath= ".data/orders/expired.csv";
-    private final String failedFilePath= ".data/orders/failed.csv";
-
+    private final String expiredFilePath= "./data/orders/expired.csv";
+    private final String failedFilePath= "./data/orders/failed.csv";
+    
     public StandingOrderManager(){
         loadOrders();
     }
@@ -60,31 +60,29 @@ public class StandingOrderManager {
     }
 
 
-    public void loadOrders(){
+    public void loadOrders() {
+        List<String> lines = storage.loadLines(activeFilePath);
 
-        List<String> lines= storage.loadLines(activeFilePath);
-
-        for(String line: lines){
+        for (String line : lines) {
             String[] parts = line.split(",");
-                String typeKey= parts[0];
+            String[] typePair = parts[0].split(":");
+            String typeKey = typePair.length > 1 ? typePair[1] : "";
 
-                StandingOrder order;
-                if(typeKey.equals("PaymentOrder")){
-                    order= new PaymentOrder("", "", null, null, 0.0, GlobalClock.getDate(), GlobalClock.getDate());
+            StandingOrder order;
+            if (typeKey.equals("PaymentOrder")) {
+                order = new PaymentOrder("", "", null, null, 0.0, GlobalClock.getDate(), GlobalClock.getDate());
+            } else if (typeKey.equals("TransferOrder")) {
+                order = new TransferOrder("", "", null, null, 0.0, 0, 0, GlobalClock.getDate(), GlobalClock.getDate());
+            } else {
+                continue;
+            }
 
-                }else if (typeKey.equals("TransferOrder")){
-                    order= new TransferOrder("", "", null, null, 0.0, 0, 0, GlobalClock.getDate(), GlobalClock.getDate());
-
-                }else{
-                    continue;
-                }
-
-                order.unmarshal(line);
-                orders.add(order);
+            order.unmarshal(line);
+            orders.add(order);
         }
-        
-        
     }
+
+
 
     public void executeAllOrders(LocalDate date, BillManager billMan, AccountManager accountMan, TransactionManager transactionMan, User user){
         List<StandingOrder> stillActive= new ArrayList<>();
