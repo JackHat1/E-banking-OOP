@@ -371,7 +371,6 @@ public class AdminMenu {
             return;
         }
 
-        //LocalDate today = LocalDate.now();
         LocalDate today= GlobalClock.getDate(); 
         BillManager billManager = new BillManager(accountManager, userManager);
         billManager.loadBills();
@@ -381,7 +380,7 @@ public class AdminMenu {
 
         while (!today.isAfter(target)) {
             GlobalClock.setDate(today);
-            
+
             for (StandingOrder order : orderManager.getAllOrders()) {
                 User owner = userManager.findByVat(order.getDescription()); 
                 if (owner != null)

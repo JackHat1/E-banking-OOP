@@ -15,7 +15,7 @@ public class StandingOrderManager {
 
     private final List<StandingOrder> orders= new ArrayList<>();
     private final String activeFilePath = "./data/orders/active.csv";
-    //private final String activeFilePath = ".data/orders/active";
+ 
     private final CsvStorageManager storage= new CsvStorageManager();
 
     private final String expiredFilePath= "./data/orders/expired.csv";
@@ -116,7 +116,9 @@ public class StandingOrderManager {
 
 
     public List<StandingOrder> getAllOrders(){
-        return new ArrayList<>(orders);
+        List<StandingOrder> allOrders= new ArrayList<>();
+        allOrders.addAll
+        return allOrders;
     }
 
     
