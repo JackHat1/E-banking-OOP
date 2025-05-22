@@ -1,6 +1,5 @@
 package com.bank.manager;
 
-//import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +7,6 @@ import java.util.List;
 import com.bank.model.orders.PaymentOrder;
 import com.bank.model.orders.StandingOrder;
 import com.bank.model.orders.TransferOrder;
-//import com.bank.model.transactions.Transaction;
 import com.bank.model.users.User;
 import com.bank.storage.CsvStorageManager;
 import com.bank.utilities.GlobalClock;
@@ -17,6 +15,7 @@ public class StandingOrderManager {
 
     private final List<StandingOrder> orders= new ArrayList<>();
     private final String activeFilePath = ".data/orders/active.csv";
+    //private final String activeFilePath = ".data/orders/";
     private final CsvStorageManager storage= new CsvStorageManager();
 
     private final String expiredFilePath= ".data/orders/expired.csv";
@@ -47,7 +46,6 @@ public class StandingOrderManager {
         return null;
     }
 
-    //----------------------------------------------
 
     public void saveOrders(List<StandingOrder> orders){
         storage.saveAll(orders,activeFilePath, false);
@@ -61,7 +59,7 @@ public class StandingOrderManager {
         storage.saveAll(failedOrders, failedFilePath, false);
     }
 
-    //-----------------------------------------------
+
     public void loadOrders(){
 
         List<String> lines= storage.loadLines(activeFilePath);

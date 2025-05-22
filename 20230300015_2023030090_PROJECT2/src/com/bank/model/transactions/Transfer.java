@@ -1,7 +1,5 @@
 package com.bank.model.transactions;
 
-//import java.time.LocalDateTime;
-
 import com.bank.manager.StatementManager;
 import com.bank.model.accounts.Account;
 import com.bank.model.statements.StatementEntry;

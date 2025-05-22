@@ -1,6 +1,5 @@
 package com.bank.manager;
 
-//import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,11 +43,11 @@ public class BillManager {
     public void saveBill() {
         for (int i = 0; i < bills.size(); i++) {
             Bill bill = bills.get(i);
-            String date = bill.getIssueDate().toString(); // π.χ. 2025-05-01
+            String date = bill.getIssueDate().toString(); 
             String filePath = billsFolder + date + ".csv";
             List<Bill> singleBillList = new ArrayList<>();
             singleBillList.add(bill);
-            // append true για να μην διαγράφει τα υπόλοιπα bills της ίδιας μέρας
+        
             storage.saveAll(singleBillList, filePath, true);
         }
     }
@@ -95,7 +94,7 @@ public class BillManager {
     
                 Customer company = userManager.findByVat(issuerVat);
                 if (company == null || !(company instanceof Company)) {
-                    // System.out.println("Company with VAT " + issuerVat + " not found.");
+                    
                     continue;
                 }
     
@@ -119,28 +118,7 @@ public class BillManager {
             }
         }
     }
-        /* 
-        String fullPath = billsFolder;
-        try( BufferedReader reader= new BufferedReader(new FileReader(fullPath))){
-            String line;
-
-            while((line= reader.readLine()) != null){
-                Bill bill= new Bill("", "", 0.0,null);
-                bill.unmarshal(line);
-
-                String[] parts= line.split(",");
-                String issuer = parts[3];
-                Account issuerAcc = accountManager.findByIban(issuer);
-                bill.setIssuer(issuerAcc);
-                bills.add(bill);
-
-            }
-        } catch(IOException e){
-            System.err.println("Error reading file: "+ e.getMessage());
-        }*/
-
     
-
 
     public void payBills(String rfCode, Account from, User transactor){
         Bill bill = getBillByRF(rfCode);

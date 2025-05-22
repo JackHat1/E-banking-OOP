@@ -10,7 +10,7 @@ public class StatementEntry implements Storable{
 
     private String transactor;
     private String reason;
-    private String type; // debit ,credit
+    private String type; 
     private double amount;
     private double balance;
     private LocalDateTime timestamp;
@@ -31,7 +31,7 @@ public class StatementEntry implements Storable{
     }
 
     public StatementEntry(){
-        //deafault min to sviseis
+        
     }
 
     public String getTransactor() { return transactor; }
@@ -56,7 +56,7 @@ public class StatementEntry implements Storable{
         );
     }
 
-    public /*static StatementEntry*/void unmarshal(String data) {
+    public void unmarshal(String data) {
         try {
             String[] parts = data.split(",", -1);
             this.transactor = parts[0];
@@ -68,13 +68,13 @@ public class StatementEntry implements Storable{
             this.timestamp = LocalDateTime.parse(parts[6], formatter);
             this.balance = Double.parseDouble(parts[7]);
 
-            //return new StatementEntry(transactor, fromIban, toIban, amount, reason, type, timestamp, balance);
         } catch (Exception e) {
             System.err.println("Error unmarshal StatementEntry: " + e.getMessage());
-            //return null;
+           
         }
     }
-//----------------------------------------------------
+
+    
     @Override
     public String toString() {
         return "Statement: " +

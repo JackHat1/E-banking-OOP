@@ -3,8 +3,6 @@ package com.bank.model.transactions;
 import com.bank.model.users.User;
 import com.bank.utilities.GlobalClock;
 
-//import java.time.LocalDateTime;
-
 import com.bank.manager.StatementManager;
 import com.bank.model.accounts.Account;
 import com.bank.model.statements.StatementEntry;
@@ -20,8 +18,7 @@ public class Deposit extends Transaction {
     }
 
     @Override
-    public void execute() {
-        // account.deposit(amount);
+    public void execute() {   
         System.out.println("Deposit of " + amount + "€ in " + account.getIban());
 
         StatementEntry entry = new StatementEntry(getTransactor().getUsername(),null,account.getIban(),amount,reason,"Credit", this.timestamp ,account.getBalance() );

@@ -18,7 +18,7 @@ public class Main {
         userManager.load();
         accountManager.load();
         billManager.loadBills();
-
+        
         login();
 
         if (loggedInUser instanceof Individual) {

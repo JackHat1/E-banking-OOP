@@ -1,7 +1,7 @@
 package com.bank.model.users;
 
 public abstract class Customer extends User {
-    protected String vat; // ΑΦΜ
+    protected String vat; 
 
     public Customer(String username, String password, String fullName, String vat) {
         super(username, password, fullName);

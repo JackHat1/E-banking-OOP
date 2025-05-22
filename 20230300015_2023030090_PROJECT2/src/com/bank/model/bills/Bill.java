@@ -33,25 +33,13 @@ public class Bill implements Storable{
         return paymentCode;
     }
 
-    /*private void setPaymentCode(String paymentCode) {
-        this.paymentCode = paymentCode;
-    }*/
-
     public String getBillNumber() {
         return billNumber;
     }
 
-    /*private void setBillNumber(String billNumber) {
-        this.billNumber = billNumber;
-    }*/
-
     public double getAmount() {
         return amount;
     }
-
-    /*private void setAmount(double amount) {
-        this.amount = amount;
-    }*/
 
     public Account getIssuer() {
         return issuer;
@@ -66,28 +54,17 @@ public class Bill implements Storable{
         return issueDate;
     }
 
-    // private void setIssueDate(LocalDate issueDate) {
-    //     this.issueDate = issueDate;
-    // }
-
     public LocalDate getDueDate() {
         return dueDate;
     }
 
-    /*private void setDueDate(LocalDate dueDate) {
-        this.dueDate = dueDate;
-    }*/
-
-    //-------------------toys thelw
     public boolean isPaid() {
         return isPaid;
     }
 
-
     public void setPaid(boolean isPaid) {
         this.isPaid = isPaid;
     }
-    //----------------
 
     public String toString(){
         return "Bill{ "+ "Payment Code: "+ paymentCode + 
@@ -99,10 +76,12 @@ public class Bill implements Storable{
         '}';
     }
 
-        @Override
-        public String marshal() {
-            return "type:Bill,paymentCode:" + paymentCode + ",billNumber:" + billNumber + ",issuer:" + issuer.getIban() + ",amount:" + amount + ",issueDate:" + issueDate.format(formatter) + ",dueDate:" + dueDate.format(formatter) + ",isPaid:" + isPaid;
-        }
+
+    @Override
+    public String marshal() {
+        return "type:Bill,paymentCode:" + paymentCode + ",billNumber:" + billNumber + ",issuer:" + issuer.getIban() + ",amount:" + amount + ",issueDate:" + issueDate.format(formatter) + ",dueDate:" + dueDate.format(formatter) + ",isPaid:" + isPaid;
+    }
+
 
     @Override
     public void unmarshal(String data) {
@@ -116,7 +95,7 @@ public class Bill implements Storable{
                 else if (kv[0].equals("issueDate")) this.issueDate = LocalDate.parse(kv[1]);
                 else if (kv[0].equals("dueDate")) this.dueDate = LocalDate.parse(kv[1]);
                 else if (kv[0].equals("isPaid")) this.isPaid = Boolean.parseBoolean(kv[1]);
-                // issuer ανατίθεται από έξω στο BillManager
+            
             }
         }
     }

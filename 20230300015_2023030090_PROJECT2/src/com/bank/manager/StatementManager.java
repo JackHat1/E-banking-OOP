@@ -5,7 +5,6 @@ import com.bank.model.statements.StatementEntry;
 import com.bank.storage.CsvStorageManager;
 
 import java.io.*;
-//import java.lang.Thread.State;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -41,7 +40,7 @@ public class StatementManager {
             list.add(entry);
         }
 
-        Collections.reverse(list); // gia na tis kanei anapoda poy leei h ekfonisi
+        Collections.reverse(list); 
         return list;
 
     }

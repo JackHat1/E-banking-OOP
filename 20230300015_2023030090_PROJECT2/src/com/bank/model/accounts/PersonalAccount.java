@@ -8,7 +8,7 @@ import java.util.List;
 
 public class PersonalAccount extends Account {
     private List<Individual> coOwners = new ArrayList<>();
-    private List<String> coOwnerVats = new ArrayList<>(); // προσωρινά VATs
+    private List<String> coOwnerVats = new ArrayList<>(); 
 
     public PersonalAccount(Individual owner, double interestRate) {
         super(owner, interestRate);

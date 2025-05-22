@@ -341,11 +341,11 @@ public class AdminMenu {
         List<StandingOrder> orders = orderManager.getAllOrders();
 
         if (orders.isEmpty()) {
-            System.out.println("❌ No standing orders found.");
+            System.out.println("No standing orders found.");
             return;
         }
 
-        System.out.println("\n📋 Standing Orders:");
+        System.out.println("\nStanding Orders:");
         for (StandingOrder order : orders) {
             System.out.println("- ID: " + order.getOrderId());
             System.out.println("  Title: " + order.getTitle());
@@ -380,7 +380,7 @@ public class AdminMenu {
 
         while (!today.isAfter(target)) {
             for (StandingOrder order : orderManager.getAllOrders()) {
-                User owner = userManager.findByVat(order.getDescription()); // assuming customer VAT in description
+                User owner = userManager.findByVat(order.getDescription()); 
                 if (owner != null)
                     order.execute(today, billManager, accountManager, transactionManager, owner);
             }
@@ -397,7 +397,7 @@ public class AdminMenu {
             today = today.plusDays(1);
         }
 
-        System.out.println("✅ Time simulation completed.");
+        System.out.println("Time simulation completed.");
     }
 
 }

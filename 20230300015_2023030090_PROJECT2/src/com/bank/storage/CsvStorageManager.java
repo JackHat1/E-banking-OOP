@@ -32,7 +32,6 @@ public class CsvStorageManager implements StorageManager{
 
     }
 
-    //ta ypoloipa einai an exoyme list
     public void saveAll(List<? extends Storable> info, String filePath, boolean append) {
     
         try(BufferedWriter writer= new BufferedWriter(new FileWriter(filePath))){
@@ -58,6 +57,7 @@ public class CsvStorageManager implements StorageManager{
             }
         } catch (IOException e) {
         System.out.println("Load failed: " + filePath);
+        e.printStackTrace();
         }
         return lines;
     }

@@ -96,7 +96,7 @@ public class PaymentOrder extends StandingOrder{
         for(String part: parts){
             String[] keyValue= part.split(":");
             String key = keyValue[0];
-            String value= "";
+            String value= keyValue.length> 1 ? keyValue[1]: "";
 
             if(value.length() >1){
                 value= keyValue[1];
