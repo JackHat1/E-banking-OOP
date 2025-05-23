@@ -49,18 +49,30 @@ import java.util.*;
             String option = scanner.nextLine();
 
         switch (option) {
-            case "1": showUsers(); break;
-            case "2": showCustomerDetails(); break;
-            case "3": showAccounts(); break;
-            case "4": showAccountInfo(); break;
-            case "5": showAccountStatements(); break;
-            case "6": showIssuedBills(); break;
-            case "7": showPaidBills(); break;
-            case "8": loadCompanyBills(); break;
-            case "9": listOrders(); break;
-            case "10":payCustomerBill(); break;
-            case "11":simulateTime(); break;
-            case "0": return;
+            case "1": showUsers(); 
+            break;
+            case "2": showCustomerDetails(); 
+            break;
+            case "3": showAccounts(); 
+            break;
+            case "4": showAccountInfo(); 
+            break;
+            case "5": showAccountStatements(); 
+            break;
+            case "6": showIssuedBills(); 
+            break;
+            case "7": showPaidBills(); 
+            break;
+            case "8": loadCompanyBills(); 
+            break;
+            case "9": listOrders(); 
+            break;
+            case "10":payCustomerBill(); 
+            break;
+            case "11":simulateTime(); 
+            break;
+            case "0": 
+            return;
             default: System.out.println("Invalid option./n");
             }
 
@@ -75,10 +87,6 @@ import java.util.*;
         for (int i = 0; i < users.size(); i++) {
             User u = users.get(i);
             System.out.print("\n- " + u.getUsername() + " (" + u.getFullName() + ") | Role: " + u.getRole());
-            // if (u instanceof Customer) {
-            //     System.out.print(" | VAT: " + ((Customer) u).getVat());
-            // }
-            // System.out.println();
         }
     }
 
@@ -348,8 +356,8 @@ import java.util.*;
         TransactionManager tm = new TransactionManager();
         tm.execute(new com.bank.model.transactions.Payment(bill, from, bill.getIssuer(), customer));
         bill.setPaid(true);
-        billManager.saveIssuedBills();
-        billManager.savePaidBills();
+        billManager.saveAll();
+
         accountManager.saveAll();
 
 
@@ -377,7 +385,8 @@ import java.util.*;
             System.out.println("- ID: " + order.getOrderId());
             System.out.println("  Title: " + order.getTitle());
             System.out.println("  Description: " + order.getDescription());
-            //boolean isActive= order.getIsActive() && !order.getIsEspire
+            
+            boolean isActive= order.getIsActive() && !order.isExpired() && !order.isFailed();
             System.out.println("  Active: " + (order.getIsActive() ? "Yes" : "No"));
             System.out.println("  Period: " + order.getStartingDate() + " to " + order.getEndingDate());
             System.out.println("  Expired: " + (order.isExpired() ? "Yes" : "No"));

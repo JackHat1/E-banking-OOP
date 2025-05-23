@@ -80,8 +80,7 @@ public class CompanyMenu {
 
         Bill bill = new Bill(billNo, rf, amount, companyAccount);
         billManager.createBill(bill);
-        billManager.saveBill();
-
+        billManager.saveAll();
         System.out.println("Bill issued successfully.");
     }
 
@@ -95,8 +94,7 @@ public class CompanyMenu {
             }
         }
         accountManager.saveAll();
-        billManager.saveBill();
-
+        billManager.saveAll();
     }
 
     private void showPaid() {

@@ -1,1 +1,2 @@
 type:Bill,paymentCode:RF10203044,billNumber:CO20250501005,issuer:090800800,customer:067688306,amount:42.11,issueDate:2025-05-01,dueDate:2025-05-21,isPaid:false
+type:Bill,paymentCode:RF10203048,billNumber:VF20250415004,issuer:090800700,customer:067688307,amount:35.00,issueDate:2025-05-01,dueDate:2025-05-25,isPaid:true

@@ -93,7 +93,7 @@ public class CompanyIssueBillPanel extends JPanel {
 
                 Bill bill = new Bill(billNumber, rf, amount, companyAccount);
                 billManager.createBill(bill);
-                billManager.saveBill();
+                billManager.saveAll();
 
                 JOptionPane.showMessageDialog(this, "Bill issued successfully.");
                 customerVatField.setText("");

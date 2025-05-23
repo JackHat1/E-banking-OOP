@@ -60,7 +60,8 @@ public class PaymentOrder extends StandingOrder{
 
         if(failedAttempts > 3){
             System.out.println("Maximum failed attempts reached. ");
-            return;
+            this.setIsActive(false);
+            
 
         }
 

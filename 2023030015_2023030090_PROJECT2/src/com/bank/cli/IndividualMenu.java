@@ -132,9 +132,9 @@ public class IndividualMenu {
 
     }
 
-        private void payBill() {
+    private void payBill() {
         System.out.println("Available Bills:");
-        for (Bill b : billManager.getAllBills()) {      ///
+        for (Bill b : billManager.getAllBills()) {
             System.out.println("- " + b.getPaymentCode());
         }
 
@@ -156,7 +156,7 @@ public class IndividualMenu {
             return;
         }
 
-        double amount = bill.getAmount(); // παίρνει το σωστό ποσό από το αντικείμενο
+        double amount = bill.getAmount();
         System.out.println("Bill amount: " + amount);
 
         if (from.getBalance() < amount) {
@@ -178,11 +178,16 @@ public class IndividualMenu {
             return;
         }
 
+     
         transactionManager.execute(new Payment(bill, from, business, user));
         bill.setPaid(true);
-        accountManager.saveAll();
+
+        billManager.saveAll();
+        accountManager.saveAll();             
+
         System.out.println("Bill payment successful.");
     }
+
 
 
     private void showStatements() {

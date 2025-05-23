@@ -131,7 +131,7 @@ public class AdminPayBillPanel extends JPanel {
             TransactionManager tm = new TransactionManager();
             tm.execute(new Payment(bill, from, bill.getIssuer(), customer));
             bill.setPaid(true);
-            billManager.saveBill();
+            billManager.saveAll();
 
             JOptionPane.showMessageDialog(this, "Bill paid successfully.");
         });
