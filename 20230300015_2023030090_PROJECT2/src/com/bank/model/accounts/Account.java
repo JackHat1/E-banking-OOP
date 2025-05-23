@@ -47,8 +47,13 @@ public abstract class Account implements Storable {
     }
 
     public void withdraw(double amount) {
-        balance -= amount;
+        if (balance >= amount) {
+            balance -= amount;
+        } else {
+            throw new IllegalArgumentException("Insufficient funds.");
+        }
     }
+
 
     public void setBalance(double balance) {
         this.balance = balance;

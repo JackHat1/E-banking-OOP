@@ -133,8 +133,7 @@ public class IndividualMenu {
     }
 
         private void payBill() {
-        billManager.loadBills(); // Βάλε αυτό στην αρχή της run() ή της payBill()
-                System.out.println("Available Bills:");
+        System.out.println("Available Bills:");
         for (Bill b : billManager.getAllBills()) {      ///
             System.out.println("- " + b.getPaymentCode());
         }
@@ -181,7 +180,6 @@ public class IndividualMenu {
 
         transactionManager.execute(new Payment(bill, from, business, user));
         bill.setPaid(true);
-        billManager.updateIssuedCsv(bill); // <-- προστίθεται αυτό
         accountManager.saveAll();
         System.out.println("Bill payment successful.");
     }

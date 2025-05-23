@@ -17,14 +17,29 @@ public class Deposit extends Transaction {
     }
 
     @Override
-    public void execute() {   
+    public void execute() {
+        // 1. Αλλαγή υπολοίπου
+        account.deposit(amount);
+
+        // 2. Καταγραφή συναλλαγής
         System.out.println("Deposit of " + amount + "€ in " + account.getIban());
 
-        StatementEntry entry = new StatementEntry(getTransactor().getUsername(),null,account.getIban(),amount,reason,"Credit", this.timestamp ,account.getBalance() );
+        StatementEntry entry = new StatementEntry(
+            getTransactor().getUsername(),
+            null,
+            account.getIban(),
+            amount,
+            reason,
+            "Credit",
+            this.timestamp,
+            account.getBalance()
+        );
 
+        // 3. Αποθήκευση statement
         StatementManager statementManager = new StatementManager();
-        statementManager.saveStatement(account, entry); 
+        statementManager.saveStatement(account, entry);
     }
+
 
         public Account getAccount() {
         return account;

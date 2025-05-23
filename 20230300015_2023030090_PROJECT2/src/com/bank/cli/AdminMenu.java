@@ -10,17 +10,24 @@ import com.bank.model.bills.Bill;
 import java.time.LocalDate;
 import java.util.*;
 
-public class AdminMenu {
-    private final UserManager userManager;
-    private final AccountManager accountManager;
-    private final Scanner scanner;
+    public class AdminMenu {
+        private final UserManager userManager;
+        private final AccountManager accountManager;
+        private final BillManager billManager;
+        private final TransactionManager transactionManager;
+        private final StandingOrderManager orderManager;
+        private final Scanner scanner;
 
+        public AdminMenu(UserManager userManager, AccountManager accountManager, BillManager billManager,
+                        TransactionManager transactionManager, StandingOrderManager orderManager, Scanner scanner) {
+            this.userManager = userManager;
+            this.accountManager = accountManager;
+            this.billManager = billManager;
+            this.transactionManager = transactionManager;
+            this.orderManager = orderManager;
+            this.scanner = scanner;
+        }
 
-    public AdminMenu(UserManager userManager, AccountManager accountManager, Scanner scanner) {
-        this.userManager = userManager;
-        this.accountManager = accountManager;
-        this.scanner = scanner;
-    }
 
 
     public void run() {
@@ -341,7 +348,10 @@ public class AdminMenu {
         TransactionManager tm = new TransactionManager();
         tm.execute(new com.bank.model.transactions.Payment(bill, from, bill.getIssuer(), customer));
         bill.setPaid(true);
-        billManager.saveBill();
+        billManager.saveIssuedBills();
+        billManager.savePaidBills();
+        accountManager.saveAll();
+
 
         System.out.println("Bill paid successfully.");
     }

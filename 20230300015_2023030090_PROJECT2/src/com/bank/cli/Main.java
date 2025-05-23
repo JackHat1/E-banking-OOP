@@ -26,7 +26,7 @@ public class Main {
         } else if (loggedInUser instanceof Company) {
             new CompanyMenu(loggedInUser, accountManager, billManager, scanner).run();
         } else if (loggedInUser instanceof Admin) {
-            new AdminMenu(userManager, accountManager, scanner).run();
+            new AdminMenu(userManager, accountManager, billManager, transactionManager, new StandingOrderManager(), scanner).run();
         } else {
             System.out.println("User type not supported.");
         }

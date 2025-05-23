@@ -26,8 +26,9 @@ public abstract class StandingOrder implements Storable {
         this.orderId = UUID.randomUUID().toString();
         this.title = title;
         this.description = description;
-        this.startingDate = GlobalClock.getDate();
-        this.endingDate = GlobalClock.getDate();
+        this.startingDate = startingDate;
+        this.endingDate = endingDate;
+
     }
 
     

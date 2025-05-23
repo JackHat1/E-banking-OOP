@@ -26,7 +26,7 @@ public class StatementEntry implements Storable{
         this.amount = amount;
         this.reason = reason;
         this.type = type;
-        this.timestamp = GlobalClock.getDateTime();
+        this.timestamp = timestamp;
         this.balance = balance;
     }
 

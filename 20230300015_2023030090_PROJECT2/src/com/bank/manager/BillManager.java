@@ -69,20 +69,18 @@ public class BillManager {
     public void saveAllBills() {
         storage.saveAll(bills, issuedPath, false);
     }
-    public void updateIssuedCsv(Bill paidBill) {
-        List<String> lines = storage.loadLines(issuedPath);
-        List<String> updated = new ArrayList<>();
+    public void updateIssuedCsv(Bill updatedBill) {
+        List<Bill> updatedList = new ArrayList<>();
 
-        for (String line : lines) {
-            if (line.contains("paymentCode:" + paidBill.getPaymentCode())) {
-                updated.add(paidBill.marshal()); // αντικαθιστούμε την εγγραφή
-            } else {
-                updated.add(line);
+        for (Bill bill : bills) {
+            if (!bill.isPaid()) {
+                updatedList.add(bill); // κράτα μόνο τους unpaid
             }
         }
 
-        storage.saveLines(updated, issuedPath, false); // overwrite
+        storage.saveAll(updatedList, issuedPath, false); // overwrite
     }
+
 
 
 
@@ -182,13 +180,21 @@ public class BillManager {
             bill.setPaid(true);
 
             // Ενημέρωση αρχείων
-            saveIssuedBills();
-            savePaidBills();
+            // ✅ Ανανέωση issued.csv
+            updateIssuedCsv(bill);
+
+            // ✅ Προσθήκη στο paid.csv
+            appendToPaidCsv(bill);
+
 
 
             System.out.println("The bill is now paid.");
         }
     }
+    public void appendToPaidCsv(Bill paidBill) {
+        storage.save(paidBill, paidPath, true); // append = true
+    }
+
 
     public List<Bill> getAllBills() {
         return new ArrayList<>(bills);
