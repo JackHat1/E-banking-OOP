@@ -46,6 +46,18 @@ public class CsvStorageManager implements StorageManager{
 
     }
 
+        public void saveLines(List<String> lines, String filePath, boolean append) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, !append))) {
+            for (String line : lines) {
+                writer.write(line);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            System.out.println("Failed to save lines to: " + filePath);
+        }
+    }
+
+
 
     public List<String> loadLines(String filePath) {
         List<String> lines = new ArrayList<>();

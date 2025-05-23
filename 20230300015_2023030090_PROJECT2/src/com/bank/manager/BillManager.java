@@ -69,6 +69,21 @@ public class BillManager {
     public void saveAllBills() {
         storage.saveAll(bills, issuedPath, false);
     }
+    public void updateIssuedCsv(Bill paidBill) {
+        List<String> lines = storage.loadLines(issuedPath);
+        List<String> updated = new ArrayList<>();
+
+        for (String line : lines) {
+            if (line.contains("paymentCode:" + paidBill.getPaymentCode())) {
+                updated.add(paidBill.marshal()); // αντικαθιστούμε την εγγραφή
+            } else {
+                updated.add(line);
+            }
+        }
+
+        storage.saveLines(updated, issuedPath, false); // overwrite
+    }
+
 
 
     // === Ενημέρωση paid.csv ===
@@ -94,6 +109,8 @@ public class BillManager {
                 System.out.println("✅ Found file: " + f.getName());            ////
             }
         }
+
+        
         
 
         if (files == null) return;

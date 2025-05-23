@@ -26,9 +26,7 @@ public class IndividualMenu {
         this.scanner = scanner;
     }
 
-    public void run() {
-        billManager.loadBills();  // <--- Φόρτωσε τους λογαριασμούς μία φορά
-            
+    public void run() {            
         while (true) {
             System.out.println("\nSelect an operation:");
             System.out.println("1. View Accounts");
@@ -183,6 +181,7 @@ public class IndividualMenu {
 
         transactionManager.execute(new Payment(bill, from, business, user));
         bill.setPaid(true);
+        billManager.updateIssuedCsv(bill); // <-- προστίθεται αυτό
         accountManager.saveAll();
         System.out.println("Bill payment successful.");
     }
