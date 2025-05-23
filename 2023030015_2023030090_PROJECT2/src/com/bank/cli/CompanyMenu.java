@@ -47,6 +47,7 @@ public class CompanyMenu {
         List<Account> accounts = accountManager.getAllAccounts();
         for (int i = 0; i < accounts.size(); i++) {
             Account acc = accounts.get(i);
+
             if (acc.getOwner().equals(user)) {
                 System.out.println("- IBAN: " + acc.getIban() + " | Balance: " + acc.getBalance());
             }
@@ -58,6 +59,7 @@ public class CompanyMenu {
         List<Account> allAccounts = accountManager.getAllAccounts();
         for (int i = 0; i < allAccounts.size(); i++) {
             Account acc = allAccounts.get(i);
+
             if (acc.getOwner().equals(user)) {
                 companyAccount = acc;
                 break;
@@ -89,6 +91,7 @@ public class CompanyMenu {
         List<Bill> allBills = billManager.getAllBills();
         for (int i = 0; i < allBills.size(); i++) {
             Bill bill = allBills.get(i);
+
             if (bill.getIssuer() != null && bill.getIssuer().getOwner().equals(user)) {
                 System.out.println(bill);
             }
@@ -100,8 +103,10 @@ public class CompanyMenu {
     private void showPaid() {
         System.out.println("Paid Bills:");
         List<Bill> allBills = billManager.getAllBills();
+        
         for (int i = 0; i < allBills.size(); i++) {
             Bill bill = allBills.get(i);
+
             if (bill.getIssuer() != null && bill.getIssuer().getOwner().equals(user) && bill.isPaid()) {
                 System.out.println(bill);
             }

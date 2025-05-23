@@ -11,9 +11,9 @@ public class Bill implements Storable {
     private String paymentCode;
     private String billNumber;
     private double amount;
-    private Account issuer;       // Χρησιμοποιείται στο σύστημα
-    private String issuerVat;     // Από το CSV
-    private String customerVat;   // Από το CSV
+    private Account issuer;       
+    private String issuerVat;     
+    private String customerVat;   
     private LocalDate issueDate;
     private LocalDate dueDate;
     private boolean isPaid;
@@ -29,7 +29,7 @@ public class Bill implements Storable {
         this.dueDate = GlobalClock.getDate().plusDays(30);
     }
 
-    // -------- Getters --------
+
     public String getPaymentCode() { return paymentCode; }
     public String getBillNumber() { return billNumber; }
     public double getAmount() { return amount; }

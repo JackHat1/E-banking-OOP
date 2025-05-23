@@ -83,6 +83,7 @@ import java.util.*;
 
     private void showUsers() {
         List<User> users = userManager.getAllUsers();
+
         System.out.println("\nUsers:");
         for (int i = 0; i < users.size(); i++) {
             User u = users.get(i);
@@ -107,6 +108,7 @@ import java.util.*;
         System.out.println("Role: " + customer.getRole());
 
         List<Account> accounts = accountManager.getAllAccounts();
+
         System.out.println("Accounts:");
         for (Account acc : accounts) {
             if (acc.getOwner().equals(customer)) {
@@ -119,6 +121,7 @@ import java.util.*;
     private void showAccounts() {
         List<Account> accounts = accountManager.getAllAccounts();
         System.out.println("\nAccounts:");
+
         for (int i = 0; i < accounts.size(); i++) {
             Account a = accounts.get(i);
             System.out.println("- " + a.getIban() + " | Owner: " + a.getOwner().getFullName() + " | Balance: " + a.getBalance());
@@ -152,6 +155,7 @@ import java.util.*;
         
         System.out.println("- Type: Personal Account");
         List<Individual> coOwners = ((PersonalAccount) acc).getCoOwners();
+
         if (coOwners.isEmpty()) {
             System.out.println("- No co-owners.");
         } else {
@@ -175,8 +179,7 @@ import java.util.*;
             return;
         }
 
-        List<com.bank.model.statements.StatementEntry> entries =
-            new StatementManager().load(account);
+        List<com.bank.model.statements.StatementEntry> entries = new StatementManager().load(account);
 
         if (entries.isEmpty()) {
             System.out.println("No statement entries found.");
@@ -203,11 +206,13 @@ import java.util.*;
         if (role.equals("individual") || role.equals("company")) {
             System.out.print("Enter VAT number: ");
             String vat = scanner.nextLine();
+
             if (role.equals("individual")) {
                 newUser = new Individual(username, password, fullName, vat);
             } else {
                 newUser = new Company(username, password, fullName, vat);
             }
+        
         } else if (role.equals("admin")) {
             newUser = new Admin(username, password, fullName);
         } else {
@@ -243,9 +248,11 @@ import java.util.*;
 
         if (customer instanceof Individual) {
             newAccount = new PersonalAccount((Individual) customer, rate);
+
         } else if (customer instanceof Company) {
             System.out.print("Enter monthly fee: ");
             double fee;
+
             try {
                 fee = Double.parseDouble(scanner.nextLine());
             } catch (NumberFormatException e) {
@@ -259,6 +266,7 @@ import java.util.*;
             accountManager.addAccount(newAccount);
             System.out.println("Account created with IBAN: " + newAccount.getIban());
         }
+
     }
 
 
@@ -273,10 +281,14 @@ import java.util.*;
         System.out.println("Issued Bills:");
         for (Bill bill : billManager.getAllBills()) {
             if (bill.getIssuer() != null &&
+
                 bill.getIssuer().getOwner().equals(company)) {
                 System.out.println(bill);
             }
+
         }
+
+
     }
 
 
@@ -291,11 +303,15 @@ import java.util.*;
         System.out.println("Paid Bills:");
         for (Bill bill : billManager.getAllBills()) {
             if (bill.getIssuer() != null &&
+
                 bill.getIssuer().getOwner().equals(company) &&
                 bill.isPaid()) {
                 System.out.println(bill);
             }
+
         }
+
+
     }
 
 
@@ -303,6 +319,7 @@ import java.util.*;
         BillManager billManager = new BillManager(accountManager, userManager);
         billManager.loadBills();
         System.out.println("Company bills loaded successfully.");
+        
     }
 
 
@@ -317,6 +334,7 @@ import java.util.*;
         
         List<Account> accounts = accountManager.getAllAccounts();
         List<Account> owned = new ArrayList<>();
+
         for (Account acc : accounts) {
             if (acc.getOwner().equals(customer)) {
                 owned.add(acc);
