@@ -45,7 +45,7 @@ import java.util.*;
             System.out.println("11. Simulate Time Passing");
             System.out.println("0. Exit");
 
-            System.out.print("Select option: ");
+            System.out.print("\nSelect option: ");
             String option = scanner.nextLine();
 
         switch (option) {
@@ -319,7 +319,7 @@ import java.util.*;
         BillManager billManager = new BillManager(accountManager, userManager);
         billManager.loadBills();
         System.out.println("Company bills loaded successfully.");
-        
+
     }
 
 
@@ -406,6 +406,7 @@ import java.util.*;
             
             boolean isActive= order.getIsActive() && !order.isExpired() && !order.isFailed();
             System.out.println("  Active: " + (order.getIsActive() ? "Yes" : "No"));
+            
             System.out.println("  Period: " + order.getStartingDate() + " to " + order.getEndingDate());
             System.out.println("  Expired: " + (order.isExpired() ? "Yes" : "No"));
             System.out.println("  Failed: " + (order.isFailed() ? "Yes" : "No"));
@@ -453,7 +454,7 @@ import java.util.*;
             today = today.plusDays(1);
         }
 
-        System.out.println("Time simulation completed.");
+        System.out.println("\nTime simulation completed.");
     }
 
 }
