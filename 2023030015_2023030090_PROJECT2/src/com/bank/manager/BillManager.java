@@ -31,11 +31,13 @@ public class BillManager {
     }
 
     private void initializeStorageFiles() {
+        File issuedFile = new File(issuedPath);
+        File paidFile = new File(paidPath);
         try {
-            new File(issuedPath).createNewFile();
-            new File(paidPath).createNewFile();
+            if (!issuedFile.exists()) issuedFile.createNewFile();
+            if (!paidFile.exists()) paidFile.createNewFile();
         } catch (Exception e) {
-            System.err.println(" Failed to create issued/paid files: " + e.getMessage());
+            System.err.println("Failed to initialize issued/paid CSV files: " + e.getMessage());
         }
     }
 
@@ -43,7 +45,8 @@ public class BillManager {
         issuedBills.removeIf(b -> b.getPaymentCode().equals(bill.getPaymentCode()));
         issuedBills.add(bill);
 
-        String filePath = billsFolder + bill.getIssueDate().toString() + ".csv";
+        String date = bill.getIssueDate().toString();
+        String filePath = billsFolder + date + ".csv";
         List<String> lines = storage.loadLines(filePath);
         lines.removeIf(l -> l.contains("paymentCode:" + bill.getPaymentCode()));
         lines.add(stripIsPaid(bill.marshal()));
@@ -53,7 +56,9 @@ public class BillManager {
     }
 
     public void payBill(Bill bill) {
-        if (bill.isPaid()) return;
+        if (bill.isPaid()) {
+            return;
+        }
 
         bill.setPaid(true);
         issuedBills.removeIf(b -> b.getPaymentCode().equals(bill.getPaymentCode()));
@@ -62,76 +67,117 @@ public class BillManager {
 
         updateDailyFile(bill);
         saveAll();
+    
+            List<Bill> single = new ArrayList<>();
+            single.add(bill);
+            storage.saveAll(single, paidPath, true); 
+
+            updateDailyFile(bill);     
+            saveAll();                 
     }
+    
 
     private void updateDailyFile(Bill bill) {
-        String filePath = billsFolder + bill.getIssueDate().toString() + ".csv";
-        List<String> lines = storage.loadLines(filePath);
-        List<String> updated = new ArrayList<>();
+        String fileName = billsFolder + bill.getIssueDate().toString() + ".csv";
+        List<String> lines = storage.loadLines(fileName);
+        List<String> updatedLines = new ArrayList<>();
+
         for (String line : lines) {
             if (line.contains("paymentCode:" + bill.getPaymentCode())) {
-                updated.add(stripIsPaid(bill.marshal()));
+                updatedLines.add(stripIsPaid(bill.marshal()));
             } else {
-                updated.add(line);
+                updatedLines.add(line);
             }
         }
-        storage.saveLines(updated, filePath, false);
+
+        storage.saveLines(updatedLines, fileName, false);
     }
 
     public void loadBills() {
         issuedBills.clear();
         paidBills.clear();
 
-        // Load daily files
+        List<String> issuedLines = storage.loadLines(issuedPath);
+
+        for (String line : issuedLines) {
+
+            Bill bill = parseBill(line);
+            if (bill != null && !bill.isPaid()) issuedBills.add(bill);
+        }
+
+        List<String> paidLines = storage.loadLines(paidPath);
+
+        for (String line : paidLines) {
+
+            Bill bill = parseBill(line);
+
+            if (bill != null) {
+                bill.setPaid(true);
+                paidBills.add(bill);
+            }
+        }
+
         File folder = new File(billsFolder);
         File[] files = folder.listFiles((dir, name) -> name.matches("\\d{4}-\\d{2}-\\d{2}\\.csv"));
         if (files != null) {
+
             for (File file : files) {
+
                 List<String> lines = storage.loadLines(file.getPath());
                 for (String line : lines) {
-                    if (!line.contains("isPaid:")) line += ",isPaid:false";
                     Bill bill = parseBill(line);
-                    if (bill != null && !bill.isPaid()) {
-                        issuedBills.add(bill);
+                    if (bill == null) continue;
+                    if (!bill.isPaid()) {
+                        if (issuedBills.stream().noneMatch(b -> b.getPaymentCode().equals(bill.getPaymentCode()))) {
+                            issuedBills.add(bill);
+                        }
                     }
                 }
             }
         }
 
-        // Load issued.csv
-        for (String line : storage.loadLines(issuedPath)) {
-            if (!line.contains("isPaid:")) line += ",isPaid:false";
+        List<String> issuedLines = storage.loadLines(issuedPath);
+        for (String line : issuedLines) {
             Bill bill = parseBill(line);
-            if (bill != null && !bill.isPaid()) {
+            if (bill != null && !bill.isPaid() &&
+                issuedBills.stream().noneMatch(b -> b.getPaymentCode().equals(bill.getPaymentCode()))) {
                 issuedBills.add(bill);
             }
         }
 
-        // Load paid.csv
-        for (String line : storage.loadLines(paidPath)) {
-            if (!line.contains("isPaid:")) line += ",isPaid:true";
+        List<String> paidLines = storage.loadLines(paidPath);
+        for (String line : paidLines) {
             Bill bill = parseBill(line);
-            if (bill != null) {
+            if (bill != null &&
+                paidBills.stream().noneMatch(b -> b.getPaymentCode().equals(bill.getPaymentCode()))) {
                 bill.setPaid(true);
                 paidBills.add(bill);
             }
         }
     }
 
+
     private Bill parseBill(String line) {
+        if (!line.contains("isPaid:")) line += ",isPaid:false";
+
         Bill bill = new Bill("", "", 0.0, null);
         bill.unmarshal(line);
 
         String issuerVat = bill.getIssuerVat();
         Customer company = userManager.findByVat(issuerVat);
-        if (!(company instanceof Company)) return null;
+
+        if (!(company instanceof Company)){
+            return null;
+        } 
 
         for (Account acc : accountManager.getAllAccounts()) {
+
             if (acc instanceof BusinessAccount && acc.getOwner().equals(company)) {
                 bill.setIssuer(acc);
                 return bill;
             }
         }
+
         return null;
     }
 
@@ -148,6 +194,7 @@ public class BillManager {
         for (Bill b : paidBills) paidLines.add(b.marshal());
         storage.saveLines(paidLines, paidPath, false);
     }
+
 
     public List<Bill> getAllBills() {
         List<Bill> all = new ArrayList<>();
@@ -166,7 +213,9 @@ public class BillManager {
 
     public Bill getBillByRF(String rfCode) {
         for (Bill bill : getAllBills()) {
-            if (bill.getPaymentCode().equals(rfCode)) return bill;
+            if (bill.getPaymentCode().equals(rfCode)) {
+                return bill;
+            }
         }
         return null;
     }
