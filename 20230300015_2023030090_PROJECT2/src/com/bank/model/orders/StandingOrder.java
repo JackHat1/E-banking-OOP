@@ -26,8 +26,8 @@ public abstract class StandingOrder implements Storable {
         this.orderId = UUID.randomUUID().toString();
         this.title = title;
         this.description = description;
-        this.startingDate = GlobalClock.getDate();
-        this.endingDate = GlobalClock.getDate();
+        this.startingDate = startingDate;
+        this.endingDate = endingDate;
     }
 
     
@@ -45,6 +45,10 @@ public abstract class StandingOrder implements Storable {
 
     public Boolean getIsActive() {
         return isActive;
+    }
+
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
     }
 
     public LocalDate getStartingDate() {

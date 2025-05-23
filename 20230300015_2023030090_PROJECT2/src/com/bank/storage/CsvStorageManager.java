@@ -34,7 +34,7 @@ public class CsvStorageManager implements StorageManager{
 
     public void saveAll(List<? extends Storable> info, String filePath, boolean append) {
     
-        try(BufferedWriter writer= new BufferedWriter(new FileWriter(filePath))){
+        try(BufferedWriter writer= new BufferedWriter(new FileWriter(filePath, append))){
 
             for(Storable s: info){
                 writer.write(s.marshal());

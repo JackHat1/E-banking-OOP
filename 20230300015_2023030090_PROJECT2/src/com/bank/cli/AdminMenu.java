@@ -349,7 +349,11 @@ public class AdminMenu {
 
     private void listOrders() {
         StandingOrderManager orderManager = new StandingOrderManager();
-        orderManager.loadOrders();
+        BillManager billMan= new BillManager(accountManager,userManager);
+        billMan.loadBills();
+        TransactionManager transMan = new TransactionManager();
+
+        orderManager.executeAllOrders(GlobalClock.getDate(), billMan,accountManager, transMan, null);
 
         List<StandingOrder> orders = orderManager.getAllOrders();
 
@@ -363,6 +367,7 @@ public class AdminMenu {
             System.out.println("- ID: " + order.getOrderId());
             System.out.println("  Title: " + order.getTitle());
             System.out.println("  Description: " + order.getDescription());
+            //boolean isActive= order.getIsActive() && !order.getIsEspire
             System.out.println("  Active: " + (order.getIsActive() ? "Yes" : "No"));
             System.out.println("  Period: " + order.getStartingDate() + " to " + order.getEndingDate());
             System.out.println("  Expired: " + (order.isExpired() ? "Yes" : "No"));
