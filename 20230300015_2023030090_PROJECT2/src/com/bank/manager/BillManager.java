@@ -64,6 +64,7 @@ public class BillManager {
       public void loadBills() {
         java.io.File folder = new java.io.File(billsFolder);
         java.io.File[] files = folder.listFiles((dir, name) -> name.endsWith(".csv"));
+        
         if (files == null){
             return;
         }

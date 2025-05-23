@@ -1,7 +1,6 @@
 package com.bank.model.transactions;
 
 import com.bank.model.users.User;
-import com.bank.utilities.GlobalClock;
 
 import com.bank.manager.StatementManager;
 import com.bank.model.accounts.Account;

@@ -116,9 +116,7 @@ public class StandingOrderManager {
 
 
     public List<StandingOrder> getAllOrders(){
-        List<StandingOrder> allOrders= new ArrayList<>();
-        allOrders.addAll
-        return allOrders;
+        return new ArrayList<>(orders);
     }
 
     

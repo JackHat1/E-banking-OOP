@@ -1,6 +1,5 @@
 package com.bank.model.accounts;
 
-import com.bank.model.users.Customer;
 import com.bank.model.users.Individual;
 
 import java.util.ArrayList;
