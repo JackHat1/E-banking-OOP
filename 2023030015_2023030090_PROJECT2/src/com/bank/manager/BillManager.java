@@ -35,7 +35,7 @@ public class BillManager {
             new File(issuedPath).createNewFile();
             new File(paidPath).createNewFile();
         } catch (Exception e) {
-            System.err.println("❌ Failed to create issued/paid files: " + e.getMessage());
+            System.err.println("Failed to create issued/paid files: " + e.getMessage());
         }
     }
 
@@ -82,7 +82,6 @@ public class BillManager {
         issuedBills.clear();
         paidBills.clear();
 
-        // Load daily files
         File folder = new File(billsFolder);
         File[] files = folder.listFiles((dir, name) -> name.matches("\\d{4}-\\d{2}-\\d{2}\\.csv"));
         if (files != null) {
@@ -98,7 +97,6 @@ public class BillManager {
             }
         }
 
-        // Load issued.csv
         for (String line : storage.loadLines(issuedPath)) {
             if (!line.contains("isPaid:")) line += ",isPaid:false";
             Bill bill = parseBill(line);
@@ -106,8 +104,6 @@ public class BillManager {
                 issuedBills.add(bill);
             }
         }
-
-        // Load paid.csv
         for (String line : storage.loadLines(paidPath)) {
             if (!line.contains("isPaid:")) line += ",isPaid:true";
             Bill bill = parseBill(line);

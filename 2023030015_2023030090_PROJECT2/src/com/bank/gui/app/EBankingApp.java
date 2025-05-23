@@ -13,8 +13,6 @@ public class EBankingApp {
             UserManager userManager = new UserManager();
             AccountManager accountManager = new AccountManager(userManager);
             BillManager billManager = new BillManager(accountManager, userManager);
-            TransactionManager transactionManager = new TransactionManager();
-            StatementManager statementManager = new StatementManager();
 
             try {
                 userManager.load();
