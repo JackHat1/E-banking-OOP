@@ -35,11 +35,13 @@ public class EBankingApp {
         LoginWindow login = new LoginWindow();
         login.setLoginListener((username, password) -> {
             User user = userManager.findByUsername(username);
+
             if (user != null && user.checkPassword(password)) {
                 login.dispose();
                 new MainDashboard(user, accountManager, userManager) {
                     @Override
                     public void dispose() {
+                        
                         super.dispose();
                         EBankingApp.showLoginWindow(userManager, accountManager);
                     }

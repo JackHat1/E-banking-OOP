@@ -5,7 +5,7 @@ import com.bank.model.accounts.Account;
 import com.bank.model.bills.Bill;
 import com.bank.model.transactions.Payment;
 import com.bank.model.users.Customer;
-import com.bank.model.users.User;
+
 
 import javax.swing.*;
 import java.awt.*;

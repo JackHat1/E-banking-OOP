@@ -48,6 +48,9 @@ public class CompanyIssuedBillsPanel extends JPanel {
             sb.append("No issued bills found for this company.");
         }
 
+       
         resultArea.setText(sb.toString());
     }
+
+
 }

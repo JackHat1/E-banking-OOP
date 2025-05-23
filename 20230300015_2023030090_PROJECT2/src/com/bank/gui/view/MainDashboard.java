@@ -2,7 +2,6 @@ package com.bank.gui.view;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.*;
 
 import com.bank.gui.view.panel.*;
 import com.bank.manager.*;
@@ -14,7 +13,7 @@ public class MainDashboard extends JFrame {
     private JPanel contentPanel;
 
     public MainDashboard(User user, AccountManager accountManager, UserManager userManager) {
-        // Initialize managers needed for panels
+       
         BillManager billManager = new BillManager(accountManager, userManager);
         TransactionManager transactionManager = new TransactionManager();
 
@@ -24,7 +23,7 @@ public class MainDashboard extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        // Header
+        
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(new Color(0, 51, 102));
         headerPanel.setPreferredSize(new Dimension(1000, 80));
@@ -41,30 +40,32 @@ public class MainDashboard extends JFrame {
         headerPanel.add(titleLabel, BorderLayout.CENTER);
         add(headerPanel, BorderLayout.NORTH);
 
-        // === Menu items ανάλογα με user type ===
-        // ...existing code...
+       
         
         String[] menuItems;
         
         if (user instanceof Individual) {
+
             menuItems = new String[] {
-                "Accounts",      // View accounts and balances
-                "Deposit",       // Deposit to own account
-                "Withdraw",      // Withdraw from own account
-                "Transfer",      // Transfer to another IBAN
-                "Pay Bill",      // Pay active bill by RF
-                "Statements",    // View account statements
-                "Logout"         // Exit to login
+                "Accounts",      
+                "Deposit",       
+                "Withdraw",      
+                "Transfer",      
+                "Pay Bill",      
+                "Statements",    
+                "Logout"         
             };
         } else if (user instanceof Company) {
             menuItems = new String[] {
-                "Accounts",         // View company accounts and balances
-                "Issue Bill",       // Create new bill (bill number, RF code, amount, customer VAT)
-                "Issued Bills",     // All bills issued by the company
-                "Paid Bills",       // Only bills that are already paid
-                "Logout"            // Exit to login
+
+                "Accounts",         
+                "Issue Bill",       
+                "Issued Bills",     
+                "Paid Bills",      
+                "Logout"           
             };
         } else if (user instanceof Admin) {
+
             menuItems = new String[] {
                 "All Users",
                 "Customer Details",
@@ -83,7 +84,7 @@ public class MainDashboard extends JFrame {
             menuItems = new String[] { "Logout" };
         }
 
-        // === Layout setup ===
+        
         JPanel menuPanel = new JPanel(new GridLayout(0, 1, 10, 10));
         menuPanel.setBackground(new Color(245, 245, 245));
         menuPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -104,7 +105,7 @@ public class MainDashboard extends JFrame {
         JPanel panel;
 
         switch (item) {
-            // === Individual / Company Shared ===
+            
             case "Accounts":
                 panel = new AccountsPanel(user, accountManager);
                 break;
@@ -124,7 +125,7 @@ public class MainDashboard extends JFrame {
                 panel = new StatementPanel(user, accountManager);
                 break;
 
-            // === Company Only ===
+        
             case "Issue Bill":
                 panel = new CompanyIssueBillPanel(user, accountManager, userManager, billManager);
                 break;
@@ -135,7 +136,6 @@ public class MainDashboard extends JFrame {
                 panel = new CompanyPaidBillsPanel(user, billManager);
                 break;
 
-            // === Admin Only ===
             case "All Users":
                 panel = new AdminCustomerListPanel(userManager);
                 break;
@@ -167,11 +167,10 @@ public class MainDashboard extends JFrame {
                 panel = new AdminCreateAccountPanel(accountManager, userManager);
                 break;
 
-            // === Common ===
+        
             case "Logout":
-                btn.addActionListener(e -> {
-                    getContentPane().removeAll();
-                    repaint();
+                btn.addActionListener(e -> {getContentPane().removeAll()
+                    ;repaint();
                     revalidate();
                     dispose();
                 });

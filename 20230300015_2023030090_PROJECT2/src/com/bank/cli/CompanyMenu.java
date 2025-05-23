@@ -94,6 +94,9 @@ public class CompanyMenu {
                 System.out.println(bill);
             }
         }
+        accountManager.saveAll();
+        billManager.saveBill();
+
     }
 
     private void showPaid() {

@@ -29,13 +29,13 @@ public class AdminCreateAccountPanel extends JPanel {
         JComboBox<String> typeBox = new JComboBox<>(types);
         JTextField vatField = new JTextField(15);
         JTextField rateField = new JTextField(15);
-        JTextField feeField = new JTextField(15); // only for Business
+        JTextField feeField = new JTextField(15); 
         JButton createBtn = new JButton("Create Account");
         createBtn.setBackground(new Color(0, 102, 204));
         createBtn.setForeground(Color.WHITE);
         createBtn.setFocusPainted(false);
 
-        // === Layout ===
+        
         gbc.gridx = 0; gbc.gridy = 0; form.add(new JLabel("Account Type:"), gbc);
         gbc.gridx = 1; form.add(typeBox, gbc);
 
@@ -53,20 +53,21 @@ public class AdminCreateAccountPanel extends JPanel {
 
         add(form, BorderLayout.CENTER);
 
-        // Show/hide fee field
+      
         typeBox.addActionListener(e -> {
             boolean isBusiness = typeBox.getSelectedItem().equals("BusinessAccount");
             feeField.setEnabled(isBusiness);
         });
         feeField.setEnabled(false);
 
-        // === Action ===
+      
         createBtn.addActionListener(e -> {
             String type = (String) typeBox.getSelectedItem();
             String vat = vatField.getText().trim();
             String rateStr = rateField.getText().trim();
             String feeStr = feeField.getText().trim();
 
+            
             if (vat.isEmpty() || rateStr.isEmpty() || (type.equals("BusinessAccount") && feeStr.isEmpty())) {
                 JOptionPane.showMessageDialog(this, "Please fill all fields.");
                 return;

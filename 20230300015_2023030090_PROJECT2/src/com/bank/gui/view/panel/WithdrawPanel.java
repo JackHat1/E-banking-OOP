@@ -80,6 +80,7 @@ public class WithdrawPanel extends JPanel {
             String iban = (String) accountBox.getSelectedItem();
             Account selected = accountManager.findByIban(iban);
 
+
             try {
                 double amount = Double.parseDouble(amountField.getText());
 
@@ -99,7 +100,14 @@ public class WithdrawPanel extends JPanel {
                 balanceLabel.setText("Balance: " + String.format("%.2f €", selected.getBalance()));
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Invalid amount.");
+          
+          
             }
         });
+  
+  
+  
     }
+
+
 }

@@ -30,6 +30,8 @@ public class AdminCustomerListPanel extends JPanel {
         StringBuilder sb = new StringBuilder();
         boolean found = false;
 
+        
+
         for (User user : allUsers) {
             if (user instanceof Customer customer) {
                 found = true;

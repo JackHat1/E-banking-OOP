@@ -26,6 +26,7 @@ public class AccountsPanel extends JPanel {
         List<Account> accounts = accountManager.getAllAccounts();
         for (int i = 0; i < accounts.size(); i++) {
             Account acc = accounts.get(i);
+            
             if (acc.getOwner().equals(user)) {
                 sb.append("IBAN: ").append(acc.getIban())
                   .append("\nBalance: ").append(String.format("%.2f €", acc.getBalance()))

@@ -61,24 +61,35 @@ public class StandingOrderManager {
 
 
     public void loadOrders() {
-        List<String> lines = storage.loadLines(activeFilePath);
 
-        for (String line : lines) {
-            String[] parts = line.split(",");
-            String[] typePair = parts[0].split(":");
-            String typeKey = typePair.length > 1 ? typePair[1] : "";
+        String[] filePaths = { activeFilePath, expiredFilePath, failedFilePath };
+        //List<String> lines = storage.loadLines(activeFilePath);
 
-            StandingOrder order;
-            if (typeKey.equals("PaymentOrder")) {
-                order = new PaymentOrder("", "", null, null, 0.0, GlobalClock.getDate(), GlobalClock.getDate());
-            } else if (typeKey.equals("TransferOrder")) {
-                order = new TransferOrder("", "", null, null, 0.0, 0, 0, GlobalClock.getDate(), GlobalClock.getDate());
-            } else {
-                continue;
+        for (String filePath : filePaths) {
+            
+            List<String> lines = storage.loadLines(filePath);
+
+            for(String line: lines){
+
+                String[] parts = line.split(",");
+                String[] typePair = parts[0].split(":");
+                String typeKey = typePair.length > 1 ? typePair[1] : "";
+
+                StandingOrder order;
+                if (typeKey.equals("PaymentOrder")) {
+                    order = new PaymentOrder("", "", null, null, 0.0, GlobalClock.getDate(), GlobalClock.getDate());
+                } else if (typeKey.equals("TransferOrder")) {
+                    order = new TransferOrder("", "", null, null, 0.0, 0, 0, GlobalClock.getDate(), GlobalClock.getDate());
+                } else {
+                    continue;
+                }
+
+                order.unmarshal(line);
+                orders.add(order);
+
             }
 
-            order.unmarshal(line);
-            orders.add(order);
+            
         }
     }
 

@@ -9,7 +9,3 @@ type:Company,legalName:Vodafone Gr,userName:vodafone,password:123456,vatNumber:0
 type:Company,legalName:Cosmote,userName:cosmote,password:123456,vatNumber:090800800
 type:Company,legalName:DEI Co,userName:dei,password:123456,vatNumber:090800900
 type:Company,legalName:NOVA,userName:nova,password:123456,vatNumber:090800600
-type:Admin,legalName:andreas p,userName:andreas,password:123456
-type:Individual,legalName:ANDREAS PANAGIOTAKIS,userName:ANDREW,password:123456,vatNumber:178960887
-type:Company,legalName:Intrasoft,userName:netcompany,password:123456,vatNumber:178960890
-type:Admin,legalName:ANDREAS,userName:PANAGIOTAKIS,password:13

@@ -9,7 +9,7 @@ import com.bank.model.users.User;
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDate;
-import java.util.List;
+
 
 public class AdminSimulateTimePanel extends JPanel {
 
@@ -74,15 +74,15 @@ public class AdminSimulateTimePanel extends JPanel {
         while (!today.isAfter(targetDate)) {
             logArea.append(today + "\n");
 
-            // Execute standing orders
+           
             for (StandingOrder order : orderManager.getAllOrders()) {
-                User user = userManager.findByVat(order.getDescription()); // description stores VAT
+                User user = userManager.findByVat(order.getDescription()); 
                 if (user != null) {
                     order.execute(today, billManager, accountManager, transactionManager, user);
                 }
             }
 
-            // Apply interest and fees
+            
             for (Account acc : accountManager.getAllAccounts()) {
                 if (today.getDayOfMonth() == 1) {
                     double interest = acc.getBalance() * acc.getInterestRate();
@@ -100,7 +100,7 @@ public class AdminSimulateTimePanel extends JPanel {
             today = today.plusDays(1);
         }
 
-        orderManager.saveOrders(orderManager.getAllOrders()); // save updated active orders
+        orderManager.saveOrders(orderManager.getAllOrders()); 
 
         logArea.append("\nSimulation complete.\n");
     }

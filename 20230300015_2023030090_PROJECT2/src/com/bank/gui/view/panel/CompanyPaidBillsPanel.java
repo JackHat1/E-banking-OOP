@@ -47,6 +47,11 @@ public class CompanyPaidBillsPanel extends JPanel {
             sb.append("No paid bills found for this company.");
         }
 
+       
+       
         resultArea.setText(sb.toString());
+ 
     }
+
+
 }

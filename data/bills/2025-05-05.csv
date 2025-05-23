@@ -1,1 +1,1 @@
-type:Bill,paymentCode:RF10203045,billNumber:VF20250415001,issuer:GR200202503131719401,amount:45.5,issueDate:2025-05-05,dueDate:2025-05-25,isPaid:false
+type:Bill,paymentCode:RF10203048,billNumber:VF20250415004,issuer:GR200202503131719401,amount:35.0,issueDate:2025-05-05,dueDate:2025-05-25,isPaid:false

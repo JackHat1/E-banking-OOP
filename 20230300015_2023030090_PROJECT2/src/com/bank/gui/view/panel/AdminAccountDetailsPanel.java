@@ -51,11 +51,11 @@ public class AdminAccountDetailsPanel extends JPanel {
 
             StringBuilder sb = new StringBuilder();
             sb.append("Account Info:\n");
-            sb.append("IBAN         : ").append(acc.getIban()).append("\n");
-            sb.append("Owner        : ").append(acc.getOwner().getFullName()).append(" (").append(acc.getOwner().getVat()).append(")").append("\n");
-            sb.append("Balance      : ").append(String.format("%.2f €", acc.getBalance())).append("\n");
-            sb.append("Interest Rate: ").append(String.format("%.2f %%", acc.getInterestRate() * 100)).append("\n");
-            sb.append("Created On   : ").append(acc.getDateCreated()).append("\n");
+            sb.append("IBAN          : ").append(acc.getIban()).append("\n");
+            sb.append("Owner         : ").append(acc.getOwner().getFullName()).append(" (").append(acc.getOwner().getVat()).append(")").append("\n");
+            sb.append("Balance       : ").append(String.format("%.2f €", acc.getBalance())).append("\n");
+            sb.append("Interest Rate : ").append(String.format("%.2f %%", acc.getInterestRate() * 100)).append("\n");
+            sb.append("Created On    : ").append(acc.getDateCreated()).append("\n");
 
             if (acc instanceof BusinessAccount) {
                 sb.append("Type         : Business Account\n");

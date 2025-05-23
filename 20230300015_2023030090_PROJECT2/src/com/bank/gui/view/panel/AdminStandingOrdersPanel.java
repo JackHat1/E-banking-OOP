@@ -55,5 +55,9 @@ public class AdminStandingOrdersPanel extends JPanel {
 
             resultArea.setText(sb.toString());
         });
+  
     }
+
+
+
 }

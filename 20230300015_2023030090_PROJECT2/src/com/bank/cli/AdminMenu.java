@@ -15,11 +15,13 @@ public class AdminMenu {
     private final AccountManager accountManager;
     private final Scanner scanner;
 
+
     public AdminMenu(UserManager userManager, AccountManager accountManager, Scanner scanner) {
         this.userManager = userManager;
         this.accountManager = accountManager;
         this.scanner = scanner;
     }
+
 
     public void run() {
         while (true) {
@@ -52,12 +54,13 @@ public class AdminMenu {
             case "10":payCustomerBill(); break;
             case "11":simulateTime(); break;
             case "0": return;
-            default: System.out.println("Invalid option.");
-
-
+            default: System.out.println("Invalid option./n");
             }
+
+
         }
     }
+
 
     private void showUsers() {
         List<User> users = userManager.getAllUsers();
@@ -71,6 +74,7 @@ public class AdminMenu {
             // System.out.println();
         }
     }
+
 
     private void showCustomerDetails() {
         System.out.print("Enter VAT of the customer: ");
@@ -97,8 +101,6 @@ public class AdminMenu {
     }
 
 
-
-
     private void showAccounts() {
         List<Account> accounts = accountManager.getAllAccounts();
         System.out.println("\nAccounts:");
@@ -107,9 +109,11 @@ public class AdminMenu {
             System.out.println("- " + a.getIban() + " | Owner: " + a.getOwner().getFullName() + " | Balance: " + a.getBalance());
         }
     }
+
+
     private void showAccountInfo() {
     System.out.print("Enter IBAN of the account: ");
-    String iban = scanner.nextLine().trim();
+    String iban = scanner.nextLine();
 
     Account acc = accountManager.findByIban(iban);
 
@@ -126,9 +130,11 @@ public class AdminMenu {
     System.out.println("- Created On: " + acc.getDateCreated());
 
     if (acc instanceof BusinessAccount) {
+
         System.out.println("- Type: Business Account");
         System.out.println("- Monthly Fee: " + ((BusinessAccount) acc).getMonthlyFee());
     } else if (acc instanceof PersonalAccount) {
+        
         System.out.println("- Type: Personal Account");
         List<Individual> coOwners = ((PersonalAccount) acc).getCoOwners();
         if (coOwners.isEmpty()) {
@@ -143,6 +149,7 @@ public class AdminMenu {
         System.out.println("- Type: Unknown");
     }
     }
+
 
     private void showAccountStatements() {
         System.out.print("Enter IBAN of account: ");
@@ -164,7 +171,6 @@ public class AdminMenu {
             }
         }
     }
-
 
 
     private void createUser() {
@@ -197,6 +203,7 @@ public class AdminMenu {
         userManager.addUser(newUser);
         System.out.println("User created successfully.");
     }
+
 
     private void createAccount() {
         System.out.print("Enter VAT of account owner: ");
@@ -238,6 +245,8 @@ public class AdminMenu {
             System.out.println("Account created with IBAN: " + newAccount.getIban());
         }
     }
+
+
     private void showIssuedBills() {
         BillManager billManager = new BillManager(accountManager, userManager);
         billManager.loadBills();
@@ -254,6 +263,7 @@ public class AdminMenu {
             }
         }
     }
+
 
     private void showPaidBills() {
         BillManager billManager = new BillManager(accountManager, userManager);
@@ -273,11 +283,13 @@ public class AdminMenu {
         }
     }
 
+
     private void loadCompanyBills() {
         BillManager billManager = new BillManager(accountManager, userManager);
         billManager.loadBills();
         System.out.println("Company bills loaded successfully.");
     }
+
 
     private void payCustomerBill() {
         System.out.print("Enter customer's VAT: ");
@@ -287,7 +299,7 @@ public class AdminMenu {
             System.out.println("Customer not found.");
             return;
         }
-
+        
         List<Account> accounts = accountManager.getAllAccounts();
         List<Account> owned = new ArrayList<>();
         for (Account acc : accounts) {

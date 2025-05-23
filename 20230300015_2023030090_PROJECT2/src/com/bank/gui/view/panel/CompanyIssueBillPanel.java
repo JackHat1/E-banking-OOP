@@ -109,5 +109,11 @@ public class CompanyIssueBillPanel extends JPanel {
                 JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
             }
         });
+   
+   
     }
+
+
+
+    
 }

@@ -89,4 +89,6 @@ public class StatementPanel extends JPanel {
 
         resultArea.setText(sb.toString());
     }
+
+    
 }

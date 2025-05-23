@@ -26,8 +26,7 @@ public class DepositPanel extends JPanel {
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        List<Account> myAccounts = accountManager.getAllAccounts().stream()
-                .filter(acc -> acc.getOwner().equals(user)).toList();
+        List<Account> myAccounts = accountManager.getAllAccounts().stream().filter(acc -> acc.getOwner().equals(user)).toList();
 
         JComboBox<String> accountBox = new JComboBox<>();
         for (Account acc : myAccounts) accountBox.addItem(acc.getIban());

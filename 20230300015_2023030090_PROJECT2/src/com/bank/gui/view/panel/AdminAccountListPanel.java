@@ -25,6 +25,7 @@ public class AdminAccountListPanel extends JPanel {
         scrollPane.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         add(scrollPane, BorderLayout.CENTER);
 
+        
         StringBuilder sb = new StringBuilder();
         List<Account> accounts = accountManager.getAllAccounts();
 

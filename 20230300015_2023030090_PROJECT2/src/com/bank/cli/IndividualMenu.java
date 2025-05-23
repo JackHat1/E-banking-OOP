@@ -27,6 +27,8 @@ public class IndividualMenu {
     }
 
     public void run() {
+        billManager.loadBills();  // <--- Φόρτωσε τους λογαριασμούς μία φορά
+            
         while (true) {
             System.out.println("\nSelect an operation:");
             System.out.println("1. View Accounts");
@@ -40,12 +42,18 @@ public class IndividualMenu {
             String option = scanner.nextLine();
 
             switch (option) {
-                case "1": showAccounts(); break;
-                case "2": deposit(); break;
-                case "3": withdraw(); break;
-                case "4": transfer(); break;
-                case "5": payBill(); break;
-                case "6": showStatements(); break;
+                case "1": showAccounts();
+                 break;
+                case "2": deposit();
+                 break;
+                case "3": withdraw();
+                 break;
+                case "4": transfer();
+                 break;
+                case "5": payBill();
+                 break;
+                case "6": showStatements();
+                 break;
                 case "0": return;
                 default: System.out.println("Invalid option.");
             }
@@ -89,6 +97,7 @@ public class IndividualMenu {
         System.out.print("Deposit amount: ");
         double amount = Double.parseDouble(scanner.nextLine());
         transactionManager.execute(new Deposit(account, amount, user, "Deposit via CLI"));
+        accountManager.saveAll();
     }
 
     private void withdraw() {
@@ -102,6 +111,7 @@ public class IndividualMenu {
             return;
         }
         transactionManager.execute(new Withdrawal(account, amount, user, "Withdrawal via CLI"));
+        accountManager.saveAll();
     }
 
     private void transfer() {
@@ -120,36 +130,63 @@ public class IndividualMenu {
         System.out.print("Reason: ");
         String reason = scanner.nextLine();
         transactionManager.execute(new Transfer(from, to, amount, user, reason, reason));
+        accountManager.saveAll();
+
     }
 
-    private void payBill() {
+        private void payBill() {
+        billManager.loadBills(); // Βάλε αυτό στην αρχή της run() ή της payBill()
+                System.out.println("Available Bills:");
+        for (Bill b : billManager.getAllBills()) {      ///
+            System.out.println("- " + b.getPaymentCode());
+        }
+
         List<Account> accounts = getUserAccounts();
         Account from = selectAccount(accounts);
         if (from == null) return;
+
         System.out.print("Bill RF: ");
         String rf = scanner.nextLine();
-        System.out.print("Amount: ");
-        double amount = Double.parseDouble(scanner.nextLine());
+
         Bill bill = billManager.getBillByRF(rf);
-        if (bill == null || bill.isPaid() || from.getBalance() < amount) {
-            System.out.println("Invalid payment.");
+        if (bill == null) {
+            System.out.println("Bill not found.");
             return;
         }
+
+        if (bill.isPaid()) {
+            System.out.println("Bill is already paid.");
+            return;
+        }
+
+        double amount = bill.getAmount(); // παίρνει το σωστό ποσό από το αντικείμενο
+        System.out.println("Bill amount: " + amount);
+
+        if (from.getBalance() < amount) {
+            System.out.println("Insufficient balance.");
+            return;
+        }
+
         Account business = null;
         List<Account> allAccounts = accountManager.getAllAccounts();
-        for (int i = 0; i < allAccounts.size(); i++) {
-            Account acc = allAccounts.get(i);
+        for (Account acc : allAccounts) {
             if (!acc.getOwner().equals(user)) {
                 business = acc;
                 break;
             }
         }
+
         if (business == null) {
             System.out.println("No business account found.");
             return;
         }
+
         transactionManager.execute(new Payment(bill, from, business, user));
+        bill.setPaid(true);
+        accountManager.saveAll();
+        System.out.println("Bill payment successful.");
     }
+
 
     private void showStatements() {
         List<Account> accounts = getUserAccounts();

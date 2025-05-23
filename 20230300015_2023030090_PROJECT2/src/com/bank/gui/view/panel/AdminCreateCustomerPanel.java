@@ -34,7 +34,7 @@ public class AdminCreateCustomerPanel extends JPanel {
         createBtn.setForeground(Color.WHITE);
         createBtn.setFocusPainted(false);
 
-        // === Layout ===
+
         gbc.gridx = 0; gbc.gridy = 0; form.add(new JLabel("User Type:"), gbc);
         gbc.gridx = 1; form.add(roleBox, gbc);
 
@@ -55,14 +55,14 @@ public class AdminCreateCustomerPanel extends JPanel {
 
         add(form, BorderLayout.CENTER);
 
-        // === Hide VAT field if Admin is selected ===
+       
         roleBox.addActionListener(e -> {
             boolean isAdmin = "Admin".equals(roleBox.getSelectedItem());
             vatField.setEnabled(!isAdmin);
             vatField.setText(isAdmin ? "" : vatField.getText());
         });
 
-        // === Create button logic ===
+     
         createBtn.addActionListener(e -> {
             String role = (String) roleBox.getSelectedItem();
             String fullName = fullNameField.getText().trim();

@@ -23,7 +23,7 @@ public class AdminAccountStatementsPanel extends JPanel {
         title.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
         add(title, BorderLayout.NORTH);
 
-        // === Account selection ===
+ 
         JPanel topPanel = new JPanel();
         topPanel.setBackground(Color.WHITE);
         topPanel.setLayout(new FlowLayout());
@@ -47,7 +47,7 @@ public class AdminAccountStatementsPanel extends JPanel {
         topPanel.add(showBtn);
         add(topPanel, BorderLayout.NORTH);
 
-        // === Results area ===
+
         resultArea = new JTextArea();
         resultArea.setEditable(false);
         resultArea.setFont(new Font("Monospaced", Font.PLAIN, 13));

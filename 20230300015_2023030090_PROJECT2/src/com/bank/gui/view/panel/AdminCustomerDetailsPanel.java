@@ -60,6 +60,7 @@ public class AdminCustomerDetailsPanel extends JPanel {
             sb.append("Accounts:\n");
             List<Account> accounts = accountManager.getAllAccounts();
             boolean hasAccounts = false;
+            
             for (Account acc : accounts) {
                 if (acc.getOwner().equals(customer)) {
                     sb.append(" - IBAN: ").append(acc.getIban())
