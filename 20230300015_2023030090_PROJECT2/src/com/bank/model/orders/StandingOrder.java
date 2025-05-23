@@ -28,10 +28,7 @@ public abstract class StandingOrder implements Storable {
         this.description = description;
         this.startingDate = startingDate;
         this.endingDate = endingDate;
-<<<<<<< HEAD
 
-=======
->>>>>>> b28c15afcd124e44f11b1d84a17ead4e3c12952f
     }
 
     
