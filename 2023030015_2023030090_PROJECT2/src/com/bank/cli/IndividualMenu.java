@@ -158,11 +158,6 @@ public class IndividualMenu {
 
 
     private void payBill() {
-        System.out.println("Available Bills:");
-
-        for (Bill b : billManager.getAllBills()) {
-            System.out.println("- " + b.getPaymentCode());
-        }
 
         List<Account> accounts = getUserAccounts();
         Account from = selectAccount(accounts);
