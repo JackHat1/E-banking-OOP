@@ -63,8 +63,19 @@ public class BillManager {
         paidBills.removeIf(b -> b.getPaymentCode().equals(bill.getPaymentCode()));
         paidBills.add(bill);
 
+<<<<<<< HEAD
         updateDailyFile(bill);
         saveAll();
+=======
+    
+            List<Bill> single = new ArrayList<>();
+            single.add(bill);
+            storage.saveAll(single, paidPath, true); 
+
+            updateDailyFile(bill);     
+            saveAll();                 
+        }
+>>>>>>> 8dbc2a68ceeabb72f522c426c65043c8c0477826
     }
 
     private void updateDailyFile(Bill bill) {
@@ -87,10 +98,35 @@ public class BillManager {
         issuedBills.clear();
         paidBills.clear();
 
+<<<<<<< HEAD
+=======
+        List<String> issuedLines = storage.loadLines(issuedPath);
+
+        for (String line : issuedLines) {
+
+            Bill bill = parseBill(line);
+            if (bill != null && !bill.isPaid()) issuedBills.add(bill);
+        }
+
+        List<String> paidLines = storage.loadLines(paidPath);
+
+        for (String line : paidLines) {
+
+            Bill bill = parseBill(line);
+
+            if (bill != null) {
+                bill.setPaid(true);
+                paidBills.add(bill);
+            }
+        }
+
+>>>>>>> 8dbc2a68ceeabb72f522c426c65043c8c0477826
         File folder = new File(billsFolder);
         File[] files = folder.listFiles((dir, name) -> name.matches("\\d{4}-\\d{2}-\\d{2}\\.csv"));
         if (files != null) {
+
             for (File file : files) {
+
                 List<String> lines = storage.loadLines(file.getPath());
                 for (String line : lines) {
                     Bill bill = parseBill(line);
@@ -124,6 +160,7 @@ public class BillManager {
         }
     }
 
+
     private Bill parseBill(String line) {
         if (!line.contains("isPaid:")) line += ",isPaid:false";
 
@@ -132,9 +169,13 @@ public class BillManager {
 
         String issuerVat = bill.getIssuerVat();
         Customer company = userManager.findByVat(issuerVat);
-        if (!(company instanceof Company)) return null;
+
+        if (!(company instanceof Company)){
+            return null;
+        } 
 
         for (Account acc : accountManager.getAllAccounts()) {
+
             if (acc instanceof BusinessAccount && acc.getOwner().equals(company)) {
                 bill.setIssuer(acc);
                 return bill;
@@ -158,6 +199,7 @@ public class BillManager {
         storage.saveLines(paidLines, paidPath, false);
     }
 
+    
     public List<Bill> getAllBills() {
         List<Bill> all = new ArrayList<>();
         all.addAll(issuedBills);

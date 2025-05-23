@@ -63,6 +63,7 @@ public class IndividualMenu {
         List<Account> allAccounts = accountManager.getAllAccounts();
         for (int i = 0; i < allAccounts.size(); i++) {
             Account acc = allAccounts.get(i);
+
             if (acc.getOwner().equals(user)) {
                 list.add(acc);
             }
@@ -71,18 +72,24 @@ public class IndividualMenu {
     }
 
     private Account selectAccount(List<Account> accounts) {
-        for (int i = 0; i < accounts.size(); i++)
+        for (int i = 0; i < accounts.size(); i++){
             System.out.println((i + 1) + ". " + accounts.get(i).getIban());
+        }
+
         System.out.print("Select account: ");
         int choice = Integer.parseInt(scanner.nextLine()) - 1;
-        if (choice >= 0 && choice < accounts.size())
+
+        if (choice >= 0 && choice < accounts.size()){
             return accounts.get(choice);
+        }
+
         return null;
     }
 
     private void showAccounts() {
         List<Account> accounts = getUserAccounts();
         for (int i = 0; i < accounts.size(); i++) {
+
             Account acc = accounts.get(i);
             System.out.println("- " + acc.getIban() + " | Balance: " + acc.getBalance());
         }
@@ -91,34 +98,51 @@ public class IndividualMenu {
     private void deposit() {
         List<Account> accounts = getUserAccounts();
         Account account = selectAccount(accounts);
-        if (account == null) return;
+
+        if (account == null){
+             return;
+        }
+
         System.out.print("Deposit amount: ");
         double amount = Double.parseDouble(scanner.nextLine());
         transactionManager.execute(new Deposit(account, amount, user, "Deposit via CLI"));
+
         accountManager.saveAll();
     }
+
 
     private void withdraw() {
         List<Account> accounts = getUserAccounts();
         Account account = selectAccount(accounts);
-        if (account == null) return;
+
+        if (account == null) {
+            return;
+        }
+
         System.out.print("Withdrawal amount: ");
         double amount = Double.parseDouble(scanner.nextLine());
+
         if (amount > account.getBalance()) {
             System.out.println("Insufficient balance.");
             return;
         }
+
         transactionManager.execute(new Withdrawal(account, amount, user, "Withdrawal via CLI"));
         accountManager.saveAll();
     }
 
+
     private void transfer() {
         List<Account> myAccounts = getUserAccounts();
         Account from = selectAccount(myAccounts);
-        if (from == null) return;
+        if (from == null){
+            return;
+        }
+
         System.out.print("Recipient IBAN: ");
         String toIban = scanner.nextLine();
         Account to = accountManager.findByIban(toIban);
+
         if (to == null || from.getIban().equals(toIban)) {
             System.out.println("Invalid IBAN.");
             return;
@@ -132,15 +156,20 @@ public class IndividualMenu {
 
     }
 
+
     private void payBill() {
         System.out.println("Available Bills:");
+
         for (Bill b : billManager.getAllBills()) {
             System.out.println("- " + b.getPaymentCode());
         }
 
         List<Account> accounts = getUserAccounts();
         Account from = selectAccount(accounts);
-        if (from == null) return;
+        
+        if (from == null) {
+            return;
+        }
 
         System.out.print("Bill RF: ");
         String rf = scanner.nextLine();
@@ -193,7 +222,10 @@ public class IndividualMenu {
     private void showStatements() {
         List<Account> accounts = getUserAccounts();
         Account account = selectAccount(accounts);
-        if (account == null) return;
+        if (account == null) {
+            return;
+        }
+        
         List<StatementEntry> entries = statementManager.load(account);
         if (entries.isEmpty()) {
             System.out.println("No transactions found.");

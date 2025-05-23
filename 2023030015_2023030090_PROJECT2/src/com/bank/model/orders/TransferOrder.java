@@ -106,10 +106,6 @@ public class TransferOrder extends StandingOrder{
             String key= keyValue[0];
             String value= keyValue.length> 1 ? keyValue[1]: "";
 
-            /*if(keyValue.length > 1){
-                value= keyValue[1];
-            }*/
-
             if(key.equals("orderId")){
                 this.orderId= value;
             } else if(key.equals("title")){
