@@ -28,6 +28,7 @@ public class BillManager {
     public BillManager(AccountManager accountManager, UserManager userManager) {
         this.accountManager = accountManager;
         this.userManager = userManager;
+        loadBills();
     }
     
 
@@ -54,12 +55,23 @@ public class BillManager {
         
     }
 
+    // === Ενημέρωση issued.csv ===
+    public void saveIssuedBills() {
+        List<Bill> issued = new ArrayList<>();
+        for (Bill b : bills) {
+            if (!b.isPaid()) issued.add(b);
+        }
+        storage.saveAll(issued, issuedPath, false);
+    }
+
+
 
     public void saveAllBills() {
         storage.saveAll(bills, issuedPath, false);
     }
 
 
+    // === Ενημέρωση paid.csv ===
     public void savePaidBills() {
         List<Bill> paid = new ArrayList<>();
         for (Bill b : bills) {
@@ -71,6 +83,7 @@ public class BillManager {
 
     // === Φόρτωση από όλα τα .csv με ημερομηνίες ===
     public void loadBills() {
+        bills.clear(); // <<--- ΠΟΛΥ ΣΗΜΑΝΤΙΚΟ: Καθαρίζει τη λίστα πριν ξαναφορτώσεις
         File folder = new File(billsFolder);
         File[] files = folder.listFiles((dir, name) -> name.endsWith(".csv") && !name.equals("issued.csv") && !name.equals("paid.csv"));
                 if (files == null || files.length == 0) {
@@ -78,7 +91,7 @@ public class BillManager {
             return;
         } else {
             for (java.io.File f : files) {
-                System.out.println("✅ Found file: " + f.getName());
+                System.out.println("✅ Found file: " + f.getName());            ////
             }
         }
         
@@ -102,8 +115,10 @@ public class BillManager {
                     }
                 }
 
+
+
                 if (issuerVat == null) {
-                    System.out.println("No issuer VAT found for bill " + bill.getPaymentCode());
+                    System.out.println("No issuer VAT found for bill " + bill.getPaymentCode()); ///
                     continue;
                 }
 
@@ -150,8 +165,9 @@ public class BillManager {
             bill.setPaid(true);
 
             // Ενημέρωση αρχείων
-            saveAllBills();
+            saveIssuedBills();
             savePaidBills();
+
 
             System.out.println("The bill is now paid.");
         }
@@ -170,4 +186,15 @@ public class BillManager {
         }
         return null;
     }
+
+    private String issuerVat;
+    private String customerVat;
+
+    public String getIssuerVat() {
+        return issuerVat;
+    }
+    public String getCustomerVat() {
+        return customerVat;
+    }
+
 }

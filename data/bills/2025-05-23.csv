@@ -1,1 +1,1 @@
-type:Bill,paymentCode:RF10203046,billNumber:CO20250501007,issuer:GR200202503131719404,amount:20.0,issueDate:2025-05-23,dueDate:2025-06-22,isPaid:false
+type:Bill,paymentCode:a,billNumber:a,issuer:null,customer:null,amount:6.7688302E7,issueDate:2025-05-23,dueDate:2025-06-22,isPaid:false
