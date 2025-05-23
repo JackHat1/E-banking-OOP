@@ -28,7 +28,10 @@ public abstract class StandingOrder implements Storable {
         this.description = description;
         this.startingDate = startingDate;
         this.endingDate = endingDate;
+<<<<<<< HEAD
 
+=======
+>>>>>>> b28c15afcd124e44f11b1d84a17ead4e3c12952f
     }
 
     
@@ -46,6 +49,10 @@ public abstract class StandingOrder implements Storable {
 
     public Boolean getIsActive() {
         return isActive;
+    }
+
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
     }
 
     public LocalDate getStartingDate() {

@@ -63,7 +63,7 @@ public class StandingOrderManager {
     public void loadOrders() {
 
         String[] filePaths = { activeFilePath, expiredFilePath, failedFilePath };
-        //List<String> lines = storage.loadLines(activeFilePath);
+    
 
         for (String filePath : filePaths) {
             
@@ -100,28 +100,27 @@ public class StandingOrderManager {
         List<StandingOrder> expiredOrders= new ArrayList<>();
         List<StandingOrder> failedOrders= new ArrayList<>();
 
+        for(StandingOrder order: this.getAllOrders()){
+            if (order.isExpired()) {
 
-        for(StandingOrder order: orders){
-            order.execute(date, billMan, accountMan, transactionMan, user);
-            
-            if(order.isExpired()){
                 expiredOrders.add(order);
-                
-            }else if(order.isFailed()){
-                failedOrders.add(order);
+            } else if (order.isFailed()) {
 
-            }else{
+                failedOrders.add(order);
+            } else {
+
+                order.execute(date, billMan, accountMan, transactionMan, user);
                 stillActive.add(order);
             }
 
+            CsvStorageManager storageMan= new CsvStorageManager();
+
+            storageMan.saveAll(expiredOrders, "./data/orders/expired.csv", false);
+            storageMan.saveAll(failedOrders,"./data/orders/failed.csv", false);
+            storageMan.saveAll(stillActive, "./data/orders/active.csv", false);
+
+
         }
-
-        saveOrders(stillActive);
-        saveExpiredOrders(expiredOrders);
-        saveFailedOrders(failedOrders);
-
-        orders.clear();
-        orders.addAll(stillActive);
 
     }
 
